@@ -1,68 +1,44 @@
+{% extends 'appEball/base.html' %}
 {% load static %}
 
-<html>
-    <head>
-        <title>Blog Django Girls</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/register.css' %}">
-    </head>
-    <body>
-        <main></main>
-        <grey></grey>
-        <nav class="navbar fixed-top navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a id="logo" class="navbar-brand" href="/">
-                        <img src="{% static 'appEball/assets/logo.png' %}">
-                    </a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
-                    <right>
-                        <a id="Teams" href="teams_list/"><span class="glyphicon glyphicon-user"></span>Teams</a>
-                        <a id="Tournaments" href=""><span class="glyphicon glyphicon-user"></span>Tournaments</a>
-                        <a id="Help" href=""><span class="glyphicon glyphicon-user"></span>Help</a>
-                        <a id="Login" href=""><span class="glyphicon glyphicon-log-in"></span>Login</a>
-                        <a id="RegisterNav" href="register/"><span class="glyphicon glyphicon-user"></span>Register</a>
-                    </right>
-                </ul>
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+    <grey></grey>
+    
+    <h1 id="register">Register</h1>
+
+    <form class="fixed-top" id="form" action="/">
+        <div id="formRegister">
+
+            </div><div class="form-group" id="inputLeft">
+                <label for="inputFirstName" id="firstName">First Name:</label>
+                <input type="firstName" class="form-control" id="firstNameInput" placeholder="Enter your first name">
+                <label for="inputLastName" id="lastName">Last Name:</label>
+                <input type="lastName" class="form-control" id="lastNameInput" placeholder="Enter your last name">
+                <label for="inputUsername" id="username">Username:</label>
+                <input type="username" class="form-control" id="usernameInput" placeholder="Enter your username">
+                <label for="inputEmail" id="email">Email:</label>
+                <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
             </div>
-        </nav>
-        
-        <h1 id="register">Register</h1>
-
-        <form class="fixed-top" id="form" action="/">
-            <div id="formRegister">
-
-                </div><div class="form-group" id="inputLeft">
-                    <label for="inputFirstName" id="firstName">First Name:</label>
-                    <input type="firstName" class="form-control" id="firstNameInput" placeholder="Enter your first name">
-                    <label for="inputLastName" id="lastName">Last Name:</label>
-                    <input type="lastName" class="form-control" id="lastNameInput" placeholder="Enter your last name">
-                    <label for="inputUsername" id="username">Username:</label>
-                    <input type="username" class="form-control" id="usernameInput" placeholder="Enter your username">
-                    <label for="inputEmail" id="email">Email:</label>
-                    <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
-                </div>
-                <div class="form-group" id="inputRight">
-                    <label for="inputPassword" id="pasword">Password:</label>
-                    <input type="password" class="form-control" id="passwordInput" placeholder="Enter password">
-                    <label for="inputPassword" id="password">Confirm Password:</label>
-                    <input type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm password">
-                    <label for="inputccNumber" id="ccNumber">CC number:</label>
-                    <input type="ccNumber" class="form-control" id="ccNumberInput" placeholder="Enter your CC number">
-                    <label for="inputPhoneNumber" id="email">Phone Number:</label>
-                    <input type="phoneNumber" class="form-control" id="phoneNumberInput" placeholder="Enter your phone number">
-                </div>
+            <div class="form-group" id="inputRight">
+                <label for="inputPassword" id="pasword">Password:</label>
+                <input type="password" class="form-control" id="passwordInput" placeholder="Enter password">
+                <label for="inputPassword" id="password">Confirm Password:</label>
+                <input type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm password">
+                <label for="inputccNumber" id="ccNumber">CC number:</label>
+                <input type="ccNumber" class="form-control" id="ccNumberInput" placeholder="Enter your CC number">
+                <label for="inputPhoneNumber" id="email">Phone Number:</label>
+                <input type="phoneNumber" class="form-control" id="phoneNumberInput" placeholder="Enter your phone number">
             </div>
-            <button type="confirm" id="confirmBtn">Confirm</button>
-            <button type="cancel" id="cancelBtn" >Cancel</button>
-        </form>
+        </div>
+        <button type="confirm" id="confirmBtn">Confirm</button>
+        <button type="cancel" id="cancelBtn" >Cancel</button>
+    </form>
 
-        <img src="{% static 'appEball/assets/photo1.png' %}" id="img1">
-        <img src="{% static 'appEball/assets/photo2.png' %}" id="img2">
-        
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </body>
-</html>
+    <img src="{% static 'appEball/assets/photo1.png' %}" id="img1">
+    <img src="{% static 'appEball/assets/photo2.png' %}" id="img2">
+
+{% endblock %}

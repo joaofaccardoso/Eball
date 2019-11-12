@@ -30,12 +30,13 @@ main{
 
 grey{
     position: absolute;
-    width: 100%;
-    height: 800px;
-    left: 0px;
-    top: 0px;
+    height: 680px;
+    width: 30%;
+    left: 35%;
+    top: 150px;
 
     background: #262626;
+    border-radius: 30px;
 }
 
 #logo{
@@ -65,16 +66,12 @@ right *:hover{
     transition:0.2s;
 }
 
-#registerNav{
-    color: #FFE603;
-}
-
-#register{
+#login{
     position: absolute;
-    width: 517px;
+    width: 100%;
     height: 71px;
-    left: 60px;
-    top: 124px;
+    text-align: center;
+    top: 230px;
     
     font-size: 60px;
     line-height: 71px;
@@ -99,23 +96,40 @@ right *:hover{
     margin-left: 6px;
 }
 
-#inputLeft{
+#inputs{
     position: absolute;
-    left: 136px;
-    top: 270px;
+    left: 38%;
+    top: 380px;
+    width: 24%;
 }
 
-#inputRight{
-    position: absolute;
-    left: 750px;
-    top: 270px;
+#form input{
+    width: 100%;
+    height: 50px;
+    background: #C4C4C4;
+    border-radius: 200px;
+    margin-bottom: 19px;
+    padding: 25px
+}
+
+#form label{
+    color: #FFFFFF;
+    font-size: 26px;
+    line-height: 31px;
+    margin-bottom: 17px;
+    margin-left: 6px;
+}
+
+#form #recoverPassword{
+    margin: 10px;   
+    color: #FFE603;
 }
 
 form button{
     position: absolute;
     width: 200px;
     height: 50px;
-    top: 680px;
+    top: 700px;
 
     background-color: #727070;
     border-radius: 200px;
@@ -135,22 +149,10 @@ form button:hover{
     background-color: #C4C4C4;
 }
 
-#cancelBtn{
-    left: 1360px;
+#loginBtn{
+    left: 750px;
 }
 
-#confirmBtn{
-    left: 1590px;
-}
-
-#img1{
-    position: absolute;
-    top: 150px;
-    left: 1340px;
-}
-
-#img2{
-    position: absolute;
-    top: 232px;
-    left: 1446px;
+#backBtn{
+    left: 970px;
 }
