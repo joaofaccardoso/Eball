@@ -6,9 +6,19 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Join a team and get onto the field.</h1>
-    <a id = 'text' href="teams_list/">Check the teams in need of an element.</a>
-    <a id="arrow" href="teams_list/">
-        <img src="{% static 'appEball/assets/arrow.png' %}">
-    </a>
+    <div class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img id="background" src="{% static 'appEball/assets/home_page.jpg' %}" class="d-block w-100">
+                <div class="container">
+                    <div class="carousel-caption text-left">
+                        <p id="imgText">Join a team and</p>
+                        <p id="imgText">get onto the</p>
+                        <p id="imgText">field.</p>
+                        <a href="#" id="imgLink">Check the teams in need of an element.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

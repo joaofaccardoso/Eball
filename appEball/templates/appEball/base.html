@@ -1,14 +1,28 @@
 {% load static %}
 <html>
     <head>
-        <title>Blog Django Girls</title>
+        <title>Eball</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         {% block css %}
         {% endblock %}
     </head>
     <body>
-        <main background></main>
-        {% include 'appEball/navbar.html' %}
+        <nav class="navbar fixed-top navbar-inverse">
+            <div class="navbar-header">
+                <a id="logo" class="navbar-brand" href="/">
+                    <img src="{% static 'appEball/assets/logo.png' %}" height="25px">
+                </a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <right>
+                    <a id="TeamsNav" href="/teams_list/"><span class="glyphicon glyphicon-user"></span>Teams</a>
+                    <a id="TournamentsNav" href=""><span class="glyphicon glyphicon-user"></span>Tournaments</a>
+                    <a id="HelpNav" href=""><span class="glyphicon glyphicon-user"></span>Help</a>
+                    <a id="LoginNav" href="/login/"><span class="glyphicon glyphicon-log-in"></span>Login</a>
+                    <a id="RegisterNav" href="/register/"><span class="glyphicon glyphicon-user"></span>Register</a>
+                </right>
+            </ul>    
+        </nav>
         {% block content %}
         {% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

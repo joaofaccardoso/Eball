@@ -12,7 +12,7 @@ def register(request):
     return render(request, 'appEball/register.html', {'form':form})
 
 def login(request):
-    return render(request, 'apxpEball/login.html', {})
+    return render(request, 'appEball/login.html', {})
 
 def teams_list(request):
     return render(request, 'appEball/teams_list.html', {})

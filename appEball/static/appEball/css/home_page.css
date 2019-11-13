@@ -1,51 +1,28 @@
 @font-face {
-    font-family: "lucidaSans";
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
+}
+
+@font-face {
+    font-family: "lucidaSansRegular";
     src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
 }
 
+
 * {
-    font-family: "lucidaSans";
+    font-family: "lucidaSansRegular";
 }
 
 body{
     background-color: #262626;
-    margin: 0;
-    padding: 0;
-    font-family: "lucidaSans";
 }
 
-main{
-    background-image: url("../assets/home_page.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-
-    width: 100%;
-    height: 100%;
-
-    left: 0px;
-    top: 0px;
-
-    opacity: 60%;
-}
-
-#logo{
-    position: absolute;
-    width: 120px;
-    height: 34.38px;
-    left: 26px;
-    top: 25px;
-}
-
-right{
-    position: relative; 
-    font-size: 24px;
-    line-height: 28px;
-    top: 25px;
+#logo {
+    padding: 15px;
 }
 
 right *{
-    scale: 1;
+    font-size: 20px;
     margin: 0px 6px;
     color: #FFFFFF;
 }
@@ -53,38 +30,28 @@ right *{
 right *:hover{
     color: #FFE603;
     text-decoration: none;
-    transition:0.2s;
+    transition:0.5s;
 }
 
-h1{
-    position: absolute;
-    width: 968px;
-    height: 418px;
-    left: 71px;
-    top: 255px;
-
-    font-size: 120px;
-    line-height: 141px;
-
-    color: #FFFFFF;
+#background {
+    opacity: 60%;
 }
 
-#text{
-    position: absolute;
-    width: 844px;
-    height: 54px;
-    left: 71px;
-    top: 680px;
-    
-    font-size: 32px;
-    line-height: 38px;
+#imgText {
+    font-family: "lucidaSansDemibold";
+    font-size: 80px;
+    line-height: 100px;
+}
+
+#imgLink {
+    font-weight: bolder;
+    font-size: 25px;
+    line-height: 20px;
 
     color: #FFE603;
 }
 
-#arrow{
-    position: absolute;
-    width: 80px;
-    left: 50%;
-    top: 850px;
+.carousel-caption {
+    height: 75%;
+    margin-left: -10%;
 }
