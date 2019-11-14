@@ -2,26 +2,32 @@
 <html>
     <head>
         <title>Eball</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">        <link rel="stylesheet" href="{% static 'appEball/css/base.css' %}">
         {% block css %}
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar fixed-top colapse-sm navbar-inverse">
-            <div class="navbar-header">
-                <a id="logo" class="navbar-brand" href="{% url 'appEball:home_page' %}">
-                    <img src="{% static 'appEball/assets/logo.png' %}" height="25px">
-                </a>
-            </div>
-            <ul class="nav navbar-nav navbar-right">
-                <right>
-                    <a id="TeamsNav" href="{% url 'appEball:teams_list' %}">Teams</a>
-                    <a id="TournamentsNav" href="#">Tournaments</a>
-                    <a id="HelpNav" href="#">Help</a>
-                    <a id="LoginNav" href="{% url 'appEball:login' %}">Login</a>
-                    <a id="RegisterNav" href="{% url 'appEball:register' %}">Register</a>
-                </right>
-            </ul>    
+        <nav class="navbar sticky-top navbar-expand-sm">
+            <a class="navbar-brand" href="{% url 'appEball:home_page' %}">
+                <img src="{% static 'appEball/assets/logo.png' %}" width="80px">
+            </a>
+            <ul class="navbar-nav ml-auto" id="navbarList">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="teamsNav">Teams</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="tournamentNav">Tournaments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="helpNav">Help</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appEball:login' %}" id="loginNav">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appEball:register' %}" id="registerNav">Register</a>
+                </li>
+            </ul>
         </nav>
         {% block content %}
         {% endblock %}

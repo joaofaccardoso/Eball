@@ -2,35 +2,37 @@
 {% load static %}
 
 {% block css %}
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'appEball/css/register.css' %}">-->
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/register.css' %}">
 {% endblock %}
 
 {% block content %}
-    <h1 id="register">Register</h1>
-
+    <h1>Create an account</h1>
     <div class="form-group">
         <form action="#" method="post">
             <div class="row">
-                <div class="col">
+                <div class="col-1"></div>
+                <div class="col" id="middleColLeft">
                     <label for="inputFirstName" id="firstName">First Name:</label>
-                    <input type="firstName" class="form-control" id="firstNameInput" placeholder="Enter your first name">
+                    <input type="firstName" class="form-control rounded-pill" id="firstNameInput" placeholder="Enter your first name">
                     <label for="inputLastName" id="lastName">Last Name:</label>
-                    <input type="lastName" class="form-control" id="lastNameInput" placeholder="Enter your last name">
+                    <input type="lastName" class="form-control rounded-pill" id="lastNameInput" placeholder="Enter your last name">
                     <label for="inputUsername" id="username">Username:</label>
-                    <input type="username" class="form-control" id="usernameInput" placeholder="Enter your username">
+                    <input type="username" class="form-control rounded-pill" id="usernameInput" placeholder="Enter your username">
                     <label for="inputEmail" id="email">Email:</label>
-                    <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
+                    <input type="email" class="form-control rounded-pill" id="emailInput" placeholder="Enter your email">
                 </div>
-                <div class="col">    
+                <div class="col" id="middleColRight">    
                     <label for="inputPassword" id="pasword">Password:</label>
-                    <input type="password" class="form-control" id="passwordInput" placeholder="Enter password">
+                    <input type="password" class="form-control rounded-pill" id="passwordInput" placeholder="Enter password">
                     <label for="inputPassword" id="password">Confirm Password:</label>
-                    <input type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm password">
+                    <input type="password" class="form-control rounded-pill" id="confirmPasswordInput" placeholder="Confirm password">
                     <label for="inputccNumber" id="ccNumber">CC number:</label>
-                    <input type="ccNumber" class="form-control" id="ccNumberInput" placeholder="Enter your CC number">
+                    <input type="ccNumber" class="form-control rounded-pill" id="ccNumberInput" placeholder="Enter your CC number">
                     <label for="inputPhoneNumber" id="email">Phone Number:</label>
-                    <input type="phoneNumber" class="form-control" id="phoneNumberInput" placeholder="Enter your phone number">
+                    <input type="phoneNumber" class="form-control rounded-pill" id="phoneNumberInput" placeholder="Enter your phone number">
+                    <button class="btn rounded-pill" type="submit" id="createAccountBtn">Create account</button>
                 </div>
+                <div class="col-1"></div>
             </div>
         </form>
     </div>

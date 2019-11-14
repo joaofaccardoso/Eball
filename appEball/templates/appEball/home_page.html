@@ -6,19 +6,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img id="background" src="{% static 'appEball/assets/home_page.jpg' %}" class="d-block w-100">
-                <div class="container">
-                    <div class="carousel-caption text-left">
-                        <p id="imgText">Join a team and</p>
-                        <p id="imgText">get onto the</p>
-                        <p id="imgText">field.</p>
-                        <a href="#" id="imgLink">Check the teams in need of an element.</a>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col" id="textCol">
+            <p>Join a team and</p>
+            <p>get onto the</p>
+            <p>field.</p>
+            <a href="#" id="linkTeams">Check the teams in need of an element</a>
         </div>
+        <div class="col-2"></div>
     </div>
 {% endblock %}

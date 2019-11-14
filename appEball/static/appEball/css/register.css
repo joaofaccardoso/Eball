@@ -7,150 +7,51 @@
     font-family: "lucidaSans";
 }
 
-body{
+html {
+    overflow-x: hidden;
+}
+
+body {
     background-color: #262626;
-    margin: 0;
-    padding: 0;
-    font-family: "lucidaSans";
-}
-
-main{
-    background: url(../assets/home_page.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-    
-    width: 100%;
-    height: 100%;
-    
-    left: 0px;
-    top: 0px;
-    
-    opacity: 60%;
-}
-
-grey{
-    position: absolute;
-    width: 100%;
-    height: 800px;
-    left: 0px;
-    top: 0px;
-
-    background: #262626;
-}
-
-#logo{
-    position: absolute;
-    width: 120px;
-    height: 34.38px;
-    left: 26px;
-    top: 25px;
-}
-
-right{
-    position: relative; 
-    font-size: 24px;
-    line-height: 28px;
-    top: 25px;
-}
-
-right *{
-    scale: 1;
-    margin: 0px 6px;
-    color: #FFFFFF;
-}
-
-right *:hover{
-    color: #FFE603;
-    text-decoration: none;
-    transition:0.2s;
 }
 
 #registerNav{
     color: #FFE603;
 }
 
-#register{
-    position: absolute;
-    width: 517px;
-    height: 71px;
-    left: 60px;
-    top: 124px;
-    
-    font-size: 60px;
-    line-height: 71px;
-    
-    color: #FFFDFD;
+h1 {
+    color: white;
+    margin: 30px;
 }
 
-#form input{
-    width: 453px;
-    height: 50px;
-    background: #C4C4C4;
-    border-radius: 200px;
-    margin-bottom: 19px;
-    padding: 25px
+label {
+    color: white;
+    line-height: 40px;
 }
 
-#form label{
-    color: #FFFFFF;
-    font-size: 26px;
-    line-height: 31px;
-    margin-bottom: 17px;
-    margin-left: 6px;
+#middleColLeft {
+    padding-right:160px;
 }
 
-#inputLeft{
-    position: absolute;
-    left: 136px;
-    top: 270px;
+#middleColRight {
+    padding-left: 0px;
 }
 
-#inputRight{
-    position: absolute;
-    left: 750px;
-    top: 270px;
-}
-
-form button{
-    position: absolute;
-    width: 200px;
-    height: 50px;
-    top: 680px;
-
+#createAccountBtn {
     background-color: #727070;
-    border-radius: 200px;
-    border: none;
-
-    font-family: "lucidaSans";
-    font-size: 26px;    
-    line-height: 31px;
-    text-align: center;
-
-    color: #FFFFFF;
+    color: white;
+    margin-top: 30px;
+    margin-left: 35%;
+    margin-bottom: 30px;
 }
 
-form button:hover{
-    transition:0.2s;
-    color: #727070;
-    background-color: #C4C4C4;
+#createAccountBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
 }
 
-#cancelBtn{
-    left: 1360px;
-}
-
-#confirmBtn{
-    left: 1590px;
-}
-
-#img1{
-    position: absolute;
-    top: 150px;
-    left: 1340px;
-}
-
-#img2{
-    position: absolute;
-    top: 232px;
-    left: 1446px;
+.form-control:focus {
+    border-color: none;
+    box-shadow: none;
 }
