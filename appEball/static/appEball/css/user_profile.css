@@ -1,0 +1,95 @@
+@font-face {
+    font-family: "lucidaSans";
+    src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
+}
+
+* {
+    font-family: "lucidaSans";
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #262626;
+}
+
+#registerNav{
+    color: #FFE603;
+}
+
+h1 {
+    color: white;
+    margin: 30px;
+}
+h2 {
+    color: white;
+    margin: 30px;
+
+}
+
+label {
+    color: white;
+    color: #FFE603;
+}
+
+p{
+    color: white;
+    color: #FFFDFD;
+}
+
+#middleColLeft {
+    padding-right:160px;
+}
+
+#middleColRight {
+    padding-left: 0px;
+}
+
+#EditBtn {
+    background-color: #727070;
+    color: white;
+    margin-top: 30px;
+    margin-left: 15%;
+    margin-bottom: 30px;
+}
+
+#EditBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
+}
+
+#BackBtn {
+    background-color: #727070;
+    color: white;
+    margin-top: 30px;
+    margin-left: 35%;
+    margin-bottom: 30px;
+}
+
+#BackBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
+}
+
+.form-control:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+.image-container {
+    background-image: url('/static/appEball/assets/photo1.png');
+    background-size: cover;
+    background-position: center;
+    width: 450px;
+    height: 450px;
+    margin-left: -10%;
+}
+#imagem{
+    position:absolute;
+    padding-left:17%;
+    padding-top:17%;
+}
