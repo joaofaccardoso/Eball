@@ -34,10 +34,12 @@ label {
     color: #FFE603;
 }
 
-p{
+label1 {
     color: white;
     color: #FFFDFD;
 }
+
+
 
 #middleColLeft {
     padding-right:160px;
@@ -79,6 +81,8 @@ p{
     border-color: none;
     box-shadow: none;
 }
+
+
 
 .image-container {
     background-image: url('/static/appEball/assets/photo1.png');
