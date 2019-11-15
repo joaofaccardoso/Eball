@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATIC_URL = '/static/'
+AUTH_USER_MODEL = 'appEball.CustomUser'
 
 # Application definition
 

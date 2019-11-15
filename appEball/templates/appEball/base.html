@@ -1,7 +1,11 @@
 {% load static %}
 <html>
     <head>
-        <title>Eball</title>
+        {% if title %}
+            <title>Eball - {{ title }}</title>
+        {% else %}
+            <title>Eball</title>
+        {% endif %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">        <link rel="stylesheet" href="{% static 'appEball/css/base.css' %}">
         {% block css %}
         {% endblock %}
@@ -12,6 +16,17 @@
                 <img src="{% static 'appEball/assets/logo.png' %}" width="80px">
             </a>
             <ul class="navbar-nav ml-auto" id="navbarList">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Notifications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">MyCalendar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">MyTeams</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="teamsNav">Teams</a>
                 </li>
@@ -21,14 +36,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="helpNav">Help</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'appEball:login' %}" id="loginNav">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'appEball:register' %}" id="registerNav">Register</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">MyProfile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'appEball:logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'appEball:login' %}" id="loginNav">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'appEball:register' %}" id="registerNav">Register</a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         {% block content %}
         {% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

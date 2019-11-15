@@ -27,7 +27,36 @@ body {
     color: #FFE603;
 }
 
+h1 {
+    color: white;
+}
+
+label {
+    color: white;
+    padding: 10px;
+}
+
 #card {
-    margin-top: 20%;
-    padding: 50px;
+    margin-top: 15%;
+    padding: 15px;
+    border-radius: 25px;
+    background-color: #262626;
+}
+
+#loginBtn {
+    background-color: #727070;
+    color: white;
+    margin-top: 10px;
+}
+
+#loginBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
+}
+
+#recoverPassword {
+    color: #FFE603;
+    font-size: smaller;
+    padding: 20px;
 }
