@@ -57,8 +57,3 @@ label {
     background-color: #262626;
     border-radius: 25px;
 }
-
-.form-control:focus {
-    border-color: none;
-    box-shadow: none;
-}

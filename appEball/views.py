@@ -30,7 +30,7 @@ class UserRegister(View):
             return HttpResponseRedirect(reverse('appEball:home_page'))
         else:
             messages.warning(request, f'Form is not valid.')
-            return HttpResponseRedirect(reverse(self.template_name))
+            return HttpResponseRedirect(reverse('appEball:register'))
 
 class UserLogin(View):
     form_class = CustomUserLoginForm
