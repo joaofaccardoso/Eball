@@ -1,0 +1,25 @@
+html {
+    background-image: url("../assets/home_page.jpg");
+    background-color: #262626;
+    background-blend-mode: overlay;
+    
+    height: 100%;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+nav {
+    background-color: black;
+}
+
+.nav-link {
+    color: #ffffff;
+}
+
+.nav-link:hover {
+    color: #FFE603;
+    text-decoration: none;
+    transition:0.5s;
+}

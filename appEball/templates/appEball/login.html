@@ -1,0 +1,33 @@
+{% extends 'appEball/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-4">
+            <div class="card" id="card">
+                <h1 class="card-title" align='center'>Login</h1>
+                <div class="form-group card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <label for="id_email">Email:</label>
+                        <input type="email" class="form-control rounded-pill" name="email" maxlength="255" required="" id="id_email">
+                        <label for="id_password">Password:</label>
+                        <input type="password" class="form-control rounded-pill" name="password" required="" id="id_password">
+                        <div class="row" align='center'>
+                            <a id="recoverPassword" href="" >Forgot your password? Click here to recover it!</a>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-block rounded-pill" id="loginBtn" type="submit">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+{% endblock %}
