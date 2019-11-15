@@ -12,7 +12,8 @@ html {
 }
 
 body {
-    background-color: #262626;
+    background: inherit;
+    background-blend-mode: inherit;
 }
 
 #registerNav{
@@ -43,10 +44,11 @@ label1 {
 
 #middleColLeft {
     padding-right:160px;
+
 }
 
 #middleColRight {
-    padding-left: 0px;
+    padding-left: 15px;
 }
 
 #EditBtn {
@@ -94,6 +96,46 @@ label1 {
 }
 #imagem{
     position:absolute;
-    padding-left:17%;
-    padding-top:17%;
+    padding-left:15%;
+    padding-top:13%;
 }
+
+#Card {
+    margin: 1px;
+    background-color: #262626;
+    border-radius: 25px;
+    opacity:85%;
+}
+
+#firstRow{
+    margin-top: 6%
+}
+
+#secondRow{
+    margin-top: 6%
+}
+
+#thirdRow{
+    margin-top: 6%
+}
+
+
+
+#fourthRow{
+    margin-top: 6%
+}
+
+#fifthRow{
+    margin-top: 6%
+}
+
+#sixthRow{
+    margin-top: 6%
+}
+
+
+
+#seventhRow{
+    margin-top: 6%
+}
+
