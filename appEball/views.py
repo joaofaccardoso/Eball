@@ -58,6 +58,7 @@ class UserLogin(View):
 
 def userLogout(request):
     logout(request)
+    messages.warning(request, 'You logged out')
     return HttpResponseRedirect(reverse('appEball:home_page'))
 
 def teams_list(request):
