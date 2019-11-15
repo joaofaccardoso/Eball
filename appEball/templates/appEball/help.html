@@ -1,0 +1,52 @@
+{% extends 'appEball/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/help.css' %}">
+{% endblock %}
+
+{% block content %}
+
+     <div class="form-group card" id="Card">
+     	  <h1 id="nome">Help</h1>
+     	   <form method="post">
+            {% csrf_token %}
+            <div class="row" id='firstRow'>
+            	<div class="col-1" ></div>
+                <div class="col-2" id="middleColLeft">
+                <h3>Tournaments</h3>
+                </div>
+               
+            	<div class="col-8" id="middleColRight">
+            		<p>Click on Tournaments at the top bar and then click on the info button of the Tournament of your choice to see the basic information such as data,local,hours,temas,rounds...</p>
+            	</div>
+
+            </div>
+            <div class="row" id='secondtRow'>
+                <div class="col-1" ></div>
+                <div class="col-1" id="middleColLeft">
+                <h3>Teams</h3>
+                </div>
+                <div class="col-1"></div>
+            	<div class="col-8" id="middleColRight">
+            		<p>Click on Teams at the top bar to see wich teams have open spots. You can also click on join a team if you would like to participate</p>
+            	</div>
+            </div>
+            <div class="row" id='thirdRow'>
+               <div class="col-1" ></div>
+                <div class="col-2" id="middleColLeft">
+                <h3>Register</h3>
+                 </div>
+             
+            	<div class="col-8" id="middleColRight">
+            		<p>If you want to join a team and don´t have a profile yeat, click on Register at the right top corner and creat your acount</p>
+            	</div>
+            </div>
+            <div class="row" id='fourthRow'>
+            	<div class="col-6"></div>
+            	 <button class="btn rounded-pill" type="submit" id="backBtn">Back</button>
+            </div>
+        </form>
+     </div>
+
+{% endblock %}

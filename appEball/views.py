@@ -64,3 +64,5 @@ def userLogout(request):
 def teams_list(request):
     return render(request, 'appEball/teams_list.html', {})
 
+def user_profile(request):
+	return render(request,'appEball/user_profile.html',{})
