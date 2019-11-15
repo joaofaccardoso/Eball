@@ -1,0 +1,48 @@
+{% extends 'appEball/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/user_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 id="title">My profile</h2>
+    <h1 id="nome">MARTIM MARQUES</h1>
+
+    <div class="form-group">
+        <form action="#" method="post">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col" id="middleColLeft">
+                    <label for="FirstName" id="firstName">First Name:</label>
+                    <p for="FirstName_" class="form-control-static" id="firstName_">MARTIM</p>
+                    <label for="LastName" id="lastName">Last Name:</label>
+                    <p for="LastName_" id="lastName_">MARQUES</p>
+                    <label for="Username" id="username">Username:</label>
+                    <p for="Username_" id="username_">martimmarques12</p>
+                    <label for="ccNumber" id="ccNumber">CC number:</label>
+                    <p for="ccNumber_" id="ccNumber_">25846941</p>
+                    <label for="PhoneNumber" id="phoneNumber">Phone Number:</label>
+                    <p for="PhoneNumber_" id="phoneNumber">785352161</p>
+                    <label for="Email" id="email">Email:</label>
+                    <p for="Email_" id="email_">martimfmarques@gmail.com</p>
+                    <label for="AccountBalance" id="accountBalance">Account Balance:</label>
+                    <p for="AccountBalance_" id="accountBalance_">10€</p>
+                    <label for="Nextmatch" id="nextmatch">Next match:</label>
+                    <p for="Nextmatch_" id="nextmatch_">Jogo nao sei onde</p>
+                </div>
+                <div class="col" id="middleColRight"> 
+                	<div class="image-container">
+                		<img id="imagem" src="{% static 'appEball/assets/photo2.png' %}" class="img-responsive" alt="Responsive image">
+                	</div>  
+                </div>     
+                <div class="col-1"></div>
+            </div>
+            <div class="row">
+                	<button class="btn rounded-pill" type="submit" id="EditBtn">Edit profile</button>
+                    <button class="btn rounded-pill" type="submit"" id="BackBtn">Back</button>
+
+             </div>
+        </form>
+    </div>
+{% endblock %}
