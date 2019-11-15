@@ -3,6 +3,8 @@ from . import views
 from .views import UserRegister, UserLogin, HomePage
 
 app_name = 'appEball'
+
+urlpatterns = [
     path('', HomePage.as_view(), name='home_page'),
     path('register/', UserRegister.as_view(), name='register'),
     path('login/', UserLogin.as_view(), name='login'),
