@@ -12,48 +12,130 @@ html {
 }
 
 body {
-    background-color: transparent;
+    background: inherit;
+    background-blend-mode: inherit;
 }
 
-#profileNav{
+#registerNav{
     color: #FFE603;
 }
 
-#profileCard {
-    margin: 5%;
-    border-radius: 25px;
-    padding: 2%;
-    background-color: #262626;
-}
-
-.card-title {
+h1 {
     color: white;
+    margin: 30px;
+}
+h2 {
+    color: white;
+    margin: 30px;
+
 }
 
-.card-subtitle {
-    color: #E5E5E5;
-}
-
-.line {
-    line-height: 40px;
-}
-
-.userLabel {
+label {
+    color: white;
     color: #FFE603;
-    margin-left: 30px;
 }
 
-.userInfo {
-    color: #E5E5E5;
+label1 {
+    color: white;
+    color: #FFFDFD;
 }
 
-.btn {
+
+
+#middleColLeft {
+    padding-right:160px;
+
+}
+
+#middleColRight {
+    padding-left: 15px;
+}
+
+#EditBtn {
     background-color: #727070;
     color: white;
+    margin-top: 30px;
+    margin-left: 15%;
+    margin-bottom: 30px;
 }
 
-.btn:hover {
+#EditBtn:hover {
     background-color: #FFE603;
     color: black;
     transition:0.5s;
 }
+
+#BackBtn {
+    background-color: #727070;
+    color: white;
+    margin-top: 30px;
+    margin-left: 35%;
+    margin-bottom: 30px;
+}
+
+#BackBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
+}
+
+.form-control:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+
+
+.image-container {
+    background-image: url('/static/appEball/assets/photo1.png');
+    background-size: cover;
+    background-position: center;
+    width: 450px;
+    height: 450px;
+    margin-left: -10%;
+}
+#imagem{
+    position:absolute;
+    padding-left:15%;
+    padding-top:13%;
+}
+
+#Card {
+    margin: 1px;
+    background-color: #262626;
+    border-radius: 25px;
+    opacity:85%;
+}
+
+#firstRow{
+    margin-top: 6%
+}
+
+#secondRow{
+    margin-top: 6%
+}
+
+#thirdRow{
+    margin-top: 6%
+}
+
+
+
+#fourthRow{
+    margin-top: 6%
+}
+
+#fifthRow{
+    margin-top: 6%
+}
+
+#sixthRow{
+    margin-top: 6%
+}
+
+
+
+#seventhRow{
+    margin-top: 6%
+}
+

@@ -12,7 +12,8 @@ html {
 }
 
 body {
-    background-color: transparent;
+    background: inherit;
+    background-blend-mode: inherit;
 }
 
 #registerNav{
