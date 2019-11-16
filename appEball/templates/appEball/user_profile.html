@@ -6,106 +6,47 @@
 {% endblock %}
 
 {% block content %}
-    
-
-    <div class="form-group card" id="Card">
-    	<h2 id="title">My profile</h2>
-    	<h1 id="nome">MARTIM MARQUES</h1>
-        <form action="#" method="post">
-        	<div class="row">
-            <div class="col-1"></div>
-            <div class="col-6" id="middleColLeft">
-            	<div class="row" id='firstRow'>
-            		<div class="col-5" id="left">
-            		<label for="FirstName" id="firstName" class="lead">First Name:</label>
-            		</div>
-            		  <div class="col-1"></div>
-            		<div class="col-4" id="right">
-                    <label1 for="FirstName_" id="firstName_" class="lead">MARTIM</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='secondRow'>
-            		<div class="col-5" id="left">
-            		<label for="LastName" id="lastName" class="lead">Last Name:</label>
-            		</div>
-            		  <div class="col-1"></div>
-            		<div class="col-4" id="right">
-                    <label1 for="LastName_" id="lastName_"class="lead">MARQUES</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='thirdRow'>
-            		<div class="col-5" id="left">
-            		<label for="Username" id="username"class="lead">Username:</label>
-            		</div>
-            		 <div class="col-1"></div>
-            		<div class="col-6" id="right">
-                    <label1 for="Username_" id="username_"class="lead">martimmarques12</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='thirdRow'>
-            		<div class="col-5" id="left">
-            		<label for="ccNumber" id="ccNumber"class="lead">CC number:</label>
-            		</div>
-
-            		<div class="col-1"></div>
-            		<div class="col-6" id="right">
-                    <label1 for="ccNumber_" id="ccNumber_"class="lead">25846941</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='fourthRow'>
-            		<div class="col-6" id="left">
-            		<label for="PhoneNumber" id="phoneNumber"class="lead">Phone Number:</label>
-            		</div>
-            		 
-            		<div class="col-6" id="right">
-                    <label1 for="PhoneNumber_" id="phoneNumber"class="lead">785352161</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='fifthRow'>
-            		<div class="col-5" id="left">
-            		 <label for="Email" id="email"class="lead">Email:</label>
-            		 </div>
-            		  <div class="col-1"></div>
-            		<div class="col-6" id="right">
-                    <label1 for="Email_" id="email_"class="lead">martimfmarques@gmail.com</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='sixthRow'>
-            		<div class="col-6" id="left">
-            		<label for="AccountBalance" id="accountBalance"class="lead">Account Balance:</label>
-            		</div>
-            		
-            		<div class="col-4" id="right">
-                    <label1 for="AccountBalance_" id="accountBalance_"class="lead">10€</label1>
-                    </div>
-            	</div>
-            	<div class="row" id='seventhRow'>
-            		<div class="col-5" id="left">
-            		<label for="Nextmatch" id="nextmatch"class="lead">Next match:</label>
-            		</div>
-            		 <div class="col-1"></div>
-            		<div class="col-6" id="right">
-                    <label1 for="Nextmatch_" id="nextmatch_"class="lead">Jogo nao sei onde</label1>
-                    </div>
-            	</div>
-
-            </div>
-            <div class="col-5" id="middleColRight">
-            	<div class="image-container">
-                        <img id="imagem" src="{% static 'appEball/assets/photo2.png' %}" class="img-responsive" alt="Responsive image">
-                    </div>  
-            </div>
-         </div>
-            <div class="row">
-            		 <div class="col-4"></div>
-            		 <div class="col-2">
-            		 	<button class="btn rounded-pill" type="submit" id="EditBtn">Edit profile</button>
-            		 </div>
-            		 <div class="col-2">
-            		 	 <button class="btn rounded-pill" type="submit"" id="BackBtn">Back</button>
-            		 </div>
-                   
-             </div>
-        </form>
-    </div>
+	<div class="card" id="profileCard">
+		<div class="card-body">
+			<h4 class="card-subtitle line">Profile</h4>
+			<h2 class="card-title line"><strong>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</strong></h2>
+			<div class="row">
+				<div class="col-5">
+					<div class="row">
+						<div class="col">
+							<p class="userLabel line">Username:</p>
+							<p class="userLabel line">E-mail:</p>
+							<p class="userLabel line">CC number:</p>
+							<p class="userLabel line">Phone number:</p>
+						</div>
+						<div class="col">
+							<p class="userInfo line">{{ requestedUser.username }}</p>
+							<p class="userInfo line">{{ requestedUser.email }}</p>
+							<p class="userInfo line">{{ requestedUser.ccNumber }}</p>
+							<p class="userInfo line">{{ requestedUser.phoneNumber }}</p>
+						</div>
+					</div>
+				</div>
+				<div class="col" align='center'>
+					<img src="{% static 'appEball/assets/photo1.png' %}" height="200px" alt="">
+				</div>
+			</div>
+		</div>
+		{% if user == requestedUser %}
+			<div class="row">
+				<div class="col" align='center'>
+					<a class="btn rounded-pill" href="#">Edit Profile</a>
+				</div>
+				<div class="col" align='center'>
+					<a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}">Back</a>
+				</div>
+			</div>
+		{% else %}
+			<div class="row">
+				<div class="col" align='center'>
+					<a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}">Back</a>
+				</div>
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}
