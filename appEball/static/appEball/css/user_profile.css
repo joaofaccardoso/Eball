@@ -12,130 +12,48 @@ html {
 }
 
 body {
-    background: inherit;
-    background-blend-mode: inherit;
+    background-color: transparent;
 }
 
-#registerNav{
+#profileNav{
     color: #FFE603;
 }
 
-h1 {
-    color: white;
-    margin: 30px;
-}
-h2 {
-    color: white;
-    margin: 30px;
-
-}
-
-label {
-    color: white;
-    color: #FFE603;
-}
-
-label1 {
-    color: white;
-    color: #FFFDFD;
-}
-
-
-
-#middleColLeft {
-    padding-right:160px;
-
-}
-
-#middleColRight {
-    padding-left: 15px;
-}
-
-#EditBtn {
-    background-color: #727070;
-    color: white;
-    margin-top: 30px;
-    margin-left: 15%;
-    margin-bottom: 30px;
-}
-
-#EditBtn:hover {
-    background-color: #FFE603;
-    color: black;
-    transition:0.5s;
-}
-
-#BackBtn {
-    background-color: #727070;
-    color: white;
-    margin-top: 30px;
-    margin-left: 35%;
-    margin-bottom: 30px;
-}
-
-#BackBtn:hover {
-    background-color: #FFE603;
-    color: black;
-    transition:0.5s;
-}
-
-.form-control:focus {
-    border-color: none;
-    box-shadow: none;
-}
-
-
-
-.image-container {
-    background-image: url('/static/appEball/assets/photo1.png');
-    background-size: cover;
-    background-position: center;
-    width: 450px;
-    height: 450px;
-    margin-left: -10%;
-}
-#imagem{
-    position:absolute;
-    padding-left:15%;
-    padding-top:13%;
-}
-
-#Card {
-    margin: 1px;
-    background-color: #262626;
+#profileCard {
+    margin: 5%;
     border-radius: 25px;
-    opacity:85%;
+    padding: 2%;
+    background-color: #262626;
 }
 
-#firstRow{
-    margin-top: 6%
+.card-title {
+    color: white;
 }
 
-#secondRow{
-    margin-top: 6%
+.card-subtitle {
+    color: #E5E5E5;
 }
 
-#thirdRow{
-    margin-top: 6%
+.line {
+    line-height: 40px;
 }
 
-
-
-#fourthRow{
-    margin-top: 6%
+.userLabel {
+    color: #FFE603;
+    margin-left: 30px;
 }
 
-#fifthRow{
-    margin-top: 6%
+.userInfo {
+    color: #E5E5E5;
 }
 
-#sixthRow{
-    margin-top: 6%
+.btn {
+    background-color: #727070;
+    color: white;
 }
 
-
-
-#seventhRow{
-    margin-top: 6%
+.btn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
 }
-

@@ -12,15 +12,7 @@ html {
 }
 
 body {
-    background-image: url("../assets/home_page.jpg");
-    background-color: #262626;
-    background-blend-mode: overlay;
-    
-    height: 100%;
-
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: transparent;
 }
 
 #loginNav {

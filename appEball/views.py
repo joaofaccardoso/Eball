@@ -4,6 +4,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm
+from .models import CustomUser
 
 class HomePage(View):
     template_name = 'appEball/home_page.html'
@@ -64,5 +65,6 @@ def userLogout(request):
 def teams_list(request):
     return render(request, 'appEball/teams_list.html', {})
 
-def user_profile(request):
-	return render(request,'appEball/user_profile.html',{})
+def user_profile(request, username):
+    requestedUser = CustomUser.objects.get(username=username)
+    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
