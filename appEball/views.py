@@ -4,6 +4,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm
+from .models import CustomUser
 
 class HomePage(View):
     template_name = 'appEball/home_page.html'
