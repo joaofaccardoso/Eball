@@ -19,23 +19,36 @@ body {
     color: #FFE603;
 }
 
-#profileCard {
-    margin: 5%;
-    border-radius: 25px;
-    padding: 2%;
-    background-color: #262626;
-}
-
-.card-title {
+#profileTitle {
+    margin-left: 5%;
+    margin-top: 5%;
     color: white;
 }
 
-.card-subtitle {
+#userTitle {
+    margin-left: 5%;
     color: #E5E5E5;
 }
 
-.line {
-    line-height: 40px;
+#profileCol{
+    position: absolute;    
+    margin-top: 2%;
+}
+
+.row{
+    padding-top: 10px;
+    padding-right: 60px;
+    padding-left: 60px;
+    text-align: justify;
+}
+
+#row1{
+    height: 50px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 50px;
 }
 
 .userLabel {
@@ -45,15 +58,25 @@ body {
 
 .userInfo {
     color: #E5E5E5;
+    margin-left: 5%;
+}
+
+#colImg{
+    position: absolute;
+    z-index: 1;
+    padding-right: 5%;
+    margin-top: -2%;
 }
 
 .btn {
     background-color: #727070;
     color: white;
+    width: 180px;
+    margin-top: 5%;
 }
 
 .btn:hover {
     background-color: #FFE603;
-    color: black;
+    color: #262626;
     transition:0.5s;
 }
