@@ -4,7 +4,6 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm
-from .models import CustomUser
 
 class HomePage(View):
     template_name = 'appEball/home_page.html'
@@ -48,7 +47,6 @@ class UserLogin(View):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Welcome { user.firstName } { user.lastName }!')
                 return HttpResponseRedirect(reverse('appEball:home_page'))
             else:
                 messages.warning(request, 'Invalid e-mail or password.')
@@ -59,12 +57,13 @@ class UserLogin(View):
 
 def userLogout(request):
     logout(request)
-    messages.warning(request, 'You logged out')
     return HttpResponseRedirect(reverse('appEball:home_page'))
 
 def teams_list(request):
     return render(request, 'appEball/teams_list.html', {})
 
-def user_profile(request, username):
-    requestedUser = CustomUser.objects.get(username=username)
-    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
+def user_profile(request):
+	return render(request,'appEball/user_profile.html',{})
+
+def help(request):
+	return render(request,'appEball/help.html',{})

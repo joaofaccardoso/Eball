@@ -12,7 +12,15 @@ html {
 }
 
 body {
-    background-color: transparent;
+    background-image: url("../assets/home_page.jpg");
+    background-color: #262626;
+    background-blend-mode: overlay;
+    
+    height: 100%;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #loginNav {
@@ -43,7 +51,19 @@ label {
 
 #loginBtn:hover {
     background-color: #FFE603;
-    color: black;
+    color: #262626;
+    transition:0.5s;
+}
+
+#backBtn {
+    background-color: #727070;
+    color: white;
+    margin-top: 10px;
+}
+
+#backBtn:hover {
+    background-color: #FFE603;
+    color: #262626;
     transition:0.5s;
 }
 

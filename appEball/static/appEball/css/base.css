@@ -6,12 +6,12 @@ html {
     height: 100%;
 
     background-position: center;
-    background-repeat: no-repeat ;
+    background-repeat: no-repeat;
     background-size: cover;
 }
 
 nav {
-    background-color: black;
+    background-color: #262626;
 }
 
 .nav-link {
