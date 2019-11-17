@@ -15,75 +15,17 @@
             <h4 class="card-subsubstitle line"><strong>Reserves</h4>
             <div class="container">
             	<div class="row">
-   					 <div class="col-6">
-   					 	<p class="name line">Buscar nome1</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome2</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome3</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome4</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome5</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome6</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome7</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome8</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome9</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome10</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-    				<div class="col-6">
-   					 	<p class="name line">Buscar nome11</p>
-   					</div>
-    				<div class="col-6">
-     					<a class="btn rounded-pill" href="#">Kick Player</a>
-    				</div>
-
- 			 	</div>
- 			 </div>
+                {% for i in  '0123456789'|make_list %}
+                  <div class="col-6">
+                    <p class="name line">Buscar nome1</p>
+                  </div>
+                  <div class="col-6">
+                    <a class="btn rounded-pill" href="#">Kick Player</a>
+                  </div>
+                {% endfor %}
+   					 
+ 			 	    </div>
+ 			  </div>
             <div class="row">
                 <div class="col" align='right'>
                     <a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}">Back</a>
