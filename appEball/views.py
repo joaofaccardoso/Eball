@@ -47,7 +47,6 @@ class UserLogin(View):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Welcome { user.firstName } { user.lastName }!')
                 return HttpResponseRedirect(reverse('appEball:home_page'))
             else:
                 messages.warning(request, 'Invalid e-mail or password.')
@@ -58,7 +57,6 @@ class UserLogin(View):
 
 def userLogout(request):
     logout(request)
-    messages.warning(request, 'You logged out')
     return HttpResponseRedirect(reverse('appEball:home_page'))
 
 def teams_list(request):
@@ -66,3 +64,6 @@ def teams_list(request):
 
 def user_profile(request):
 	return render(request,'appEball/user_profile.html',{})
+
+def help(request):
+	return render(request,'appEball/help.html',{})

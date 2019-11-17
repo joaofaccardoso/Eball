@@ -1,0 +1,14 @@
+{% extends 'appEball/base.html' %}
+
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/base_with_grey_background.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="card position-static" id="card1" style="background-color: #262626; border: none; height: 80%; border-radius: 0px;">
+        {% block content2 %}
+        {% endblock %}
+    </div>
+{% endblock %}
