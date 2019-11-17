@@ -62,8 +62,9 @@ def userLogout(request):
 def teams_list(request):
     return render(request, 'appEball/teams_list.html', {})
 
-def user_profile(request):
-	return render(request,'appEball/user_profile.html',{})
+def user_profile(request, username):
+	requestedUser = CustomUser.objects.get(username=username)
+	return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
 
 def help(request):
 	return render(request,'appEball/help.html',{})
