@@ -34,11 +34,11 @@
                     <a class="nav-link" href="#" id="tournamentNav">Tournaments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="helpNav">Help</a>
+                    <a class="nav-link" href="{% url 'appEball:help' %}" id="helpNav">Help</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'appEball:userProfile' user.username %}" id="profileNav">MyProfile</a>
+                        <a class="nav-link" href="{% url 'appEball:userProfile' user.username %}" id='profileNav'>MyProfile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'appEball:logout' %}">Logout</a>

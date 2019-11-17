@@ -1,52 +1,78 @@
-{% extends 'appEball/base.html' %}
+{% extends 'appEball/base_with_grey_background.html' %}
 {% load static %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/user_profile.css' %}">
 {% endblock %}
 
-{% block content %}
-	<div class="card" id="profileCard">
-		<div class="card-body">
-			<h4 class="card-subtitle line">Profile</h4>
-			<h2 class="card-title line"><strong>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</strong></h2>
-			<div class="row">
-				<div class="col-5">
-					<div class="row">
-						<div class="col">
-							<p class="userLabel line">Username:</p>
-							<p class="userLabel line">E-mail:</p>
-							<p class="userLabel line">CC number:</p>
-							<p class="userLabel line">Phone number:</p>
-						</div>
-						<div class="col">
-							<p class="userInfo line">{{ requestedUser.username }}</p>
-							<p class="userInfo line">{{ requestedUser.email }}</p>
-							<p class="userInfo line">{{ requestedUser.ccNumber }}</p>
-							<p class="userInfo line">{{ requestedUser.phoneNumber }}</p>
-						</div>
+{% block content2 %}
+	<div class="content" id="profileContent">
+		<h4 id="profileTitle">Profile</h4>
+		<h2 id="userTitle"><strong>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</strong></h2>
+		<div class="col" id="profileCol">
+			<div class="row" id="row1">
+				<div class="col-sm-2">
+					<p class="userLabel line">Username:</p>
+				</div>
+				<div class="col">
+					<p class="userInfo line">{{ requestedUser.username }}</p>
+				</div>
+			</div>
+			<div class="row" id="row2">
+				<div class="col-sm-2">
+					<p class="userLabel line">E-mail:</p>
+				</div>
+				<div class="col">
+					<p class="userInfo line">{{ requestedUser.email }}</p>
+				</div>
+			</div>
+			<div class="row"  id="row1">
+				<div class="col-sm-2">
+					<p class="userLabel line">CC number:</p>
+				</div>
+				<div class="col">
+					<p class="userInfo line">{{ requestedUser.ccNumber }}</p>
+				</div>
+			</div>
+			<div class="row" id="row2">
+				<div class="col-sm-2">
+					<p class="userLabel line">Phone number:</p>
+				</div>
+				<div class="col">
+					<p class="userInfo line">{{ requestedUser.phoneNumber }}</p>
+				</div>
+			</div>
+			{% if user == requestedUser %}
+				<div class="row" id="row1">
+					<div class="col-sm-2">
+						<p class="userLabel line">Next match:</p>
+					</div>
+					<div class="col">
+						<p class="userInfo line"></p>
 					</div>
 				</div>
-				<div class="col" align='center'>
-					<img src="{% static 'appEball/assets/photo1.png' %}" height="200px" alt="">
+				<div class="row">
+					<div class="col" align='right'>
+						<a class="btn rounded-pill btn-block" href="#">Edit Profile</a>
+					</div>
+					<div class="col" align='left'>
+						<a class="btn rounded-pill btn-block" href={{request.META.HTTP_REFERER}}>Back</a>
+					</div>
 				</div>
-			</div>
+			{% else %}
+				<div class="row" id="row2">
+				</div>
+				<div class="row">
+					<div class="col" align='center'>
+						<a class="btn rounded-pill" href={{request.META.HTTP_REFERER}}>Back</a>
+					</div>
+				</div>
+			{% endif %}
 		</div>
-		{% if user == requestedUser %}
-			<div class="row">
-				<div class="col" align='center'>
-					<a class="btn rounded-pill" href="#">Edit Profile</a>
-				</div>
-				<div class="col" align='center'>
-					<a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}">Back</a>
-				</div>
-			</div>
-		{% else %}
-			<div class="row">
-				<div class="col" align='center'>
-					<a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}">Back</a>
-				</div>
-			</div>
-		{% endif %}
+		<div class="col" id="colImg" align="right">
+			<a href="">
+				<img src="{% static 'appEball/assets/photo1.png' %}" height="350px" alt="">
+			</a>
+		</div>
 	</div>
 {% endblock %}
