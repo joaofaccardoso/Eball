@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
@@ -27,3 +28,20 @@ class CustomUser(AbstractUser):
 
 
     
+class Tournament(models.Model):
+
+        name=models.CharField(max_length=100, blank=False)
+        maxTeams = models.IntegerField(unique=False, blank=False)
+        beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
+        endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
+
+        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate']
+
+        class Meta:
+            db_table = 'Tournament'
+            verbose_name = 'Tournament'
+            verbose_name_plural = 'Tournaments'
+
+        def __str__(self):
+            return self.name
+

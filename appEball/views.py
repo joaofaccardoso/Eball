@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.views import View
-from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
-from .models import CustomUser
+from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm
+from .models import CustomUser, Tournament
 
 class HomePage(View):
     template_name = 'appEball/home_page.html'
@@ -26,14 +26,11 @@ class UserRegister(View):
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=email, password=password)
-            if(user.username == "admin"):
-                user.isAccepted = True
             login(request, user)
             messages.success(request, 'Account created successfuly!')
             return HttpResponseRedirect(reverse('appEball:home_page'))
         else:
-            print(form.errors)
-            messages.warning(request, 'Form is not valid.')
+            messages.warning(request, f'Form is not valid.')
             return HttpResponseRedirect(reverse('appEball:register'))
 
 class UserLogin(View):
@@ -66,6 +63,18 @@ def userLogout(request):
 def teams_list(request):
     return render(request, 'appEball/teams_list.html', {})
 
+def tournaments(request):
+    tournaments_initial=list(Tournament.objects.all())
+    tournaments=[]
+    for i in range(len(tournaments_initial)):
+        if(i%2==0):
+            tournaments.append(["row2",tournaments_initial[i]])
+        else:
+            tournaments.append(["row1",tournaments_initial[i]])
+
+    return render(request, 'appEball/tournaments.html', {'tournaments':tournaments})
+
+
 def user_profile(request, username):
 	requestedUser = CustomUser.objects.get(username=username)
 	return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
@@ -90,12 +99,14 @@ class edit_user_profile(View):
                 messages.success(request, ' Profile edited successfuly!')
                 return HttpResponseRedirect(reverse('appEball:userProfile',kwargs= {"username":username}))
             else:
-                print(form.errors )
+                print(form.errors)
                 messages.warning(request, f'Form is not valid.')
                 return HttpResponseRedirect(reverse('appEball:editUserProfile',kwargs= {"username":username}))
 
 def help(request):
 	return render(request,'appEball/help.html',{})
+
+
 
 def users(request):
     acceptedUsers = list()
@@ -141,3 +152,24 @@ def is_tournament_manager(request, username):
         requestedUser.isTournamentManager = True
     requestedUser.save()
     return HttpResponseRedirect(reverse('appEball:users'))
+
+
+
+class new_tournament(View):
+    form_class = TournamentCreationForm
+    template_name = 'appEball/new_tournament.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        if request.method=="POST":
+            form = self.form_class(data=request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Tournament created successfuly!')
+                return HttpResponseRedirect(reverse('appEball:tournaments'))
+            else:
+                print(form.errors)
+                messages.warning(request, f'Form is not valid.')
+                return HttpResponseRedirect(reverse('appEball:new_tournament'))

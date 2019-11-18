@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser
+from .models import CustomUser , Tournament
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class CustomUserForm(UserCreationForm):
@@ -30,6 +30,7 @@ class CustomUserLoginForm(forms.Form):
         )
 
 
+
 class EditProfileForm(UserChangeForm):
 
     class Meta:
@@ -39,3 +40,15 @@ class EditProfileForm(UserChangeForm):
             'ccNumber',
             'phoneNumber',
             )
+
+
+class TournamentCreationForm(forms.ModelForm):
+    
+    class Meta:
+        model = Tournament
+        fields = (
+            'name',
+            'maxTeams',
+            'beginDate',
+            'endDate',
+        )

@@ -1,0 +1,55 @@
+{% extends 'appEball/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/new_tournament.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="form-group card" id="tournCard">
+        <h1>New Tournament</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col" id="middleColLeft">
+                    <div class="row">
+                        <label for="id_name">Tournament's name:</label>
+                        <input type="text" class="form-control rounded-pill" placeholder="Enter the tournament's name" name="name" maxlength="100" required="" id="id_name">
+                    </div>
+                    <div class="row">
+                         <label for="id_maxTeams">Max Teams:</label>
+                         <input type="number" class="form-control rounded-pill" name="maxTeams" maxlength="100" required="" id="id_maxTeams">
+
+                        
+                    </div>
+                    <div class="row" id="special">
+                        <label for="id_beginDate">Begin date:</label>
+                        <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" maxlength="100" required="" id="id_beginDate">
+                        <label for="id_endDate">End date:</label>
+                        <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate" maxlength="150" required="" id="id_endDate">
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                </div>
+                <div class="col" id="middleColRight">
+                    <div class="row">
+                        
+                    </div>    
+                    <div class="row">
+                        
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                    <button class="btn rounded-pill" type="submit" id="createTournament">Create Tournament</button>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
