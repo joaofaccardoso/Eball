@@ -12,8 +12,7 @@ html {
 }
 
 body {
-    background: inherit;
-    background-blend-mode: inherit;
+    background-color: transparent;
 }
 
 #registerNav{
@@ -56,9 +55,4 @@ label {
     margin: 10px;
     background-color: #262626;
     border-radius: 25px;
-}
-
-.form-control:focus {
-    border-color: none;
-    box-shadow: none;
 }

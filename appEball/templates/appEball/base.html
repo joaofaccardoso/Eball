@@ -17,14 +17,20 @@
             </a>
             <ul class="navbar-nav ml-auto" id="navbarList">
                 {% if user.is_authenticated %}
+                    {% if user.username == "admin" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'appEball:users' %}" id="usersNav">Users</a>
+                        </li>
+                    {% endif %}
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
+                        <a class="nav-link" href="#" id="notificationsNav">Notifications</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">MyCalendar</a>
+                        <a class="nav-link" href="#" id="myCalendarNav">MyCalendar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">MyTeams</a>
+                        <a class="nav-link" href="#" id="myTeamsNav">MyTeams</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -34,11 +40,11 @@
                     <a class="nav-link" href="#" id="tournamentNav">Tournaments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="helpNav">Help</a>
+                    <a class="nav-link" href="{% url 'appEball:help' %}" id="helpNav">Help</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">MyProfile</a>
+                        <a class="nav-link" href="{% url 'appEball:userProfile' user.username %}" id='profileNav'>MyProfile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'appEball:logout' %}">Logout</a>

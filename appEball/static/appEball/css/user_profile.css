@@ -12,130 +12,72 @@ html {
 }
 
 body {
-    background: inherit;
-    background-blend-mode: inherit;
+    background-color: transparent;
 }
 
-#registerNav{
+#profileNav{
     color: #FFE603;
 }
 
-h1 {
+#profileTitle {
+    margin-left: 5%;
+    margin-top: 5%;
     color: white;
-    margin: 30px;
-}
-h2 {
-    color: white;
-    margin: 30px;
-
 }
 
-label {
-    color: white;
+#userTitle {
+    margin-left: 5%;
+    color: #E5E5E5;
+}
+
+#profileCol{
+    position: absolute;    
+    margin-top: 2%;
+}
+
+.row{
+    padding-top: 10px;
+    padding-right: 60px;
+    padding-left: 60px;
+    text-align: justify;
+}
+
+#row1{
+    height: 50px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 50px;
+}
+
+.userLabel {
     color: #FFE603;
+    margin-left: 30px;
 }
 
-label1 {
-    color: white;
-    color: #FFFDFD;
+.userInfo {
+    color: #E5E5E5;
+    margin-left: 5%;
 }
 
-
-
-#middleColLeft {
-    padding-right:160px;
-
+#colImg{
+    position: absolute;
+    z-index: 1;
+    padding-right: 5%;
+    margin-top: -2%;
 }
 
-#middleColRight {
-    padding-left: 15px;
-}
-
-#EditBtn {
+.btn {
     background-color: #727070;
     color: white;
-    margin-top: 30px;
-    margin-left: 15%;
-    margin-bottom: 30px;
+    width: 180px;
+    margin-top: 5%;
+    z-index: 2;
 }
 
-#EditBtn:hover {
+.btn:hover {
     background-color: #FFE603;
-    color: black;
+    color: #262626;
     transition:0.5s;
 }
-
-#BackBtn {
-    background-color: #727070;
-    color: white;
-    margin-top: 30px;
-    margin-left: 35%;
-    margin-bottom: 30px;
-}
-
-#BackBtn:hover {
-    background-color: #FFE603;
-    color: black;
-    transition:0.5s;
-}
-
-.form-control:focus {
-    border-color: none;
-    box-shadow: none;
-}
-
-
-
-.image-container {
-    background-image: url('/static/appEball/assets/photo1.png');
-    background-size: cover;
-    background-position: center;
-    width: 450px;
-    height: 450px;
-    margin-left: -10%;
-}
-#imagem{
-    position:absolute;
-    padding-left:15%;
-    padding-top:13%;
-}
-
-#Card {
-    margin: 1px;
-    background-color: #262626;
-    border-radius: 25px;
-    opacity:85%;
-}
-
-#firstRow{
-    margin-top: 6%
-}
-
-#secondRow{
-    margin-top: 6%
-}
-
-#thirdRow{
-    margin-top: 6%
-}
-
-
-
-#fourthRow{
-    margin-top: 6%
-}
-
-#fifthRow{
-    margin-top: 6%
-}
-
-#sixthRow{
-    margin-top: 6%
-}
-
-
-
-#seventhRow{
-    margin-top: 6%
-}
-
