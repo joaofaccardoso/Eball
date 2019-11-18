@@ -6,13 +6,38 @@
 {% endblock %}
 
 {% block content %}
-    <img id="background" src="{% static 'appEball/assets/home_page2.jpg' %}" class="d-block w-100">
-    <h1 id="teams_list">Teams</h1>
-    <form action="#" method="post">
-        </div><div class="form-group" id="searchar">
-            <input type="search" class="form-control" id="search" placeholder="Search in teams...">
-        </div> 
-        <button type="search" id="searchBtn"></button>
-        <button type="back" id="backBtn" >Back</button>
-    </form>
+
+    <div class="row">
+        <div class="col-9" >
+            <h1 id="teams_list">Teams</h1>
+        </div>
+        
+        <div class="col-2" align="center" id= coli>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-check form-check-inline">
+                    <input type="search" class="form-control rounded-pill" name="Search" id="id_search">
+                    <button  id="searchBtn" type="searchbtn"></button>
+                </div>
+            </form>
+        </div>  
+        
+    </div>
+    <div class="card" style="padding: 15px;border-radius: 25px; background-color: #262626;">
+        <div class="card-body">
+           <p>THIS IS FOR  </p>
+           <p>PLACEHOLDING </p>
+           <p>OK</p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-9" ></div>
+        <div class="col-2" >
+            <button class="btn btn-block rounded-pill" id="backBtn" href={{request.META.HTTP_REFERER}} >Back</button>
+        </div>
+    </div>
+
+
 {% endblock %}

@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.views import View
-from .forms import CustomUserForm, CustomUserLoginForm
+from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
 from .models import CustomUser
 
 class HomePage(View):
@@ -69,6 +69,30 @@ def teams_list(request):
 def user_profile(request, username):
 	requestedUser = CustomUser.objects.get(username=username)
 	return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
+
+class edit_user_profile(View):
+    form_class = EditProfileForm
+
+    def get(self, request,username):
+        print("ALO")
+        requestedUser = CustomUser.objects.get(username=username)
+        return render(request, 'appEball/edit_user_profile.html', {'requestedUser':requestedUser})
+
+    def post(self, request,username):
+        print("oi1")
+        if request.method=="POST":
+            form = self.form_class(data=request.POST, instance=request.user)
+            if form.is_valid():
+                print("oi2")
+                user=form.save()
+
+                username = form.cleaned_data.get('username')
+                messages.success(request, ' Profile edited successfuly!')
+                return HttpResponseRedirect(reverse('appEball:userProfile',kwargs= {"username":username}))
+            else:
+                print(form.errors )
+                messages.warning(request, f'Form is not valid.')
+                return HttpResponseRedirect(reverse('appEball:editUserProfile',kwargs= {"username":username}))
 
 def help(request):
 	return render(request,'appEball/help.html',{})

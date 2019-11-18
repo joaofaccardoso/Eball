@@ -53,7 +53,7 @@
 				</div>
 				<div class="row">
 					<div class="col" align='right'>
-						<a class="btn rounded-pill btn-block" href="#">Edit Profile</a>
+						<a class="btn rounded-pill btn-block" href="{% url 'appEball:editUserProfile' user.username %}">Edit Profile</a>
 					</div>
 					<div class="col" align='left'>
 						<a class="btn rounded-pill btn-block" href={{request.META.HTTP_REFERER}}>Back</a>
