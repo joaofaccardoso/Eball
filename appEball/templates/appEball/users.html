@@ -1,0 +1,70 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/users.css' %}">
+{% endblock %}
+
+{% block content2 %}    
+    <h1>Users</h1>
+
+    <div class="content" id="tabsContent">
+
+        <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#accepted" role="tab" aria-controls="home" aria-selected="true">Accepted users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#toAccept" role="tab" aria-controls="profile" aria-selected="false">Users to accept</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tournamentsManagers" role="tab" aria-controls="profile" aria-selected="false">Tournaments Managers</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active border border-1" id="accepted" role="tabpanel" aria-labelledby="home-tab">
+                {% for u in acceptedUsers %}
+                    <div class="row" id="{{ u.0 }}" onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                        <div class="col-sm-5">
+                            <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                        </div>
+                        <div class="col">
+                            <a class="btn rounded-pill" href="{% url 'appEball:delete_user' u.1.username %}" id='pageBtn'>Delete User</a>
+                            {% if u.1.isTournamentManager == False %}
+                                <a class="btn rounded-pill" href="{% url 'appEball:is_tournament_manager' u.1.username %}" id='pageBtn'>Tournament manager</a>
+                            {% else %}
+                                <a class="btn rounded-pill" href="{% url 'appEball:is_tournament_manager' u.1.username %}" id='pageBtnActive'>Tournament manager</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade active border border-1" id="toAccept" role="tabpanel" aria-labelledby="profile-tab">
+                {% for u in notAcceptedUsers %}
+                <div class="row" id="{{ u.0 }}" onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                    <div class="col-sm-5">
+                        <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                    </div>
+                    <div class="col">
+                        <a class="btn rounded-pill" href="{% url 'appEball:accept_user' u.1.username %}" id='pageBtn'>Accept User</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade active border border-1" id="tournamentsManagers" role="tabpanel" aria-labelledby="profile-tab">
+                {% for u in tournamentsManagers %}
+                <div class="row" id="{{ u.0 }}" onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                    <div class="col-sm-5">
+                        <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                    </div>
+                    <div class="col">
+                        <a class="btn rounded-pill" href="{% url 'appEball:delete_user' u.1.username %}" id='pageBtn'>Accept User</a>
+                        <a class="btn rounded-pill" href="{% url 'appEball:is_tournament_manager' u.1.username %}" id='pageBtnActive'>Tournament manager</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

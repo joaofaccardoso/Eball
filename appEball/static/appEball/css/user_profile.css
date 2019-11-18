@@ -73,6 +73,7 @@ body {
     color: white;
     width: 180px;
     margin-top: 5%;
+    z-index: 2;
 }
 
 .btn:hover {

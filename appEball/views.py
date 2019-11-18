@@ -26,11 +26,14 @@ class UserRegister(View):
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=email, password=password)
+            if(user.username == "admin"):
+                user.isAccepted = True
             login(request, user)
             messages.success(request, 'Account created successfuly!')
             return HttpResponseRedirect(reverse('appEball:home_page'))
         else:
-            messages.warning(request, f'Form is not valid.')
+            print(form.errors)
+            messages.warning(request, 'Form is not valid.')
             return HttpResponseRedirect(reverse('appEball:register'))
 
 class UserLogin(View):
@@ -69,3 +72,48 @@ def user_profile(request, username):
 
 def help(request):
 	return render(request,'appEball/help.html',{})
+
+def users(request):
+    acceptedUsers = list()
+    notAcceptedUsers = list()
+    tournamentsManagers = list()
+    acceptedFilter = list(CustomUser.objects.filter(isAccepted = True).exclude(username="admin").order_by('username'))
+    notAcceptedFilter = list(CustomUser.objects.filter(isAccepted = False).exclude(username="admin").order_by('username'))
+    tournamentsManagersFilter = list(CustomUser.objects.filter(isTournamentManager = True).exclude(username="admin").order_by('username'))
+
+    for i in range(len(acceptedFilter)):
+        print(acceptedFilter[i].username)
+        if(i%2==0):
+            acceptedUsers.append(["row2",acceptedFilter[i]])
+        else:
+            acceptedUsers.append(["row1",acceptedFilter[i]])
+    for i in range(len(notAcceptedFilter)):
+        if(i%2==0):
+            notAcceptedUsers.append(["row2",notAcceptedFilter[i]])
+        else:
+            notAcceptedUsers.append(["row1",notAcceptedFilter[i]])
+    for i in range(len(tournamentsManagersFilter)):
+        if(i%2==0):
+            tournamentsManagers.append(["row2",tournamentsManagersFilter[i]])
+        else:
+            tournamentsManagers.append(["row1",tournamentsManagersFilter[i]])
+    return render(request,'appEball/users.html',{'acceptedUsers':acceptedUsers,'notAcceptedUsers':notAcceptedUsers,'tournamentsManagers':tournamentsManagers})
+
+def accept_user(request, username):
+    requestedUser = CustomUser.objects.get(username=username)
+    requestedUser.isAccepted = True
+    requestedUser.save()
+    return HttpResponseRedirect(reverse('appEball:users'))
+
+def delete_user(request, username):
+    CustomUser.objects.get(username=username).delete()
+    return HttpResponseRedirect(reverse('appEball:users'))
+
+def is_tournament_manager(request, username):
+    requestedUser = CustomUser.objects.get(username=username)
+    if(requestedUser.isTournamentManager):
+        requestedUser.isTournamentManager = False
+    else:
+        requestedUser.isTournamentManager = True
+    requestedUser.save()
+    return HttpResponseRedirect(reverse('appEball:users'))
