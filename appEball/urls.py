@@ -13,4 +13,8 @@ urlpatterns = [
     path('profile/<str:username>', views.user_profile, name='userProfile'),
     path('editprofile/<str:username>', edit_user_profile.as_view(), name='editUserProfile'),
     path('help/', views.help, name='help'),
+    path('users/', views.users, name='users'),
+    path('accept_user/<str:username>', views.accept_user, name='accept_user'),
+    path('delete_user/<str:username>', views.delete_user, name='delete_user'),
+    path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
 ]

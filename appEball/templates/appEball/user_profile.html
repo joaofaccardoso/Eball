@@ -71,7 +71,11 @@
 		</div>
 		<div class="col" id="colImg" align="right">
 			<a href="">
-				<img src="{% static 'appEball/assets/photo1.png' %}" height="350px" alt="">
+				{% if requestedUser.profileImg.url is not none %}
+					<img src="{{ requestedUser.profileImg.url }}" height="350px" alt="">
+				{% else %}
+					<img src="{% static 'appEball/assets/photo1.png' %}" height="350px" alt="">
+				{% endif %}
 			</a>
 		</div>
 	</div>

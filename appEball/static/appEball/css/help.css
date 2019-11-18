@@ -9,7 +9,7 @@
 }
 
 * {
-    font-family: "lucidaSansDemibold";
+    font-family: "lucidaSansRegular";
 }
 
 html {
@@ -23,11 +23,13 @@ body {
 
 #helpNav{
     color: #FFE603;
+    font-family: "lucidaSansDemibold";
 }
 
 h1{
     margin: 25px;
     color: white;
+    font-family: "lucidaSansDemibold";
 }
 
 .content{
@@ -47,6 +49,7 @@ h1{
     vertical-align: middle;
     color: #FFE603;
     font-size: 25px;
+    font-family: "lucidaSansDemibold";
 }
 
 p{
