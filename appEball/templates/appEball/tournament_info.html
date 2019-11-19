@@ -1,0 +1,156 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/tournament_info.css' %}">
+{% endblock %}
+
+{% block content2 %}
+
+    <div class="content">
+        <div class="row">
+            <div class="col-4">
+                <h3>Tournament</h3>
+                <h1 class="name_Tournament">Uc Tourne</h1>
+            </div>
+            <div class="col-1">
+            <!--botao para a tras-->
+            </div>
+            <div class="col-3">
+                <p class="round">ROUND 6</p>
+            </div>
+            <div class="col-1">
+                <!--botao para a frente-->
+            </div>
+
+        </div>
+        {% for i in  '01'|make_list %}
+            <div class="row traco cor">
+                <div class="col-2"></div>
+                <div class="col-2">
+                    <p class="equipa1">Team x</p>
+                </div>
+                <div class="col-4">
+                    <p class="details" id="details">dia, horas , Campo Nao sei aonde</p>
+                </div>
+                <div class="col-2">
+                    <p class="equipa2" id="round">Team x</p>
+                </div>
+
+     		</div>
+            <div class="row traco ">
+                <div class="col-2"></div>
+                <div class="col-2">
+                    <p class="equipa1">Team x</p>
+                </div>
+                <div class="col-4">
+                    <p class="details" id="details">dia, horas , Campo Nao sei aonde</p>
+                </div>
+                <div class="col-2">
+                    <p class="equipa2" id="round">Team x</p>
+                </div>
+        </div>
+        {% endfor %}
+
+        <div class="row space">
+               <h2 >Leaderboard</h2>
+        </div>
+        <div class="row traco cor">
+            <div class="col-1"></div>
+            <div class="col-2">
+                <p class="subtitulo_barra">Teams</p>
+            </div>
+  
+            <div class="col-1">
+                <p class="subtitulo_barra">Points</p>
+            </div>
+            <div class="col-1">
+                <p class="subtitulo_barra" >Played</p>
+            </div>
+            <div class="col-1">
+                <p class="subtitulo_barra" >Won</p>
+            </div>
+            <div class="col-1">
+                <p class="subtitulo_barra" >Drawn</p>
+            </div>
+            <div class="col-1">
+                <p class="subtitulo_barra" >Lost</p>
+            </div>
+            <div class="col-1">
+                <p class="subtitulo_barra" >GF</p>
+            </div>
+            <div class="col-1">
+                <p class="subtitulo_barra" >GA</p>
+            </div>
+             <div class="col-1">
+                <p class="subtitulo_barra" >GD</p>
+            </div>
+        </div>
+        <div class="row traco ">
+            <div class="col-1"></div>
+            <div class="col-2">
+                <p class="titulo_barra" id="primeiro">Team x</p>
+            </div>
+     
+            <div class="col-1">
+                <p class="titulo_barra" id="points">5</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="played" >3</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="won">3</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="drawn">0</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="lost">0</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="GF">8</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id ="GA">1</p>
+            </div>
+             <div class="col-1">
+                <p class="titulo_barra" id="GD">+7</p>
+            </div>
+        </div>
+        <div class="row traco cor">
+            <div class="col-1"></div>
+            <div class="col-2">
+                <p class="titulo_barra" id="segundo">Team y</p>
+            </div>
+          
+            <div class="col-1">
+                <p class="titulo_barra" id="points">4</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="played" >3</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="won">3</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="drawn">0</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="lost">1</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id="GF">7</p>
+            </div>
+            <div class="col-1">
+                <p class="titulo_barra" id ="GA">1</p>
+            </div>
+             <div class="col-1">
+                <p class="titulo_barra" id="GD">+4</p>
+            </div>
+        </div>
+         <div class="row space"></div>
+        <a class="btn rounded-pill pull-right" role="button" id="backBtn" href={{ request.META.HTTP_REFERER }}>Back</a>
+    </div>
+    
+    
+{% endblock %}
