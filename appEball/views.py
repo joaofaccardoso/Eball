@@ -204,3 +204,20 @@ class new_tournament(View):
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
                 return HttpResponseRedirect(reverse('appEball:new_tournament'))
+def askSub(request):
+    return render(request, 'appEball/askSub.html', {})
+
+def askKick(request):
+    return render(request, 'appEball/askKick.html', {})
+
+
+def my_teams(request):
+    return render(request, 'appEball/my_teams.html', {})
+   
+
+def tournament_info(request):
+    return render(request, 'appEball/tournament_info.html', {})
+
+def tournament_teams(request):
+    return render(request, 'appEball/tournament_teams.html', {})
+
