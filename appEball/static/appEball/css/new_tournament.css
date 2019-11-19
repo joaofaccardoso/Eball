@@ -43,9 +43,19 @@ label {
     padding-left: 0px;
 }
 
-#special{
+#dateRow{
     height: 90px;
 
+}
+
+#check{
+    padding-right:2px;
+    margin:5px;
+    padding-left:3px;
+}
+
+#space{
+    margin-left:  10px;
 }
 #id_beginDate,#id_endDate{
 
@@ -54,15 +64,16 @@ label {
     margin-left: 10px;
     margin-right:20px ;
 }
-#createTournament {
+#createTournament,#back {
     background-color: #727070;
     color: white;
     margin-top: 30px;
     margin-left: 32%;
     margin-bottom: 30px;
+    width: 200px;
 }
 
-#createTournament:hover {
+#createTournament:hover, #back:hover {
     background-color: #FFE603;
     color: black;
     transition:0.5s;

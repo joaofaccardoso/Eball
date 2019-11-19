@@ -1,11 +1,10 @@
-{% extends 'appEball/base.html' %}
-{% load static %}
+{% extends 'appEball/base_with_grey_background.html' %}{% load static %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/new_team.css' %}">
 {% endblock %}
 
-{% block content %}
+{% block content2 %}
     <div class="form-group card" id="teamCard">
         <h1>New Team</h1>
         <form method="post">
@@ -19,8 +18,8 @@
                     </div>
                     <div class="row">
                         <div class="form-group">
-                              <label for="sel1">Select list:</label>
-                              <select class="form-control" id="sel1" name="tactic">
+                              <label for="sel1">Select tactic:</label>
+                              <select class="form-control rounded-pill" id="sel1" name="tactic">
                                 {% for u in tactics%}
                                     <option value="{{u.1}}">{{u.1}}</option>
                                 {% endfor %}

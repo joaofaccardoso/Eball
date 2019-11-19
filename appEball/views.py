@@ -191,7 +191,7 @@ class new_tournament(View):
     template_name = 'appEball/new_tournament.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, self.template_name,{'week':TournamentCreationForm.week})
 
     def post(self, request):
         if request.method=="POST":

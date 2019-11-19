@@ -43,7 +43,7 @@ class EditProfileForm(UserChangeForm):
 
 
 class TournamentCreationForm(forms.ModelForm):
-    
+    week=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
     class Meta:
         model = Tournament
         fields = (
@@ -51,6 +51,7 @@ class TournamentCreationForm(forms.ModelForm):
             'maxTeams',
             'beginDate',
             'endDate',
+            'gameDays',
         )
 
 
