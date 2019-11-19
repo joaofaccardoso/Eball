@@ -18,20 +18,20 @@
                         <input type="text" class="form-control rounded-pill" placeholder="Enter the Team's name" name="name" maxlength="100" required="" id="id_name">
                     </div>
                     <div class="row">
-                        <div class="dropdown">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Choose tactic
-                          </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            {% for u in tacticChoice %}
-                            <a class="dropdown-item" href="#">{{ u.0 }}</a>
-                            {% endfor %}
-                          </div>
-                        </div>
+                        <div class="form-group">
+                              <label for="sel1">Select list:</label>
+                              <select class="form-control" id="sel1" name="tactic">
+                                {% for u in tactics%}
+                                    <option value="{{u.1}}">{{u.1}}</option>
+                                {% endfor %}
+                              </select>
+                               
+                              </div>
+                    </div>
                          
 
                         
-                    </div>
+                  
                     <div class="row" >
                         
                     </div>

@@ -80,7 +80,7 @@ class new_team(View):
     template_name = 'appEball/new_team.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, self.template_name,{'tactics':TeamCreationForm.tacticChoice})
 
     def post(self, request):
         if request.method=="POST":
