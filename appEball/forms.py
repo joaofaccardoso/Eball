@@ -1,6 +1,6 @@
 from django import forms
 from .models import CustomUser
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class CustomUserForm(UserCreationForm):
 
@@ -16,6 +16,7 @@ class CustomUserForm(UserCreationForm):
             'password1',
             'password2',
         )
+   
 
 class CustomUserLoginForm(forms.Form):
     email = forms.EmailField(max_length=255)
@@ -27,3 +28,14 @@ class CustomUserLoginForm(forms.Form):
             'email',
             'password',
         )
+
+
+class EditProfileForm(UserChangeForm):
+
+    class Meta:
+        model= CustomUser
+        fields=( 'username',
+            'email',
+            'ccNumber',
+            'phoneNumber',
+            )

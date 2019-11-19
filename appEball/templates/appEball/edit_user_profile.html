@@ -1,0 +1,73 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/edit_user_profile.css' %}">
+{% endblock %}
+
+{% block content2 %}
+	<div class="content" id="profileContent">
+		<h4 id="profileTitle">Edit Profile</h4>
+		<h2 id="userTitle"><strong>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</strong></h2>
+		 <form method="post">
+            {% csrf_token %}
+			<div class="col" id="profileCol">
+				<div class="row" id="row1">
+					<div class="col-sm-2">
+						<p class="userLabel line">Username:</p>
+					</div>
+					<div class="col">
+						<input type="userInfo line" class="form-control rounded-pill" name="username" id="username" value={{ requestedUser.username }}>				
+					</div>
+				</div>
+				<div class="row" id="row2">
+					<div class="col-sm-2">
+						<p class="userLabel line">E-mail:</p>
+					</div>
+					<div class="col">
+						<input type="userInfo line" class="form-control rounded-pill" name="email" id="email" value={{ requestedUser.email }}>	
+					</div>
+				</div>
+				<div class="row"  id="row1">
+					<div class="col-sm-2">
+						<p class="userLabel line">CC number:</p>
+					</div>
+					<div class="col">
+						<input type="userInfo line" class="form-control rounded-pill"  name="ccNumber" id="ccNumber" value={{ requestedUser.ccNumber }}>		
+					</div>
+				</div>
+				<div class="row" id="row2">
+					<div class="col-sm-2">
+						<p class="userLabel line">Phone number:</p>
+					</div>
+					<div class="col">
+						<input type="userInfo line" class="form-control rounded-pill" name ="phoneNumber"id="phoneNumber" value={{ requestedUser.phoneNumber }}>	
+					</div>
+				</div>
+				<div class="row" id="row1">
+					<div class="col-sm-2">
+						<p class="userLabel line">Next match:</p>
+					</div>
+					<div class="col">
+						<p class="userInfo line"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col" align='right'>
+						<button class="btn rounded-pill btn-block" type="submit" >Save</button>
+					</div>
+					<div class="col" align='left'>
+						<button class= "btn rounded-pill btn-block" href={{request.META.HTTP_REFERER}}>Back</button>
+					</div>
+				</div>
+			</div>
+			<!--
+			<div class="col" id="colImg" align="right">
+				<img src="{% static 'appEball/assets/photo1.png' %}" height="350px" alt="">
+			</div>-->
+		</form>
+		
+		
+
+	</div>
+{% endblock %}

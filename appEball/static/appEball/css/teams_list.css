@@ -1,120 +1,70 @@
 @font-face {
-    font-family: "lucidaSansDemibold";
-    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
-}
-
-@font-face {
-    font-family: "lucidaSansRegular";
+    font-family: "lucidaSans";
     src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
 }
 
-
 * {
-    font-family: "lucidaSansRegular";
+    font-family: "lucidaSans";
 }
 
-body{
-    background-color: #262626;
+html {
+    overflow-x: hidden;
 }
 
-#logo {
-    padding: 15px;
-
-}
-
-#background {
-    position: absolute;
-    bottom: 0px;
-    opacity: 60%;
+body {
+    background-color: transparent;
 }
 
 
-#teams_list{
-    position: absolute;
-    width: 100%;
-    height: 71px;
-    text-align: left;
-    top: 80px;
-    left: 20px;
-    font-size: 60px;
-    line-height: 71px;
-    color: #FFFDFD;
+h1 {
+    color: white;
+    margin: 10px;
+    margin-top: 30px;
+    margin-left: 40px;
 }
 
-
-right *{
-    font-size: 20px;
-    margin: 0px 6px;
-    color: #FFFFFF;
-}
-
-right *:hover{
-    color: #FFE603;
-    text-decoration: none;
-    transition:0.5s;
+label {
+    color: white;
+    line-height: 40px;
 }
 
 
 
-form input{
-    position: absolute;
-    left: 1240px;
-    top: 100px;
+p{
+    font-size: 80px;
+    color: white;
+}
+
+
+#coli{
+    padding: 35px;
+}
+#id_search{
     width: 200px;
-    height: 30px;
-    background: #C4C4C4;
-    border-radius: 200px;
-    
-    
-    
 }
-
-#searchar{
-    position: absolute;
-    left: 1240px;
-    top: 100px;
-    width: 200px;
-    height: 30px;
-    background: #C4C4C4;
-    border-radius: 200px;
-    
-
-
-}
-
-
-form button{
-    position: absolute;
-    width: 100px;
-    height: 30px;
-    background-color: #727070;
-    border-radius: 200px;
-    border: none;
-    font-family: "lucidaSansRegular";
-    font-size: 20px;    
-    line-height: 31px;
-    text-align: center;
-
-    color: #FFFFFF;
-}
-
-form button:hover{
-    transition:0.2s;
-    color: #727070;
-    background-color: #C4C4C4;
-}
-
 
 
 
 #searchBtn{
-    left: 1440px;
-    top: 100px;
-    width: 30px;
+    background-color: #727070;
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    
 }
 
+#searchBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
+}
 #backBtn{
+    background-color: #727070;
+    color: white;
     width: 100px;
-    left: 1370px;
-    bottom: 155px;
+}
+#backBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
 }

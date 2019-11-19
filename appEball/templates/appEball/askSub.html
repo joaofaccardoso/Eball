@@ -1,0 +1,36 @@
+{% extends 'appEball/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/askSub.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+<div class="card" id="SubCard">
+        <div class="card-body">
+            <h4 class="card-subtitle line">Tournament</h4>
+            <h2 class="card-title line"><strong>Buscar nome do Tourneio</strong></h2>
+            <h4 class="card-subsubstitle line"><strong>Reserves</h4>
+            <div class="container">
+            	<div class="row">
+   					 {% for i in  '0123456789'|make_list %}
+	                  <div class="col-6">
+	                    <p class="name line">Buscar nome1</p>
+	                  </div>
+	                  <div class="col-6">
+	                    <a class="btn rounded-pill" href="#">Ask Sub</a>
+	                  </div>
+	                {% endfor %}
+ 			 	</div>
+ 			 </div>
+            <div class="row">
+                <div class="col" align='right'>
+                    <a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}">Back</a>
+                </div>
+            </div>
+        </div>
+</div>
+
+{% endblock %}
