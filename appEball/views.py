@@ -1,10 +1,16 @@
+import json
 from django.shortcuts import render, reverse
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
+from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm
-from .models import CustomUser
+from .models import CustomUser,Notification
+from django.http import JsonResponse
+from django.db import transaction
+from django.db import IntegrityError
+
 
 class HomePage(View):
     template_name = 'appEball/home_page.html'
@@ -28,6 +34,13 @@ class UserRegister(View):
             user = authenticate(username=email, password=password)
             if(user.username == "admin"):
                 user.isAccepted = True
+                user.isTournamentManager = True
+            else:
+                admin = CustomUser.objects.filter(username="admin")
+                n = Notification(text = "New Register!\n"+user.username+" registered.", title = "New Register", user = admin[0])
+                n.save()
+            n = Notification(text = "Welcome to Eball!\nHere you can play in different teams with different people.\nJust waiting for admin confirmation.", title = "Welcome to Eball!", user = user)
+            n.save()
             login(request, user)
             messages.success(request, 'Account created successfuly!')
             return HttpResponseRedirect(reverse('appEball:home_page'))
@@ -74,35 +87,41 @@ def help(request):
 	return render(request,'appEball/help.html',{})
 
 def users(request):
+    allUsers = list()
     acceptedUsers = list()
     notAcceptedUsers = list()
     tournamentsManagers = list()
+    allFilter = list(CustomUser.objects.all().exclude(username="admin").order_by('isAccepted','username'))
     acceptedFilter = list(CustomUser.objects.filter(isAccepted = True).exclude(username="admin").order_by('username'))
     notAcceptedFilter = list(CustomUser.objects.filter(isAccepted = False).exclude(username="admin").order_by('username'))
     tournamentsManagersFilter = list(CustomUser.objects.filter(isTournamentManager = True).exclude(username="admin").order_by('username'))
+    for i in range(len(allFilter)):
+        if(i%2==0):
+            allUsers.append(["row2",allFilter[i]])
+            if(i<len(acceptedFilter)):
+                acceptedUsers.append(["row2",acceptedFilter[i]])
+            if(i<len(notAcceptedFilter)):
+                notAcceptedUsers.append(["row2",notAcceptedFilter[i]])
+            if(i<len(tournamentsManagersFilter)):
+                tournamentsManagers.append(["row2",tournamentsManagersFilter[i]])
+        else:
+            allUsers.append(["row1",allFilter[i]])
+            if(i<len(acceptedFilter)):
+                acceptedUsers.append(["row1",acceptedFilter[i]])
+            if(i<len(notAcceptedFilter)):
+                notAcceptedUsers.append(["row1",notAcceptedFilter[i]])
+            if(i<len(tournamentsManagersFilter)):
+                tournamentsManagers.append(["row1",tournamentsManagersFilter[i]])
 
-    for i in range(len(acceptedFilter)):
-        print(acceptedFilter[i].username)
-        if(i%2==0):
-            acceptedUsers.append(["row2",acceptedFilter[i]])
-        else:
-            acceptedUsers.append(["row1",acceptedFilter[i]])
-    for i in range(len(notAcceptedFilter)):
-        if(i%2==0):
-            notAcceptedUsers.append(["row2",notAcceptedFilter[i]])
-        else:
-            notAcceptedUsers.append(["row1",notAcceptedFilter[i]])
-    for i in range(len(tournamentsManagersFilter)):
-        if(i%2==0):
-            tournamentsManagers.append(["row2",tournamentsManagersFilter[i]])
-        else:
-            tournamentsManagers.append(["row1",tournamentsManagersFilter[i]])
-    return render(request,'appEball/users.html',{'acceptedUsers':acceptedUsers,'notAcceptedUsers':notAcceptedUsers,'tournamentsManagers':tournamentsManagers})
+    return render(request,'appEball/users.html',{'allUsers':allUsers,'acceptedUsers':acceptedUsers,'notAcceptedUsers':notAcceptedUsers,'tournamentsManagers':tournamentsManagers})
 
 def accept_user(request, username):
     requestedUser = CustomUser.objects.get(username=username)
     requestedUser.isAccepted = True
     requestedUser.save()
+    print("accept")
+    n = Notification(text = "You have been accepted to the app! Check the teams in need of an element.\n Hope you enjoy!", title = "You have been accepted to the app!", user = requestedUser)
+    n.save()
     return HttpResponseRedirect(reverse('appEball:users'))
 
 def delete_user(request, username):
@@ -111,9 +130,53 @@ def delete_user(request, username):
 
 def is_tournament_manager(request, username):
     requestedUser = CustomUser.objects.get(username=username)
-    if(requestedUser.isTournamentManager):
+    print("tuorn:",requestedUser.isTournamentManager)
+    if(requestedUser.isTournamentManager == True):
         requestedUser.isTournamentManager = False
+        n = Notification(text = "You are no more tournaments manager! You can still create and manage teams or play in another tournaments!", title = "You are no more tournaments manager!", user = requestedUser)
+        print("nhecas")
     else:
         requestedUser.isTournamentManager = True
+        n = Notification(text = "You are now tournaments manager! You can create and manage tournaments!", title = "You are now tournaments manager!", user = requestedUser)
+        print("Tornei gestor de torneios")
     requestedUser.save()
+    n.save()
     return HttpResponseRedirect(reverse('appEball:users'))
+
+def notifications(request):
+    notifications = list()
+    notificationsNotSeen = list()
+    notificationsFilter = Notification.objects.filter(user = request.user).order_by('isSeen','-date')
+    for i in range(len(notificationsFilter)):
+        print("olha ue lindo:",notificationsFilter[i].isSeen)
+        if(i%2==0):
+            notifications.append(["row2","collapseMessage"+str(i),notificationsFilter[i]])
+        else:
+            notifications.append(["row1","collapseMessage"+str(i),notificationsFilter[i]])
+    notificationsNotSeenFilter = Notification.objects.filter(user = request.user, isSeen = False).order_by('isSeen','-date')
+    for i in range(len(notificationsNotSeenFilter)):
+        if(i%2==0):
+            notificationsNotSeen.append(["row2","collapseMessage"+str(i),notificationsNotSeenFilter[i]])
+        else:
+            notificationsNotSeen.append(["row1","collapseMessage"+str(i),notificationsNotSeenFilter[i]])
+    return render(request, 'appEball/notifications.html', {'notifications':notifications,'notificationsNotSeen':notificationsNotSeen})
+
+def is_seen(request, pk):
+    if request.user.is_authenticated:
+        request_data = json.loads(request.body)
+        try:
+            with transaction.atomic():
+                notification = Notification.objects.get(pk=pk)
+                notification.isSeen = request_data.get("isSeen")
+                notification.save()
+                notifications = list()
+                notificationsFilter = Notification.objects.filter(user = request.user).order_by('-date','-isSeen')
+                for i in range(len(notificationsFilter)):
+                    if(i%2==0):
+                        notifications.append(["row2","collapseMessage"+str(i),notificationsFilter[i]])
+                    else:
+                        notifications.append(["row1","collapseMessage"+str(i),notificationsFilter[i]])
+                return JsonResponse({"success": True})
+        except IntegrityError as err:
+            raise err
+    raise Http404

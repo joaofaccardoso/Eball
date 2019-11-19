@@ -9,7 +9,6 @@ class CustomUser(AbstractUser):
     phoneNumber = models.IntegerField(unique=True, blank=False)
     profileImg = models.ImageField(upload_to="images")
     isAccepted = models.BooleanField(default=False)
-    isPageAdmin = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
     isCaptain = models.BooleanField(default=False)
 
@@ -25,5 +24,9 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-
-    
+class Notification(models.Model):
+    date = models.DateTimeField(auto_now_add = True)
+    title = models.TextField(blank = False, default="")
+    text = models.TextField(blank = False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    isSeen = models.BooleanField(default = False)

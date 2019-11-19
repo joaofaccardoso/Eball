@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import UserRegister, UserLogin, HomePage
+from .models import Notification
 
 app_name = 'appEball'
 
@@ -16,4 +17,6 @@ urlpatterns = [
     path('accept_user/<str:username>', views.accept_user, name='accept_user'),
     path('delete_user/<str:username>', views.delete_user, name='delete_user'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('is_seen/<int:pk>/', views.is_seen, name='is_seen'),    
 ]
