@@ -17,4 +17,9 @@ urlpatterns = [
     path('accept_user/<str:username>', views.accept_user, name='accept_user'),
     path('delete_user/<str:username>', views.delete_user, name='delete_user'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
+    path('askSub/', views.askSub, name='askSub'),
+    path('askKick/', views.askKick, name='askKick'),
+    path('my_teams/', views.my_teams, name='my_teams'),
+    path('tournament_info/', views.tournament_info, name='tournament_info'),
+    path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
 ]
