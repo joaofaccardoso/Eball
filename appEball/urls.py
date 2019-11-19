@@ -22,4 +22,9 @@ urlpatterns = [
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
     path('notifications/', views.notifications, name='notifications'),
     path('is_seen/<int:pk>/', views.is_seen, name='is_seen'),    
+    path('askSub/', views.askSub, name='askSub'),
+    path('askKick/', views.askKick, name='askKick'),
+    path('my_teams/', views.my_teams, name='my_teams'),
+    path('tournament_info/', views.tournament_info, name='tournament_info'),
+    path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
 ]
