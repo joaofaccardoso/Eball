@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 from django.contrib.auth.models import AbstractUser
+from multiselectfield import MultiSelectField
 
 class CustomUser(AbstractUser):
     email = models.EmailField(max_length=255, unique=True, blank=False)
@@ -27,13 +28,14 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-    
+dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
 class Tournament(models.Model):
 
         name=models.CharField(max_length=100, blank=False)
         maxTeams = models.IntegerField(unique=False, blank=False)
         beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
         endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
+        gameDays=MultiSelectField(choices=dayChoice,default= None )
 
         REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate']
 
@@ -45,3 +47,20 @@ class Tournament(models.Model):
         def __str__(self):
             return self.name
 
+tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
+
+
+class Team(models.Model):
+
+        name=models.CharField(max_length=100, blank=False)
+        tactic=models.CharField(choices=tacticChoice,max_length=100,default= None)
+
+        REQUIRED_FIELDS = ['name','tactic']
+
+        class Meta:
+            db_table = 'Team'
+            verbose_name = 'Team'
+            verbose_name_plural = 'Teams'
+
+        def __str__(self):
+            return self.name

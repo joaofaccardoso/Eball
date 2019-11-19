@@ -23,6 +23,22 @@ h1 {
     margin-left: 40px;
 }
 
+.row{
+    display: flex;
+    align-items: center;
+
+}
+
+
+#row1{
+    height: 30px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 30px;
+}
+
 label {
     color: white;
     line-height: 40px;
@@ -31,8 +47,18 @@ label {
 
 
 p{
-    font-size: 80px;
-    color: white;
+    font-size: 16px;
+    color: #FFE603;
+    padding-left: 60px;
+
+}
+
+p2{
+    
+    font-size: 12px;
+    color: #FFFFFF;
+    padding-left: 270px;
+
 }
 
 
@@ -40,7 +66,7 @@ p{
     padding: 35px;
 }
 #id_search{
-    width: 200px;
+    width: 225px;
 }
 
 
@@ -58,9 +84,62 @@ p{
     color: black;
     transition:0.5s;
 }
-#backBtn{
+
+
+#joinBtn {
     background-color: #727070;
     color: white;
+    line-height: 8px;
+    float: right;
+    height: 25px;
+    text-align: center;
+    padding-left: 60px;
+    padding-right: 60px;
+    margin-right: 60px;
+    margin-left: 10px;
+}
+
+#infoBtn {
+    background-color: #727070;
+    color: white;
+    line-height: 8px;
+    float: right;
+    height: 25px;
+    text-align: center;
+    padding-left: 60px;
+    padding-right: 60px;
+    margin-left: 60px;
+}
+#infoBtn:hover {
+    background-color: #FFE603;
+    color: #262626;
+    }
+
+#joinBtn:hover {
+    background-color: #FFE603;
+    color: #262626;
+    }
+
+
+#teamBtn{
+    background-color: #727070;
+    float: center;
+    left: 40px;
+    color: white;
+    width: 200px;
+}
+#teamBtn:hover {
+    background-color: #FFE603;
+    color: black;
+    transition:0.5s;
+}
+
+#backBtn{
+    background-color: #727070;
+    float: right;
+    color: white;
+    margin-right: 135px;
+
     width: 100px;
 }
 #backBtn:hover {

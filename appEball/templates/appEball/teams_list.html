@@ -1,11 +1,11 @@
-{% extends 'appEball/base.html' %}
+{% extends 'appEball/base_with_grey_background.html' %}
 {% load static %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/teams_list.css' %}">
 {% endblock %}
 
-{% block content %}
+{% block content2 %}
 
     <div class="row">
         <div class="col-9" >
@@ -16,25 +16,46 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="form-check form-check-inline">
-                    <input type="search" class="form-control rounded-pill" name="Search" id="id_search">
+                    <input type="search" class="form-control rounded-pill" name="Search" id="id_search" placeholder="Search in teams...">
                     <button  id="searchBtn" type="submit"></button>
                 </div>
             </form>
         </div>  
         
     </div>
-    <div class="card" style="padding: 15px;border-radius: 25px; background-color: #262626;">
+    <div class="content" style="background-color: transparent;">
         <div class="card-body">
-           <p>THIS IS FOR  </p>
-           <p>PLACEHOLDING </p>
-           <p>OK</p>
-        </div>
+           {% for u in teams_list %}
+                    <div class="row" id="{{ u.0 }}" >
+                        <div class="col-sm-5">
+                            <p>{{ u.1.name }}</p>
+                        </div>
+                        <div class="col">
+                        <!--<p2>{{ u.1.beginDate }}  -  {{ u.1.endDate }}</p2> -->
+                        <a class="btn rounded-pill"  href="" id='joinBtn'>Join Team</a>
+                        <a class="btn rounded-pill"  href="" id='infoBtn'>Info</a>
+
+                        </div>
+                    </div>
+            {% endfor %}
+
+            <div class="row">
+                <div class="col" align='right'>
+                </div>
+                <div class="col" align='left'>
+                </div>
+            </div>
+    </div>
     </div>
 
 
     <div class="row">
-        <div class="col-9" ></div>
-        <div class="col-2" >
+        <div class="col" align='right' >
+                <a class= "btn rounded-pill btn-block" href="{% url 'appEball:new_team' %}" id='teamBtn'>New Team</a>
+                -
+        </div>
+
+        <div class="col" align='right'>
             <a class="btn btn-block rounded-pill" id="backBtn" href={{request.META.HTTP_REFERER}} >Back</a>
         </div>
     </div>
