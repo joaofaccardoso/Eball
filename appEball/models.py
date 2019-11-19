@@ -1,5 +1,7 @@
 from django.db import models
+import datetime
 from django.contrib.auth.models import AbstractUser
+from multiselectfield import MultiSelectField
 
 class CustomUser(AbstractUser):
     email = models.EmailField(max_length=255, unique=True, blank=False)
@@ -9,7 +11,6 @@ class CustomUser(AbstractUser):
     phoneNumber = models.IntegerField(unique=True, blank=False)
     profileImg = models.ImageField(upload_to="images")
     isAccepted = models.BooleanField(default=False)
-    isPageAdmin = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
     isCaptain = models.BooleanField(default=False)
 
@@ -26,4 +27,55 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-    
+dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
+class Tournament(models.Model):
+
+        name=models.CharField(max_length=100, blank=False)
+        maxTeams = models.IntegerField(unique=False, blank=False)
+        beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
+        endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
+        gameDays=MultiSelectField(choices=dayChoice,default= None )
+
+        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate']
+
+        class Meta:
+            db_table = 'Tournament'
+            verbose_name = 'Tournament'
+            verbose_name_plural = 'Tournaments'
+
+        def __str__(self):
+            return self.name
+
+tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
+
+
+class Team(models.Model):
+
+        name=models.CharField(max_length=100, blank=False)
+        tactic=models.CharField(choices=tacticChoice,max_length=100,default= None)
+
+        REQUIRED_FIELDS = ['name','tactic']
+
+        class Meta:
+            db_table = 'Team'
+            verbose_name = 'Team'
+            verbose_name_plural = 'Teams'
+
+        def __str__(self):
+            return self.name
+class Notification(models.Model):
+    date = models.DateTimeField(auto_now_add = True)
+    title = models.TextField(blank = False, default="")
+    text = models.TextField(blank = False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    isSeen = models.BooleanField(default = False)
+
+
+positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
+class Player(models.Model):
+    posicao = models.CharField(hoices=positionChoice,max_length=100,default= None)
+    saldo= models.IntegerField(unique=False, default= 0)
+    nrGolos= models.IntegerField(unique=False, default= 0)
+    isTitular = models.BooleanField(default=False)
+    isReserva = models.BooleanField(default=False)
+    isSub = models.BooleanField(default=False)
