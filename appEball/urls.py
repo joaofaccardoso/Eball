@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserRegister, UserLogin, HomePage,edit_user_profile
+from .views import UserRegister, UserLogin, HomePage,edit_user_profile, new_tournament, new_team
 
 app_name = 'appEball'
 
@@ -22,4 +22,6 @@ urlpatterns = [
     path('my_teams/', views.my_teams, name='my_teams'),
     path('tournament_info/', views.tournament_info, name='tournament_info'),
     path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('is_seen/<int:pk>/', views.is_seen, name='is_seen'),    
 ]
