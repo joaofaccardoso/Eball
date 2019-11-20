@@ -21,17 +21,17 @@ body {
     background-blend-mode: inherit;
 }
 
-#teamsNav{
+#notificationsNav{
     color: #FFE603;
 }
 
-#firstRow{
+h1{
     margin: 25px;
     color: white;
     font-family: "lucidaSansDemibold";
 }
 
-#myTabContent .row{
+.row{
     padding-top: 10px;
     padding-right: 60px;
     padding-left: 60px;
@@ -40,17 +40,15 @@ body {
     font-family: "lucidaSansRegular";
 }
 
-.content.row:hover{
+.row:hover{
     cursor: pointer;
 }
 
 #row1{
-    height: 50px;
     background-color: #3D3B3B;
 }
 
 #row2{
-    height: 50px;
 }
 
 .nav-tabs{
@@ -67,7 +65,7 @@ body {
 
 .nav-tabs a:hover{
     background-color: #3D3B3B;
-    color: white;
+    color: white;   
 }
 
 .border-1{
@@ -87,6 +85,7 @@ body {
 #pageBtn {
     background-color: #727070;
     color: white;
+    float: right;
     height: 80%;
     text-align: center;
     padding-left: 15px;
@@ -101,6 +100,44 @@ body {
     transition:0.5s;
 }
 
-#all #pageBtn{
+#pageBtnActive {
+    background-color: #727070;
+    color: white;
     float: right;
+    height: 80%;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 15px; 
+    margin-right: 15px;
+    opacity: 40%;
+}
+
+#pageBtnActive:hover {
+    background-color: #FFE603;
+    color: #262626;
+    transition:0.5s;
+}
+
+#rowButton{
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    color: white;
+    text-decoration: none;
+}
+
+.card{
+    color: white;
+    background-color: #1b1b1b;
+    border-radius: 0;
+}
+
+.card-body{
+    padding-left: 7%;
+    margin-bottom: -0.5%;
+}
+
+#p2{
+    font-size: 14px;
 }

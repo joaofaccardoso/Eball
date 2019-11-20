@@ -63,3 +63,10 @@ class Team(models.Model):
 
         def __str__(self):
             return self.name
+            
+class Notification(models.Model):
+    date = models.DateTimeField(auto_now_add = True)
+    title = models.TextField(blank = False, default="")
+    text = models.TextField(blank = False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    isSeen = models.BooleanField(default = False)

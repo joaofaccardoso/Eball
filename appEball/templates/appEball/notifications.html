@@ -1,0 +1,76 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/notifications.css' %}">
+    <script type="text/javascript" src="{% static 'appEball/js/notifications.js' %}"></script>
+{% endblock %}
+    
+{% block content2 %}
+    {% csrf_token %}    
+    <h1>Users</h1>
+
+    <div class="content" data-spy="scroll"  id="tabsContent">
+
+        <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" >All notifications</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="not-seen-tab" data-toggle="tab" href="#not-seen" role="tab" >Not seen</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <div id="accordion">
+                    {% for n in notifications %}
+                        <div class="row" id={{ n.0 }}>
+                            <div class="col-sm-10">
+                                <button class="btn btn-link btn-block left-align" id="rowButton" name="{{n.2.pk}}" data-toggle="collapse" data-target="#{{ n.1 }}" aria-expanded="true" aria-controls={{ n.1 }}>
+                                    <span class="col-1"><b>{{ n.2.date }}</b></span>
+                                    <span class="col">{{ n.2.title }}</span>
+                                </button>
+                            </div>
+                            <div class="col">
+
+                                {% if n.2.isSeen == False%}
+                                    <img src ="{% static 'appEball/assets/bell.png' %}" style="height: 80%; float: right;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div id={{ n.1 }} name="scroll" class="card collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body" style="border-width: 2px;">
+                                <p><b>{{ n.2.title }}</b></p>
+                                <p id="p2">{{ n.2.text }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tab-pane fade border border-1" id="not-seen" role="tabpanel" aria-labelledby="not-seen-tab">
+                <div id="accordion">
+                    {% for n in notificationsNotSeen %}
+                        <div class="row" id={{ n.0 }}>
+                            <div class="col-sm-10">
+                                <button class="btn btn-link btn-block left-align" id="rowButton" name="{{n.2.pk}}" data-toggle="collapse" data-target="#{{ n.1 }}" aria-expanded="true" aria-controls={{ n.1 }}>
+                                    <span class="col-1"><b>{{ n.2.date }}</b></span>
+                                    <span class="col">{{ n.2.title }}</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <img src ="{% static 'appEball/assets/bell.png' %}" style="height: 80%; float: right;">
+                            </div>
+                        </div>
+                        <div id={{ n.1 }} name="scroll" class="card collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body" style="border-width: 2px;">
+                                <p><b>{{ n.2.title }}</b></p>
+                                <p id="p2">{{ n.2.text }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

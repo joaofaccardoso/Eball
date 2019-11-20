@@ -1,3 +1,17 @@
+@font-face {
+    font-family: "lucidaSansRegular";
+    src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
+}
+
+@font-face {
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
+}
+
+* {
+    font-family: "lucidaSansRegular";
+}
+
 html {
     background-image: url("../assets/home_page.jpg");
     background-color: #262626;
@@ -22,4 +36,37 @@ nav {
     color: #FFE603;
     text-decoration: none;
     transition:0.5s;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #727070;
+    color: white;
+    min-width: 14px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    border-radius: 4%;
+}
+
+.dropdown-content a {
+    border-radius: 4%;
+    text-align:center;
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: rgb(223, 223, 223);
+    color: #262626;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropdown-toggle {
+    color: #FFE603;
 }

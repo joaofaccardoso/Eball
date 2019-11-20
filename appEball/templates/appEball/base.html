@@ -24,20 +24,33 @@
                     {% endif %}
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="notificationsNav">Notifications</a>
+                        <a class="nav-link" href="{% url 'appEball:notifications' %}" id="notificationsNav">Notifications</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="myCalendarNav">MyCalendar</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="myTeamsNav">MyTeams</a>
-                    </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'appEball:teams_list' %}" id="teamsNav">Teams</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="teamsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Teams
+                    </a>
+                    <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'appEball:teams_list' %}">Teams</a>
+                        {% if user.is_authenticated %}
+                            <a class="dropdown-item" id="myTeamsNav" href="{% url 'appEball:my_teams' %}">My teams</a>
+                        {% endif %}
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link"href="{% url 'appEball:tournaments' %}" id="tournamentNav">Tournaments</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="tournamentsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Tournaments
+                    </a>
+                    <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'appEball:tournaments' %}">Tournaments</a>
+                        {% if user.is_authenticated and user.isTournamentManager%}
+                            <a class="dropdown-item" href="#">My tournaments</a>
+                        {% endif %}
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'appEball:help' %}" id="helpNav">Help</a>
@@ -68,7 +81,7 @@
         {% endif %}
         {% block content %}
         {% endblock %}
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
