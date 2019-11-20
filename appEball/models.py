@@ -11,7 +11,6 @@ class CustomUser(AbstractUser):
     phoneNumber = models.IntegerField(unique=True, blank=False)
     profileImg = models.ImageField(upload_to="images")
     isAccepted = models.BooleanField(default=False)
-    isPageAdmin = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
     isCaptain = models.BooleanField(default=False)
 
