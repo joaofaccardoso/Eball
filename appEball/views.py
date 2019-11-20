@@ -294,7 +294,6 @@ def askKick(request):
 def my_teams(request):
     return render(request, 'appEball/my_teams.html', {})
    
-
 def tournament_info(request):
     return render(request, 'appEball/tournament_info.html', {})
 
