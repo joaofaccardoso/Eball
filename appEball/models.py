@@ -80,3 +80,5 @@ class Player(models.Model):
     isTitular = models.BooleanField(default=False)
     isReserva = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
+    equipa=models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
