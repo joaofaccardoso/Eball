@@ -104,6 +104,20 @@ class teams_list(View):
 
     
     
+def teams_list(request):
+    teams_initial=list(Team.objects.all())
+    teams=[]
+    for i in range(len(teams_initial)):
+        print("oi")
+        if(i%2==0):
+            teams.append(["row2",teams_initial[i]])
+        else:
+            teams.append(["row1",teams_initial[i]])
+
+    return render(request, 'appEball/teams_list.html', {'teams_list':teams})
+
+
+
 
 class new_team(View):
     form_class = TeamCreationForm
@@ -287,6 +301,9 @@ def is_seen(request, pk):
         except IntegrityError as err:
             raise err
     raise Http404
+
+
+
 def askSub(request):
     return render(request, 'appEball/askSub.html', {})
 

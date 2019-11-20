@@ -9,6 +9,11 @@ urlpatterns = [
     path('register/', views.UserRegister.as_view(), name='register'),
     path('login/', views.UserLogin.as_view(), name='login'),
     path('logout/', views.userLogout, name='logout'),
+
+    path('teams_list/', views.teams_list, name='teams_list'),
+    path('new_team/', new_team.as_view(), name='new_team'),
+    path('tournaments/', views.tournaments, name='tournaments'),
+    path('tournaments/new/', new_tournament.as_view(), name='new_tournament'),
     path('profile/<str:username>', views.user_profile, name='userProfile'),
     path('editprofile/<str:username>', views.edit_user_profile.as_view(), name='editUserProfile'),
     
@@ -35,4 +40,6 @@ urlpatterns = [
     
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('is_seen/<int:pk>/', views.is_seen, name='is_seen'),    
 ]

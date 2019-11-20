@@ -63,10 +63,20 @@ class Team(models.Model):
 
         def __str__(self):
             return self.name
-            
+
 class Notification(models.Model):
     date = models.DateTimeField(auto_now_add = True)
     title = models.TextField(blank = False, default="")
     text = models.TextField(blank = False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     isSeen = models.BooleanField(default = False)
+
+
+positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
+class Player(models.Model):
+    posicao = models.CharField(hoices=positionChoice,max_length=100,default= None)
+    saldo= models.IntegerField(unique=False, default= 0)
+    nrGolos= models.IntegerField(unique=False, default= 0)
+    isTitular = models.BooleanField(default=False)
+    isReserva = models.BooleanField(default=False)
+    isSub = models.BooleanField(default=False)
