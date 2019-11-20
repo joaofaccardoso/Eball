@@ -102,23 +102,6 @@ class teams_list(View):
                 messages.warning(request, f'Form is not valid.')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
 
-    
-    
-def teams_list(request):
-    teams_initial=list(Team.objects.all())
-    teams=[]
-    for i in range(len(teams_initial)):
-        print("oi")
-        if(i%2==0):
-            teams.append(["row2",teams_initial[i]])
-        else:
-            teams.append(["row1",teams_initial[i]])
-
-    return render(request, 'appEball/teams_list.html', {'teams_list':teams})
-
-
-
-
 class new_team(View):
     form_class = TeamCreationForm
     template_name = 'appEball/new_team.html'
@@ -180,8 +163,6 @@ class edit_user_profile(View):
 
 def help(request):
 	return render(request,'appEball/help.html',{})
-
-
 
 def users(request):
     allUsers = list()
@@ -264,6 +245,7 @@ class new_tournament(View):
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
                 return HttpResponseRedirect(reverse('appEball:new_tournament'))
+
 def notifications(request):
     notifications = list()
     notificationsNotSeen = list()
@@ -302,8 +284,6 @@ def is_seen(request, pk):
             raise err
     raise Http404
 
-
-
 def askSub(request):
     return render(request, 'appEball/askSub.html', {})
 
@@ -320,4 +300,3 @@ def tournament_info(request):
 
 def tournament_teams(request):
     return render(request, 'appEball/tournament_teams.html', {})
-
