@@ -77,20 +77,33 @@ def userLogout(request):
     logout(request)
     return HttpResponseRedirect(reverse('appEball:home_page'))
 
-def teams_list(request):
-    teams_initial=list(Team.objects.all())
-    teams=[]
-    for i in range(len(teams_initial)):
-        print("oi")
-        if(i%2==0):
-            teams.append(["row2",teams_initial[i]])
-        else:
-            teams.append(["row1",teams_initial[i]])
+class teams_list(View):
+    form_class = TeamCreationForm
+    template_name = 'appEball/teams_list.html'
 
-    return render(request, 'appEball/teams_list.html', {'teams_list':teams})
+    def get(self, request):
+        allTeamsFilter=list(Team.objects.all())
+        allTeams=list()
+        for i in range(len(allTeamsFilter)):
+            if(i%2==0):
+                allTeams.append(["row2",allTeamsFilter[i]])
+            else:
+                allTeams.append(["row1",allTeamsFilter[i]])
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':TeamCreationForm.tacticChoice})
 
+    def post(self, request):
+        if request.method=="POST":
+            form = self.form_class(data=request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Team created successfuly!')
+                return HttpResponseRedirect(reverse('appEball:teams_list'))
+            else:
+                messages.warning(request, f'Form is not valid.')
+                return HttpResponseRedirect(reverse('appEball:teams_list'))
 
-
+    
+    
 
 class new_team(View):
     form_class = TeamCreationForm
@@ -197,6 +210,10 @@ def accept_user(request, username):
 def delete_user(request, username):
     CustomUser.objects.get(username=username).delete()
     return HttpResponseRedirect(reverse('appEball:users'))
+
+def delete_team(request, pk):
+    Team.objects.get(pk=pk).delete()
+    return HttpResponseRedirect(reverse('appEball:teams_list'))
 
 def is_tournament_manager(request, username):
     requestedUser = CustomUser.objects.get(username=username)

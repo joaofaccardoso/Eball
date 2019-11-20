@@ -23,7 +23,6 @@ body {
 
 #usersNav{
     color: #FFE603;
-    font-family: "lucidaSansDemibold";
 }
 
 h1{
@@ -69,7 +68,6 @@ h1{
 .nav-tabs a:hover{
     background-color: #3D3B3B;
     color: white;
-    border-bottom: 1px;
 }
 
 .border-1{

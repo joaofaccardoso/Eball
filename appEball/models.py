@@ -63,6 +63,7 @@ class Team(models.Model):
 
         def __str__(self):
             return self.name
+            
 class Notification(models.Model):
     date = models.DateTimeField(auto_now_add = True)
     title = models.TextField(blank = False, default="")

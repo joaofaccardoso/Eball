@@ -1,10 +1,15 @@
 @font-face {
-    font-family: "lucidaSans";
+    font-family: "lucidaSansRegular";
     src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
 }
 
+@font-face {
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
+}
+
 * {
-    font-family: "lucidaSans";
+    font-family: "lucidaSansRegular";
 }
 
 html {
@@ -15,12 +20,16 @@ body {
     background-color: transparent;
 }
 
+#tournamentsNav{
+    color: #FFE603;
+}
 
 h1 {
     color: white;
     margin: 10px;
     margin-top: 30px;
     margin-left: 40px;
+    font-family: "lucidaSansDemibold";
 }
 
 .row{
