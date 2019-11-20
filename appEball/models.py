@@ -73,9 +73,11 @@ class Notification(models.Model):
 
 positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
 class Player(models.Model):
-    posicao = models.CharField(hoices=positionChoice,max_length=100,default= None)
+    posicao = models.CharField(choices=positionChoice,max_length=100,default= None)
     saldo= models.IntegerField(unique=False, default= 0)
     nrGolos= models.IntegerField(unique=False, default= 0)
     isTitular = models.BooleanField(default=False)
     isReserva = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
+    equipa=models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
