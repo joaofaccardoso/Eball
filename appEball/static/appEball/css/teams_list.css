@@ -25,12 +25,6 @@ body {
     color: #FFE603;
 }
 
-#firstRow{
-    margin: 25px;
-    color: white;
-    font-family: "lucidaSansDemibold";
-}
-
 #myTabContent .row{
     padding-top: 10px;
     padding-right: 60px;

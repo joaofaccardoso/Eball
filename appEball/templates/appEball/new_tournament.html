@@ -5,9 +5,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/new_tournament.css' %}">
 {% endblock %}
 
+{% block title %}
+    New tournament
+{% endblock %}
+
 {% block content2 %}
-    <div class="form-group card" id="tournCard">
-        <h1>New Tournament</h1>
+    <div class="form-group" id="tournCard">
         <form method="post">
             {% csrf_token %}
             <div class="row">

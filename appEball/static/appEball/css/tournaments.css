@@ -24,14 +24,6 @@ body {
     color: #FFE603;
 }
 
-h1 {
-    color: white;
-    margin: 10px;
-    margin-top: 30px;
-    margin-left: 40px;
-    font-family: "lucidaSansDemibold";
-}
-
 .row{
     display: flex;
     align-items: center;

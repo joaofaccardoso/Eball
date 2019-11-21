@@ -5,10 +5,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/notifications.css' %}">
     <script type="text/javascript" src="{% static 'appEball/js/notifications.js' %}"></script>
 {% endblock %}
-    
+
+{% block title %}
+    Notifications
+{% endblock %}
+
 {% block content2 %}
-    {% csrf_token %}    
-    <h1>Users</h1>
+    {% csrf_token %}   
 
     <div class="content" data-spy="scroll"  id="tabsContent">
 

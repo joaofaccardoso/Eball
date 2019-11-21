@@ -5,10 +5,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/user_profile.css' %}">
 {% endblock %}
 
+{% block title %}
+    Profile
+{% endblock %}
+
 {% block content2 %}
+	<h2 id="userTitle"><strong>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</strong></h2>
 	<div class="content" id="profileContent">
-		<h4 id="profileTitle">Profile</h4>
-		<h2 id="userTitle"><strong>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</strong></h2>
 		<div class="col" id="profileCol">
 			<div class="row" id="row1">
 				<div class="col-sm-2">
