@@ -97,37 +97,16 @@ class teams_list(View):
         if request.method=="POST":
             form = self.form_class(data=request.POST)
             if form.is_valid():
-                 equipa=form.save()
+                equipa=form.save()
                 player = Player(posicao = "Goalkeeper", saldo = 0, nrGolos = 0,isTitular=True,isReserva=False,isSub=False,equipa=equipa,user=request.user,isCaptain=True)
                 player.save()
                 messages.success(request, 'Team created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
             else:
                 print(form.errors)
-
                 messages.warning(request, f'Form is not valid.')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
 
-class new_team(View):
-    form_class = TeamCreationForm
-    template_name = 'appEball/new_team.html'
-    tactic=list(Tactic.objects.all())
-
-    def get(self, request):
-        print(tactic)
-        return render(request, self.template_name,{'tactics': tactic})
-
-    def post(self, request):
-        if request.method=="POST":
-            form = self.form_class(data=request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Team created successfuly!')
-                return HttpResponseRedirect(reverse('appEball:teams_list'))
-            else:
-                print(form.errors)
-                messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:new_team'))
 
 def tournaments(request):
     tournaments_initial=list(Tournament.objects.all())
@@ -300,7 +279,14 @@ def askKick(request):
 
 
 def my_teams(request):
-    return render(request, 'appEball/my_teams.html', {})
+    user=request.user
+   
+    players=list(Player.objects.filter(user=user))
+    teams=[]
+    for player in players:
+        teams.append(player.equipa)
+
+    return render(request, 'appEball/my_teams.html', {'teams': teams})
    
 def tournament_info(request):
     return render(request, 'appEball/tournament_info.html', {})
