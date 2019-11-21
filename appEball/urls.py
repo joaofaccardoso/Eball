@@ -26,11 +26,8 @@ urlpatterns = [
     path('accept_user/<str:username>', views.accept_user, name='accept_user'),
     path('delete_user/<str:username>', views.delete_user, name='delete_user'),
 
-    path('teams_list/', views.teams_list.as_view(), name='teams_list'),
-    path('my_teams/', views.my_teams, name='my_teams'),
 
-    path('tournaments/', views.tournaments, name='tournaments'),
-    path('tournaments/new/', new_tournament.as_view(), name='new_tournament'),
+    path('my_teams/', views.my_teams, name='my_teams'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
     path('tournament_info/', views.tournament_info, name='tournament_info'),
     path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
@@ -40,6 +37,4 @@ urlpatterns = [
     
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),
-    path('notifications/', views.notifications, name='notifications'),
-    path('is_seen/<int:pk>/', views.is_seen, name='is_seen'),    
 ]
