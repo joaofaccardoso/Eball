@@ -19,14 +19,11 @@ body {
     color: #FFE603;
 }
 
-#profileTitle {
-    margin-left: 5%;
-    margin-top: 5%;
+h2 {
+    margin-left: 40px;
+    font-size: 20px;
     color: white;
-}
-
-#userTitle {
-    margin-left: 5%;
+    margin-top: -10px;
     color: #E5E5E5;
 }
 
@@ -51,9 +48,11 @@ body {
     height: 50px;
 }
 
-#username,#email,#ccnumber,#phoneNumber{
-    width: 350px;
+.form-control{
+    width: 400px;
+    background-color: #E5E5E5; 
 }
+
 .userLabel {
     color: #FFE603;
     margin-left: 30px;
@@ -75,7 +74,7 @@ body {
     background-color: #727070;
     color: white;
     width: 180px;
-    margin-top: 5%;
+    margin-top: 3%;
 }
 
 .btn:hover {

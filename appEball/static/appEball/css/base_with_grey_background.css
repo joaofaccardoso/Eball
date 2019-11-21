@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/LucidaSansDemibold.ttf");
+}
+
+* {
+    font-family: "lucidaSansDemibold";
+}
