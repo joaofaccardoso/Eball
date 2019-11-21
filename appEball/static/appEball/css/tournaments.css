@@ -17,128 +17,97 @@ html {
 }
 
 body {
-    background-color: transparent;
+    background: inherit;
+    background-blend-mode: inherit;
 }
 
-#tournamentsNav{
+#teamsNav{
     color: #FFE603;
 }
 
-h1 {
+#myTabContent .row{
+    padding-top: 10px;
+    padding-right: 60px;
+    padding-left: 60px;
+    text-align: justify;
     color: white;
-    margin: 10px;
-    margin-top: 30px;
-    margin-left: 40px;
-    font-family: "lucidaSansDemibold";
+    font-family: "lucidaSansRegular";
 }
 
-.row{
-    display: flex;
-    align-items: center;
-
+.content.row:hover{
+    cursor: pointer;
 }
-
 
 #row1{
-    height: 30px;
+    height: 50px;
     background-color: #3D3B3B;
 }
 
 #row2{
-    height: 30px;
+    height: 50px;
 }
 
-label {
+.nav-tabs{
+    margin-left: 1%;
+}
+
+.nav-tabs .nav-link :not(.active) {
+    border-color: transparent !important;   
+}
+
+.nav-tabs a{
+    font-family: "lucidaSansDemibold";
+}
+
+.nav-tabs a:hover{
+    background-color: #3D3B3B;
     color: white;
-    line-height: 40px;
+    border-color: #3D3B3B;
 }
 
-
-
-p{
-    font-size: 16px;
-    color: #FFE603;
-    padding-left: 60px;
-
+#new-tab{
+    background-color: white; 
+    color: #262626; 
+    border-bottom: none;
+    border-color: #3D3B3B;
 }
 
-p2{
-    
-    font-size: 12px;
-    color: #FFFFFF;
-    padding-left: 270px;
-
+#new-tab:hover{
+    background-color: #3D3B3B;
+    color: white;
 }
 
-
-#coli{
-    padding: 35px;
-}
-#id_search{
-    width: 225px;
-}
-
-
-
-#searchBtn{
-    background-color: #727070;
-    border-radius: 50px;
-    width: 40px;
-    height: 40px;
-    
+.border-1{
+    border-width: 6px !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-color: #727070 !important;
 }
 
-#searchBtn:hover {
-    background-color: #FFE603;
-    color: black;
-    transition:0.5s;
+#myTab a.active.nav-link{
+    border-color: #727070;
+    background-color: #727070 !important;
+    color: white;   
 }
 
-
-
-#infoBtn {
+#pageBtn {
     background-color: #727070;
     color: white;
-    line-height: 8px;
-    float: right;
-    height: 25px;
+    height: 80%;
     text-align: center;
-    padding-left: 60px;
-    padding-right: 60px;
-    margin-left: 60px;
-    margin-right: 60px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
-#infoBtn:hover {
+#pageBtn:hover {
     background-color: #FFE603;
     color: #262626;
-    }
-
-
-
-#tournBtn{
-    background-color: #727070;
-    float: center;
-    left: 40px;
-    color: white;
-    width: 200px;
-}
-#tournBtn:hover {
-    background-color: #FFE603;
-    color: black;
     transition:0.5s;
 }
 
-#backBtn{
-    background-color: #727070;
+#all #pageBtn{
     float: right;
-    color: white;
-    margin-right: 135px;
-
-    width: 100px;
-}
-#backBtn:hover {
-    background-color: #FFE603;
-    color: black;
-    transition:0.5s;
 }

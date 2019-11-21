@@ -19,11 +19,6 @@ body {
     color: #FFE603;
 }
 
-h1 {
-    color: white;
-    margin: 30px;
-}
-
 label {
     color: white;
     line-height: 40px;
@@ -49,10 +44,4 @@ label {
     background-color: #FFE603;
     color: black;
     transition:0.5s;
-}
-
-#registerCard {
-    margin: 10px;
-    background-color: #262626;
-    border-radius: 25px;
 }

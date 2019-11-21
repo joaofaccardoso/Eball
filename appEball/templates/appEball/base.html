@@ -31,7 +31,7 @@
                     </li>
                 {% endif %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="teamsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{% url 'appEball:teams_list' %}" id="teamsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Teams
                     </a>
                     <div class="dropdown-content" aria-labelledby="navbarDropdown">
@@ -42,11 +42,12 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="tournamentsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{% url 'appEball:tournaments' %}" id="tournamentsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Tournaments
                     </a>
                     <div class="dropdown-content" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'appEball:tournaments' %}">Tournaments</a>
+                        <a class="dropdown-item" href="{% url 'appEball:new_tournament' %}">New</a>
                         {% if user.is_authenticated and user.isTournamentManager%}
                             <a class="dropdown-item" href="#">My tournaments</a>
                         {% endif %}

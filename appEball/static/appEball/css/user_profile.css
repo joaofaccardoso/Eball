@@ -1,10 +1,10 @@
 @font-face {
-    font-family: "lucidaSans";
+    font-family: "lucidaSansRegular";
     src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
 }
 
 * {
-    font-family: "lucidaSans";
+    font-family: "lucidaSansRegular";
 }
 
 html {
@@ -19,14 +19,11 @@ body {
     color: #FFE603;
 }
 
-#profileTitle {
-    margin-left: 5%;
-    margin-top: 5%;
+h2 {
+    margin-left: 40px;
+    font-size: 20px;
     color: white;
-}
-
-#userTitle {
-    margin-left: 5%;
+    margin-top: -10px;
     color: #E5E5E5;
 }
 

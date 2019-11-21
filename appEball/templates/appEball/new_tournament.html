@@ -5,61 +5,73 @@
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/new_tournament.css' %}">
 {% endblock %}
 
+{% block title %}
+    New tournament
+{% endblock %}
+
 {% block content2 %}
-    <div class="form-group card" id="tournCard">
-        <h1>New Tournament</h1>
+    <div class="form-group" id="tournCard">
         <form method="post">
             {% csrf_token %}
             <div class="row">
-                <div class="col-1"></div>
-                <div class="col" id="middleColLeft">
+                <div class="col" style="margin-left: 60px;">
                     <div class="row">
-                        <label for="id_name">Tournament's name:</label>
-                        <input type="text" class="form-control rounded-pill" placeholder="Enter the tournament's name" name="name" maxlength="100" required="" id="id_name">
-                    </div>
-                    <div class="row">
-                         <label for="id_maxTeams">Max Teams:</label>
-                         <input type="number" class="form-control rounded-pill" name="maxTeams" maxlength="100" required="" id="id_maxTeams">
-
-                        
-                    </div>
-                    <div class="row" id= "dateRow" >
-                        <label for="id_beginDate">Begin date:</label>
-                        <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" maxlength="100" required="" id="id_beginDate">
-                        <label for="id_endDate">End date:</label>
-                        <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate" maxlength="150" required="" id="id_endDate">
-                    </div>
-                    <div class="row">
-                        <label for="id_gameDays">Game Days:</label>
-                        <div class="form-check form-check-inline "name="gameDays">
-                        {% for u in week%}
-                            <label class="checkbox-inline" id="space">{{u.0}}<input type="checkbox" name="gameDays" value="{{u.0}}" id="check"></label>
-                    
-                        {% endfor %}
+                        <div class="col-sm-2">
+                            <label for="id_name">Tournament's name:</label>
                         </div>
+                        <div class="col">
+                            <input type="text" class="form-control rounded-pill" placeholder="Enter the tournament's name" name="name" maxlength="100" required="" id="id_name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label for="id_maxTeams">Max Teams:</label>
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control rounded-pill" name="maxTeams" maxlength="100" required="" style="width: 190px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label for="id_beginDate">Begin date:</label>
+                        </div>
+                        <div class="col">
+                            <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" style="width: 190px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label for="id_beginDate">End date:</label>
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate" style="width: 190px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label for="id_gameDays">Game Days:</label>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                {% for u in week%}
+                                    <label class="btn btn-secondary rounded-pill">
+                                        <input type="checkbox" checked="checked" name="gameDays" value="{{u.0}}"> {{u.0}}
+                                    </label>
+                                {% endfor %}
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-                <div class="col" id="middleColRight">
-                    <div class="row">
-                        
-                    </div>    
-                    <div class="row">
-                        
-                    </div>
-                    <div class="row">
-                        
-                    </div>
-                    <div class="row">
-                        
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <button class="btn rounded-pill" type="submit" id="createTournament">Create Tournament</button>
-                    <div class="row">
-                         <a class= "btn rounded-pill btn-block" id= "back" href={{request.META.HTTP_REFERER}}>Back</a>
-
-                    </div>
                 </div>
-                <div class="col-1"></div>
+                <div class="col">
+                    <a class= "btn rounded-pill" id= "back" href={{request.META.HTTP_REFERER}}>Back</a>
+                </div>
+
             </div>
         </form>
     </div>

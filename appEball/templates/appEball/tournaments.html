@@ -5,57 +5,70 @@
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/tournaments.css' %}">
 {% endblock %}
 
-{% block content2 %}
+{% block title %}
+    Tournaments
+{% endblock %}
 
-    <div class="row">
-        <div class="col-9" >
-            <h1 id="tournaments">Tournaments</h1>
-        </div>
-        
-        <div class="col-2" align="center" id= coli>
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-check form-check-inline">
-                    <input type="search" class="form-control rounded-pill" name="Search" id="id_search" placeholder="Search in tournaments...">
-                    <button  id="searchBtn" type="submit"></button>
-                </div>
-            </form>
-        </div>  
-        
-    </div>
-    <div class="content" style="background-color: transparent;">
-        <div class="card-body">
-            {% for u in tournaments %}
-                    <div class="row" id="{{ u.0 }}" >
+{% block content2 %}    
+
+    <div class="content" id="tabsContent">
+
+        <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+            {% if user.is_authenticated and user.isTournamentManager%}
+                <li class="nav-item">
+                    <a class="nav-link" id="new-tab" data-toggle="tab" href="#new" role="tab" >New tournament</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" >All tournaments</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade border border-1" id="new" role="tabpanel" aria-labelledby="new-tab">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row" style="height: 60%;">
+                            <div class="col-1"></div>
+                            <div class="col" id="middleColLeft">
+                                <div class="row">
+                                    <label for="id_name">Tournament's name:</label>
+                                    <input type="text" class="form-control rounded-pill" placeholder="Enter the Tournament's name" name="name" maxlength="100" required="" id="id_name" style="width: 400px; margin-left: 30px;">
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="sel1">Select tactic:</label>
+                                        <select class="form-control rounded-pill" id="sel1" name="tactic">
+                                            {% for u in tactics%}
+                                                <option value="{{u.1}}">{{u.1}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <button class="btn rounded-pill" type="submit" id="pageBtn">Create Team</button>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+            <div class="tab-pane fade show active border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
+                {% for t in allTeams %}
+                    <div class="row" id="{{ t.0 }}">
                         <div class="col-sm-5">
-                            <p>{{ u.1.name }}</p>
+                            <p class="userLabel line"><b>{{ t.1.name }}</b></p>
                         </div>
                         <div class="col">
-                            <p2>{{ u.1.beginDate }}  -  {{ u.1.endDate }}</p2> 
-                            <a class="btn rounded-pill"  href="" id='infoBtn'>Info</a>
+                            {% if user.username == "admin" %}
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn'>Delete Team</a>
+                            {% endif %}
+                            <a class="btn rounded-pill"  href="" id='pageBtn'>Join Team</a>
                         </div>
                     </div>
-            {% endfor %}
-
-            <div class="row">
-                <div class="col" align='right'>
-                </div>
-                <div class="col" align='left'>
-                </div>
+                {% endfor %}
             </div>
-    </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col" align='right' >
-                <a class= "btn rounded-pill btn-block" href="{% url 'appEball:new_tournament' %}" id='tournBtn'>New Tournament</a>
-        </div>
-
-        <div class="col" align='right'>
-            <a class="btn btn-block rounded-pill" id="backBtn" href={{request.META.HTTP_REFERER}} >Back</a>
         </div>
     </div>
-
 
 {% endblock %}

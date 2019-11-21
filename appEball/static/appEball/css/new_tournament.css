@@ -35,12 +35,8 @@ label {
 
 }
 
-#middleColLeft {
-    padding-right:160px;
-}
-
-#middleColRight {
-    padding-left: 0px;
+.form-control{
+    width: 400px;
 }
 
 #dateRow{
@@ -84,3 +80,32 @@ label {
     background-color: #262626;
     border-radius: 25px;
 }
+
+.btn-secondary{
+    margin-right: 20px;
+    width: 70px;
+    background-color: #3D3B3B;
+    border-color: #727070;
+    border-width: 3px;
+}
+
+.btn-secondary:hover{
+    cursor: pointer;
+    border-color: #727070;
+    background-color: #727070;
+}
+
+.btn-secondary:checked{
+    cursor: pointer;
+    border-color: #727070;
+    background-color: yellow;
+}
+
+input[type=checkbox]:checked {
+    background-color: yellow;
+}
+
+.row{
+    margin-bottom: 10px;
+}
+

@@ -1,13 +1,16 @@
-{% extends 'appEball/base.html' %}
+{% extends 'appEball/base_with_grey_background.html' %}
 {% load static %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/register.css' %}">
 {% endblock %}
 
-{% block content %}
-    <div class="form-group card" id="registerCard">
-        <h1>Create an account</h1>
+{% block title %}
+    Create account
+{% endblock %}
+
+{% block content2 %}
+    <div class="form-group" id="registerCard">
         <form method="post">
             {% csrf_token %}
             <div class="row">

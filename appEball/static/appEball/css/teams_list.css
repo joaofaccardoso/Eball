@@ -25,12 +25,6 @@ body {
     color: #FFE603;
 }
 
-#firstRow{
-    margin: 25px;
-    color: white;
-    font-family: "lucidaSansDemibold";
-}
-
 #myTabContent .row{
     padding-top: 10px;
     padding-right: 60px;
@@ -57,7 +51,7 @@ body {
     margin-left: 1%;
 }
 
-.nav-tabs .nav-link:not(.active) {
+.nav-tabs .nav-link :not(.active) {
     border-color: transparent !important;   
 }
 
@@ -68,10 +62,23 @@ body {
 .nav-tabs a:hover{
     background-color: #3D3B3B;
     color: white;
+    border-color: #3D3B3B;
+}
+
+#new-tab{
+    background-color: white; 
+    color: #262626; 
+    border-bottom: none;
+    border-color: #3D3B3B;
+}
+
+#new-tab:hover{
+    background-color: #3D3B3B;
+    color: white;
 }
 
 .border-1{
-    border-width: 4px !important;
+    border-width: 6px !important;
     border-bottom: none !important;
     border-left: none !important;
     border-right: none !important;
