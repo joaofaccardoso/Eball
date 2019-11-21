@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team
+from .models import CustomUser, Tournament, Team, Player, Tactic
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
 from .models import CustomUser,Notification
 from django.http import JsonResponse
@@ -84,12 +84,14 @@ class teams_list(View):
     def get(self, request):
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
+        tactic=list(Tactic.objects.all())
+
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
                 allTeams.append(["row2",allTeamsFilter[i]])
             else:
                 allTeams.append(["row1",allTeamsFilter[i]])
-        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':TeamCreationForm.tacticChoice})
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':tactic})
 
     def post(self, request):
         if request.method=="POST":
@@ -99,15 +101,19 @@ class teams_list(View):
                 messages.success(request, 'Team created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
             else:
+                print(form.errors)
+
                 messages.warning(request, f'Form is not valid.')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
 
 class new_team(View):
     form_class = TeamCreationForm
     template_name = 'appEball/new_team.html'
+    tactic=list(Tactic.objects.all())
 
     def get(self, request):
-        return render(request, self.template_name,{'tactics':TeamCreationForm.tacticChoice})
+        print(tactic)
+        return render(request, self.template_name,{'tactics': tactic})
 
     def post(self, request):
         if request.method=="POST":

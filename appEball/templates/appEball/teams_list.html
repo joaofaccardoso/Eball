@@ -39,8 +39,16 @@
                                         <label for="sel1">Select tactic:</label>
                                         <select class="form-control rounded-pill" id="sel1" name="tactic">
                                             {% for u in tactics%}
-                                                <option value="{{u.1}}">{{u.1}}</option>
-                                            {% endfor %}
+                                                {% if u.scorer is False %}
+                                                <option value="{{u.pk}}">{{u.n_def }} - {{u.n_cent}} - {{u.n_atac}}</option>
+
+                                            {% endif %}
+                                            {% if u.scorer is True %}
+                                                <option value="{{u.pk}}">{{u.n_def }} - {{u.n_cent}} - {{u.n_atac}} - 1</option>
+
+                                            {% endif %}
+
+                                            {% endfor %}-->
                                         </select>
                                     </div>
                                 </div>

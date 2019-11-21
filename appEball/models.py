@@ -27,6 +27,7 @@ class CustomUser(AbstractUser):
         return self.username
 
 
+
 dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
 class Tournament(models.Model):
 
@@ -49,20 +50,7 @@ class Tournament(models.Model):
 tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
 
 
-class Team(models.Model):
 
-        name=models.CharField(max_length=100, blank=False)
-        tactic=models.CharField(choices=tacticChoice,max_length=100,default= None)
-
-        REQUIRED_FIELDS = ['name','tactic']
-
-        class Meta:
-            db_table = 'Team'
-            verbose_name = 'Team'
-            verbose_name_plural = 'Teams'
-
-        def __str__(self):
-            return self.name
 
 class Notification(models.Model):
     date = models.DateTimeField(auto_now_add = True)
@@ -70,6 +58,15 @@ class Notification(models.Model):
     text = models.TextField(blank = False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     isSeen = models.BooleanField(default = False)
+
+
+
+class Tactic(models.Model):
+    n_def=models.IntegerField(unique=False, default= 0)
+    n_atac=models.IntegerField(unique=False, default= 0)
+    n_cent=models.IntegerField(unique=False, default= 0)
+    scorer=models.BooleanField(default=False)
+
 
 
 positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
@@ -80,5 +77,33 @@ class Player(models.Model):
     isTitular = models.BooleanField(default=False)
     isReserva = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
-    equipa=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
+    #equipa=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, default = None, on_delete=models.CASCADE)
+
+
+    class Meta:
+            db_table = 'Player'
+            verbose_name = 'Player'
+            verbose_name_plural = 'Players'
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+class Team(models.Model):
+
+        name=models.CharField(max_length=100, blank=False)
+        members=models.ManyToManyField(Player)
+        tactic = models.ForeignKey(Tactic, on_delete=models.CASCADE)
+        REQUIRED_FIELDS = ['name','tactic']
+
+        class Meta:
+            db_table = 'Team'
+            verbose_name = 'Team'
+            verbose_name_plural = 'Teams'
+
+        def __str__(self):
+            return self.name
