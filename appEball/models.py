@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     profileImg = models.ImageField(upload_to="images")
     isAccepted = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
-    isCaptain = models.BooleanField(default=False)
+    #isCaptain = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'firstName', 'lastName', 'ccNumber', 'phoneNumber']
@@ -69,6 +69,23 @@ class Tactic(models.Model):
 
 
 
+
+class Team(models.Model):
+
+        name=models.CharField(max_length=100, blank=False)
+        #members=models.ManyToManyField(Player)
+        tactic = models.ForeignKey(Tactic, on_delete=models.CASCADE)
+        REQUIRED_FIELDS = ['name','tactic']
+
+        class Meta:
+            db_table = 'Team'
+            verbose_name = 'Team'
+            verbose_name_plural = 'Teams'
+
+        def __str__(self):
+            return self.name
+
+
 positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
 class Player(models.Model):
     posicao = models.CharField(choices=positionChoice,max_length=100,default= None)
@@ -77,8 +94,9 @@ class Player(models.Model):
     isTitular = models.BooleanField(default=False)
     isReserva = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
-    #equipa=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
+    equipa=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, default = None, on_delete=models.CASCADE)
+    isCaptain = models.BooleanField(default=False)
 
 
     class Meta:
@@ -92,18 +110,3 @@ class Player(models.Model):
 
 
 
-
-class Team(models.Model):
-
-        name=models.CharField(max_length=100, blank=False)
-        members=models.ManyToManyField(Player)
-        tactic = models.ForeignKey(Tactic, on_delete=models.CASCADE)
-        REQUIRED_FIELDS = ['name','tactic']
-
-        class Meta:
-            db_table = 'Team'
-            verbose_name = 'Team'
-            verbose_name_plural = 'Teams'
-
-        def __str__(self):
-            return self.name

@@ -97,7 +97,9 @@ class teams_list(View):
         if request.method=="POST":
             form = self.form_class(data=request.POST)
             if form.is_valid():
-                form.save()
+                 equipa=form.save()
+                player = Player(posicao = "Goalkeeper", saldo = 0, nrGolos = 0,isTitular=True,isReserva=False,isSub=False,equipa=equipa,user=request.user,isCaptain=True)
+                player.save()
                 messages.success(request, 'Team created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
             else:
