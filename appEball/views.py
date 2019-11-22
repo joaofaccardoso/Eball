@@ -6,9 +6,8 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team, Player, Tactic
+from .models import CustomUser, Tournament, Team, Player, Tactic,Notification
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
-from .models import CustomUser,Notification
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -89,8 +88,10 @@ class teams_list(View):
         
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
-        myTeamsFilter=list(Team.objects.filter(user=request.user))
         myTeams=list()
+        myTeamsFilter=list()
+        if (request.user.is_authenticated):
+            myTeamsFilter=list(Team.objects.filter(user=request.user))
         f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
@@ -126,8 +127,10 @@ class tournaments(View):
     def get(self,request):
         allTournamentsFilter=list(Tournament.objects.all())
         allTournaments=[]
-        myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
         myTournaments=[]
+        myTournamentsFilter=[]
+        if (request.user.is_authenticated):
+            myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
         for i in range(len(allTournamentsFilter)):
             if(i%2==0):
                 allTournaments.append(["row2",allTournamentsFilter[i]])

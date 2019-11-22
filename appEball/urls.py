@@ -9,9 +9,6 @@ urlpatterns = [
     path('login/', views.UserLogin.as_view(), name='login'),
     path('logout/', views.userLogout, name='logout'),
 
-    path('teams_list/', teams_list.as_view(), name='teams_list'),
-    path('tournaments/', views.tournaments, name='tournaments'),
-    path('tournaments/new/', new_tournament.as_view(), name='new_tournament'),
     path('profile/<str:username>', views.user_profile, name='userProfile'),
     path('editprofile/<str:username>', views.edit_user_profile.as_view(), name='editUserProfile'),
     

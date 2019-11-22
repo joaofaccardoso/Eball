@@ -74,19 +74,18 @@ class Tactic(models.Model):
 class Team(models.Model):
     tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
     name=models.CharField(max_length=100, blank=False)
-    tactic=models.CharField(choices=tacticChoice,max_length=100,default = None)
     tournament=models.ForeignKey(Tournament,default = None,on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
+    #members=models.ManyToManyField(Player)
+    tactic = models.ForeignKey(Tactic, on_delete=models.CASCADE)
 
-        name=models.CharField(max_length=100, blank=False)
-        #members=models.ManyToManyField(Player)
-        tactic = models.ForeignKey(Tactic, on_delete=models.CASCADE)
-        REQUIRED_FIELDS = ['name','tactic']
+     
+    REQUIRED_FIELDS = ['name','tactic','tournament','user']
 
-        class Meta:
-            db_table = 'Team'
-            verbose_name = 'Team'
-            verbose_name_plural = 'Teams'
+    class Meta:
+        db_table = 'Team'
+        verbose_name = 'Team'
+        verbose_name_plural = 'Teams'
 
     def __str__(self):
         return self.name
