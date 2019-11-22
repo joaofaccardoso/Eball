@@ -111,3 +111,16 @@ body {
 #all #pageBtn{
     float: right;
 }
+
+.card{
+    background-color: transparent;
+}
+
+.content1{
+    margin-top: 20px;
+
+}
+
+.content1 .row{
+    height: 20%;
+}

@@ -15,12 +15,12 @@
 
         <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
             {% if user.is_authenticated %}
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" id="new-tab" data-toggle="tab" href="#new" role="tab" >New team</a>
                 </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" >All teams</a>
+                <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" >All teams</a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
@@ -29,46 +29,51 @@
             {% endif %}
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade border border-1" id="new" role="tabpanel" aria-labelledby="new-tab">
+            <div class="tab-pane fade border border-1 active show" id="new" role="tabpanel" aria-labelledby="new-tab">
                 <form method="post">
                     {% csrf_token %}
-                    <div class="row" style="height: 60%;">
-                        <div class="col-1"></div>
-                        <div class="col" id="middleColLeft">
-                            <div class="row">
+                    <div class="content1" style="height: 55%;">
+                        <div class="row" >
+                            <div class="col-sm-2">
                                 <label for="id_name">Team's name:</label>
-                                <input type="text" class="form-control rounded-pill" placeholder="Enter the Team's name" name="name" maxlength="100" required="" id="id_name" style="width: 400px; margin-left: 30px;">
                             </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <label for="sel1">Select tactic:</label>
-                                    <select class="form-control rounded-pill" id="sel1" name="tactic">
-                                        {% for u in tactics%}
-                                            <option value="{{u.1}}">{{u.1}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <label for="sel1">Select tournament:</label>
-                                    <select class="form-control rounded-pill" id="sel1" name="tournament">
-                                        {% for t in tournaments%}
-                                            <option value={{t.pk}}>{{t.name}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                            <div class="col">
+                                <input type="text" class="form-control rounded-pill" placeholder="Enter the Team's name" name="name" maxlength="100" required="" id="id_name" style="width: 400px; ">   
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label for="tactic">Select tactic:</label>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control rounded-pill" id="sel1" name="tactic">
+                                    {% for u in tactics%}
+                                        <option value="{{u.1}}">{{u.1}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label for="sel1">Select tournament:</label>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control rounded-pill" id="sel1" name="tournament">
+                                    {% for t in tournaments%}
+                                        <option value={{t.pk}}>{{t.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>  
                     </div>
                     <div class="row">
                         <div class="col text-center">
-                            <button class="btn rounded-pill" type="submit" id="pageBtn">Create Team</button>
+                            <button class="btn rounded-pill" type="submit" id="pageBtn" style="width: 10%;">Create</button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="tab-pane fade show active border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
+            <div class="tab-pane fade border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
                 {% for t in allTeams %}
                     <div class="row" id="{{ t.0 }}">
                         <div class="col-sm-5">
@@ -76,7 +81,7 @@
                         </div>
                         <div class="col">
                             {% if user.username == "admin" %}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn'>Delete Team</a>
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
                             <a class="btn rounded-pill"  href="" id='pageBtn'>Join Team</a>
                         </div>

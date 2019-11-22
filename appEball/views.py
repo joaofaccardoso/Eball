@@ -38,6 +38,7 @@ class UserRegister(View):
             if(user.username == "admin"):
                 user.isAccepted = True
                 user.isTournamentManager = True
+                user.save()
             else:
                 admin = CustomUser.objects.filter(username="admin")
                 n = Notification(text = "New Register!\n"+user.username+" registered.", title = "New Register", user = admin[0])
