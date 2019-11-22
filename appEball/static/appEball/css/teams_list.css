@@ -108,6 +108,12 @@ body {
     transition:0.5s;
 }
 
+#pageBtn:disabled {
+    background-color:#727070;
+    color: #262626;
+    transition:0.5s;
+    color: black;
+}
 #all #pageBtn{
     float: right;
 }

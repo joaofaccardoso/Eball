@@ -1,0 +1,38 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/criar_player.css' %}">
+{% endblock %}
+
+{% block title %}
+    Teams
+{% endblock %}
+
+{% block content2 %}    
+
+    <div class="content" id="tabsContent">
+                    <form method="post">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="sel1">Select Position:</label>
+                                        <select class="form-control rounded-pill" id="sel1" name="Position">
+                                            {% for u in positions%}
+                                                <option value="{{u}}">{{u}}</option>
+                                            {% endfor %}-->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <button class="btn rounded-pill" type="submit" id="pageBtn">Join Team</button>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
-from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
+from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm,PlayerCreationForm
 from .models import CustomUser, Tournament, Team, Player, Tactic
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
 from .models import CustomUser,Notification
@@ -86,12 +86,18 @@ class teams_list(View):
         allTeams=list()
         tactic=list(Tactic.objects.all())
 
+
+        players=list(Player.objects.filter(user=request.user))
+        teams=[]
+        for player in players:
+            teams.append(player.equipa)
+
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
                 allTeams.append(["row2",allTeamsFilter[i]])
             else:
                 allTeams.append(["row1",allTeamsFilter[i]])
-        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':tactic})
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':tactic,'teams':teams})
 
     def post(self, request):
         if request.method=="POST":
@@ -300,10 +306,40 @@ def askKick(request):
 
 
 def my_teams(request):
-    return render(request, 'appEball/my_teams.html', {})
+    user=request.user
+   
+    players=list(Player.objects.filter(user=user))
+    teams=[]
+    for player in players:
+        teams.append(player.equipa)
+
+    return render(request, 'appEball/my_teams.html', {'teams': teams})
    
 def tournament_info(request):
     return render(request, 'appEball/tournament_info.html', {})
 
 def tournament_teams(request):
     return render(request, 'appEball/tournament_teams.html', {})
+
+class criar_player(View):
+    form_class = PlayerCreationForm
+    template_name = 'appEball/criar_player.html'
+    positions=form_class.positionChoice
+    def get(self, request):
+        return render(request, self.template_name, {'title': 'criar_player','positions':positions})
+
+    def post(self, request):
+        if request.method=="POST":
+            form = self.form_class(data=request.POST)
+            equipa=Team.objects.get(pk=pk)
+            if form.is_valid():
+                position = form.cleaned_data.get('position')
+                player = Player(posicao = position, saldo = 0, nrGolos = 0,isTitular=True,isReserva=False,isSub=False,equipa=equipa,user=request.user,isCaptain=True)
+                player.save()
+                messages.success(request, 'Sucessful join!')
+                return HttpResponseRedirect(reverse('appEball:teams_list'))
+            else:
+                print(form.errors)
+
+                messages.warning(request, f'Form is not valid.')
+                return HttpResponseRedirect(reverse('appEball:teams_list'))

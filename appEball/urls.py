@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserRegister, UserLogin, HomePage,edit_user_profile, new_tournament, new_team, teams_list
+from .views import UserRegister, UserLogin, HomePage,edit_user_profile, new_tournament, new_team, teams_list,criar_player
 
 app_name = 'appEball'
 
@@ -37,4 +37,5 @@ urlpatterns = [
     
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),
+    path('criar_player',criar_player.as_view(),name='criar_player'),
 ]

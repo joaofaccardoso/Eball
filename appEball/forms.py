@@ -66,3 +66,11 @@ class TeamCreationForm(forms.ModelForm):
             'name',
             'tactic'
         )
+
+class PlayerCreationForm(PositionForm):
+    positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
+    class Meta:
+        model = Player
+        fields = (
+            'position',
+        )
