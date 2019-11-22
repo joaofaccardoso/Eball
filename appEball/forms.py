@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser , Tournament, Team
+from .models import CustomUser , Tournament, Team ,Player
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class CustomUserForm(UserCreationForm):
