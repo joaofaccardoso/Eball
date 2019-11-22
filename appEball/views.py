@@ -85,12 +85,24 @@ class teams_list(View):
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
         tactic=list(Tactic.objects.all())
+        user=request.user
+        players=list(Player.objects.filter(user=user))
+        teams=[]
+        for player in players:
+            teams.append(player.equipa)
 
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
-                allTeams.append(["row2",allTeamsFilter[i]])
+                if allTeamsFilter[i] in teams:
+                    allTeams.append(["row2",allTeamsFilter[i],1])
+                else:
+                    allTeams.append(["row2",allTeamsFilter[i],0])
             else:
-                allTeams.append(["row1",allTeamsFilter[i]])
+                if allTeamsFilter[i] in teams:
+                    allTeams.append(["row1",allTeamsFilter[i]],1)
+                else:
+                    allTeams.append(["row1",allTeamsFilter[i]],0)
+
         return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':tactic})
 
     def post(self, request):

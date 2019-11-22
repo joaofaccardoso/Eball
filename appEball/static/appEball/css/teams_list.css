@@ -111,3 +111,41 @@ body {
 #all #pageBtn{
     float: right;
 }
+
+
+#joinBtn {
+    background-color: #727070;
+    color: white;
+    float: right;
+    height: 80%;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+#joinBtn:hover {
+    background-color: #FFE603;
+    color: #262626;
+    transition:0.5s;
+}
+
+#joinBtnActive {
+    background-color: #727070;
+    color: white;
+    float: right;
+    height: 80%;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    opacity: 40%;
+}
+
+#joinBtnActive:hover {
+    background-color: #FFE603;
+    color: #262626;
+    transition:0.5s;
+}
