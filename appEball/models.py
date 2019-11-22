@@ -27,25 +27,32 @@ class CustomUser(AbstractUser):
         return self.username
 
 
+class Tactic(models.Model):
+    name = models.CharField(max_length=10, unique=True, blank=False)
+    nDef = models.IntegerField(blank=False)
+    nMid = models.IntegerField(blank=False)
+    nFor = models.IntegerField(blank=False)
+
+
 dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
 class Tournament(models.Model):
 
-        name=models.CharField(max_length=100, blank=False)
-        maxTeams = models.IntegerField(unique=False, blank=False)
-        beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
-        endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
-        gameDays=MultiSelectField(choices=dayChoice,default= None )
-        user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
+    name=models.CharField(max_length=100, blank=False)
+    maxTeams = models.IntegerField(unique=False, blank=False)
+    beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
+    endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
+    gameDays=MultiSelectField(choices=dayChoice,default= None )
+    user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
 
-        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
+    REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
 
-        class Meta:
-            db_table = 'Tournament'
-            verbose_name = 'Tournament'
-            verbose_name_plural = 'Tournaments'
+    class Meta:
+        db_table = 'Tournament'
+        verbose_name = 'Tournament'
+        verbose_name_plural = 'Tournaments'
 
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 class Team(models.Model):
     tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
