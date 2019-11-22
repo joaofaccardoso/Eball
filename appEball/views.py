@@ -32,9 +32,9 @@ class UserRegister(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-            user = authenticate(username=email, password=password)
+            user = authenticate(username=username, password=password)
             if(user.username == "admin"):
                 user.isAccepted = True
                 user.isTournamentManager = True
@@ -48,6 +48,7 @@ class UserRegister(View):
             messages.success(request, 'Account created successfuly!')
             return HttpResponseRedirect(reverse('appEball:home_page'))
         else:
+            print(form.errors)
             messages.warning(request, f'Form is not valid.')
             return HttpResponseRedirect(reverse('appEball:register'))
 
