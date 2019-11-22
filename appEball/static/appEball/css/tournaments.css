@@ -21,7 +21,7 @@ body {
     background-blend-mode: inherit;
 }
 
-#teamsNav{
+#tournamentsNav{
     color: #FFE603;
 }
 
@@ -110,4 +110,46 @@ body {
 
 #all #pageBtn{
     float: right;
+}
+
+
+.btn-secondary{
+    margin-right: 20px;
+    width: 70px;
+    background-color: #3D3B3B;
+    border-color: #727070;
+    border-width: 3px;
+}
+
+.btn-secondary:hover{
+    cursor: pointer;
+    border-color: #727070;
+    background-color: #727070;
+}
+
+.row{
+    margin-bottom: 10px;
+}
+
+#dateRow{
+    height: 90px;
+
+}
+
+#check{
+    padding-right:2px;
+    margin:5px;
+    padding-left:3px;
+}
+
+#space{
+    margin-left:  10px;
+}
+
+#id_beginDate,#id_endDate{
+
+    width: 175px;
+    padding: 10px;
+    margin-left: 10px;
+    margin-right:20px ;
 }

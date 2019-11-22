@@ -9,13 +9,13 @@ class CustomUser(AbstractUser):
     lastName = models.CharField(max_length=100, blank=False)
     ccNumber = models.IntegerField(unique=True, blank=False)
     phoneNumber = models.IntegerField(unique=True, blank=False)
-    profileImg = models.ImageField(upload_to="images")
+    # profileImg = modelsImageField(upload_to="images")
     isAccepted = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
     #isCaptain = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'firstName', 'lastName', 'ccNumber', 'phoneNumber']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'firstName', 'lastName', 'ccNumber', 'phoneNumber']
 
     class Meta:
         db_table = 'User'
@@ -36,8 +36,9 @@ class Tournament(models.Model):
         beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
         endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
         gameDays=MultiSelectField(choices=dayChoice,default= None )
+        user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
 
-        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate']
+        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
 
         class Meta:
             db_table = 'Tournament'
@@ -71,6 +72,11 @@ class Tactic(models.Model):
 
 
 class Team(models.Model):
+    tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
+    name=models.CharField(max_length=100, blank=False)
+    tactic=models.CharField(choices=tacticChoice,max_length=100,default = None)
+    tournament=models.ForeignKey(Tournament,default = None,on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
 
         name=models.CharField(max_length=100, blank=False)
         #members=models.ManyToManyField(Player)
@@ -82,8 +88,8 @@ class Team(models.Model):
             verbose_name = 'Team'
             verbose_name_plural = 'Teams'
 
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 
 positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))

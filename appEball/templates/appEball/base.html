@@ -30,28 +30,11 @@
                         <a class="nav-link" href="#" id="myCalendarNav">MyCalendar</a>
                     </li>
                 {% endif %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{% url 'appEball:teams_list' %}" id="teamsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Teams
-                    </a>
-                    <div class="dropdown-content" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'appEball:teams_list' %}">Teams</a>
-                        {% if user.is_authenticated %}
-                            <a class="dropdown-item" id="myTeamsNav" href="{% url 'appEball:my_teams' %}">My teams</a>
-                        {% endif %}
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appEball:teams_list' %}" id='teamsNav'>Teams</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{% url 'appEball:tournaments' %}" id="tournamentsNav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Tournaments
-                    </a>
-                    <div class="dropdown-content" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'appEball:tournaments' %}">Tournaments</a>
-                        <a class="dropdown-item" href="{% url 'appEball:new_tournament' %}">New</a>
-                        {% if user.is_authenticated and user.isTournamentManager%}
-                            <a class="dropdown-item" href="#">My tournaments</a>
-                        {% endif %}
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appEball:tournaments' %}" id='tournamentsNav'>Tournaments</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'appEball:help' %}" id="helpNav">Help</a>

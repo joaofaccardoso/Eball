@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import UserRegister, UserLogin, HomePage,edit_user_profile, new_tournament, teams_list
 
 app_name = 'appEball'
 
@@ -25,14 +24,15 @@ urlpatterns = [
     path('accept_user/<str:username>', views.accept_user, name='accept_user'),
     path('delete_user/<str:username>', views.delete_user, name='delete_user'),
 
-
+    path('teams_list/', views.teams_list.as_view(), name='teams_list'),
     path('my_teams/', views.my_teams, name='my_teams'),
+    path('delete_team/<int:pk>', views.delete_team, name='delete_team'),
+
+    path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
     path('tournament_info/', views.tournament_info, name='tournament_info'),
     path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
-    
-    path('delete_team/<int:pk>', views.delete_team, name='delete_team'),
-    
+    path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
     
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),

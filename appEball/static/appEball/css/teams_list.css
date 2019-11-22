@@ -12,6 +12,9 @@
     font-family: "lucidaSansRegular";
 }
 
+.card{
+    background-color: transparent;
+}
 html {
     overflow-x: hidden;
 }
@@ -148,4 +151,13 @@ body {
     background-color: #FFE603;
     color: #262626;
     transition:0.5s;
+}
+
+.content1{
+    margin-top: 20px;
+
+}
+
+.content1 .row{
+    height: 20%;
 }
