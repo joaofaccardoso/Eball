@@ -19,13 +19,13 @@ class CustomUserForm(UserCreationForm):
    
 
 class CustomUserLoginForm(forms.Form):
-    email = forms.EmailField(max_length=255)
+    username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = CustomUser
         fields = (
-            'email',
+            'username',
             'password',
         )
 

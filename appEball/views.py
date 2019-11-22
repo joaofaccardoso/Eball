@@ -12,6 +12,7 @@ from .models import CustomUser,Notification
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class HomePage(View):
@@ -55,23 +56,23 @@ class UserLogin(View):
     template_name = 'appEball/login.html'
 
     def get(self, request):
-        return render(request, self.template_name, {'title': 'Login'})
+        return render(request, self.template_name, {'title': 'Login', 'form':self.form_class})
 
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(username=email, password=password)
+            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(reverse('appEball:home_page'))
             else:
-                messages.warning(request, 'Invalid e-mail or password.')
-                return HttpResponseRedirect(reverse('appEball:login'))
+                messages.warning(request, 'Invalid username or password.')
+                return HttpResponseRedirect('')
         else:
-            messages.warning(request, 'Invalid e-mail or password.')
-            return HttpResponseRedirect(reverse('appEball:login'))
+            messages.warning(request, 'Invalid username or password.')
+            return HttpResponseRedirect('')
 
 def userLogout(request):
     logout(request)

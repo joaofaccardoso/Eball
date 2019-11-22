@@ -14,8 +14,8 @@ class CustomUser(AbstractUser):
     isTournamentManager = models.BooleanField(default=False)
     isCaptain = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'firstName', 'lastName', 'ccNumber', 'phoneNumber']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'firstName', 'lastName', 'ccNumber', 'phoneNumber']
 
     class Meta:
         db_table = 'User'
