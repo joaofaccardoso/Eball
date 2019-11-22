@@ -82,56 +82,80 @@ class teams_list(View):
     template_name = 'appEball/teams_list.html'
 
     def get(self, request):
+        tournamentsChoice = Tournament.objects.all()
+        
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
+        myTeamsFilter=list(Team.objects.filter(user=request.user))
+        myTeams=list()
+        f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
                 allTeams.append(["row2",allTeamsFilter[i]])
+                if(len(myTeamsFilter)>i):
+                    myTeams.append(["row2",myTeamsFilter[i]])
+                    
             else:
                 allTeams.append(["row1",allTeamsFilter[i]])
-        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'tactics':TeamCreationForm.tacticChoice})
+                if(len(myTeamsFilter)>i):
+                    myTeams.append(["row1",myTeamsFilter[i]])
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'myTeams':myTeams,'tactics':TeamCreationForm.tacticChoice,'tournaments':tournamentsChoice,'form':f})
 
     def post(self, request):
         if request.method=="POST":
             form = self.form_class(data=request.POST)
             if form.is_valid():
-                form.save()
-                messages.success(request, 'Team created successfuly!')
-                return HttpResponseRedirect(reverse('appEball:teams_list'))
-            else:
-                messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:teams_list'))
-
-class new_team(View):
-    form_class = TeamCreationForm
-    template_name = 'appEball/new_team.html'
-
-    def get(self, request):
-        return render(request, self.template_name,{'tactics':TeamCreationForm.tacticChoice})
-
-    def post(self, request):
-        if request.method=="POST":
-            form = self.form_class(data=request.POST)
-            if form.is_valid():
-                form.save()
+                name = form.cleaned_data.get('name')
+                tactic = form.cleaned_data.get('tactic')
+                tournament = form.cleaned_data.get('tournament')
+                user = CustomUser.objects.get(username=request.user.username)
+                newTeam = Team(name=name,tactic=tactic,tournament=tournament,user=user)
+                newTeam.save()
                 messages.success(request, 'Team created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
             else:
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:new_team'))
+                return HttpResponseRedirect(reverse('appEball:teams_list'))
 
-def tournaments(request):
-    tournaments_initial=list(Tournament.objects.all())
-    tournaments=[]
-    for i in range(len(tournaments_initial)):
-        if(i%2==0):
-            tournaments.append(["row2",tournaments_initial[i]])
-        else:
-            tournaments.append(["row1",tournaments_initial[i]])
+class tournaments(View):
+    form_class = TournamentCreationForm
+    def get(self,request):
+        allTournamentsFilter=list(Tournament.objects.all())
+        allTournaments=[]
+        myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
+        myTournaments=[]
+        for i in range(len(allTournamentsFilter)):
+            if(i%2==0):
+                allTournaments.append(["row2",allTournamentsFilter[i]])
+                if(len(myTournamentsFilter)>i):
+                    myTournaments.append(["row2",myTournamentsFilter[i]])
+            else:
+                allTournaments.append(["row1",allTournamentsFilter[i]])
+                if(len(myTournamentsFilter)>i):
+                    myTournaments.append(["row1",myTournamentsFilter[i]])
 
-    return render(request, 'appEball/tournaments.html', {'tournaments':tournaments})
-
+        return render(request, 'appEball/tournaments.html', {'allTournaments':allTournaments,'myTournaments':myTournaments,'week':TournamentCreationForm.week})
+    
+    def post(self,request):
+        if request.method=="POST":
+            form = self.form_class(data=request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                maxTeams = form.cleaned_data.get('maxTeams')
+                beginDate = form.cleaned_data.get('beginDate')
+                endDate = form.cleaned_data.get('endDate')
+                gameDays = form.cleaned_data.get('gameDays')
+                user = CustomUser.objects.get(username=request.user.username)
+                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,gameDays=gameDays,user=user)
+                newTournament.save()
+                print("criei")
+                messages.success(request, 'Tournament created successfuly!')
+                return HttpResponseRedirect(reverse('appEball:tournaments'))
+            else:
+                print(form.errors)
+                messages.warning(request, f'Form is not valid.')
+                return HttpResponseRedirect(reverse('appEball:new_tournament'))
 
 def user_profile(request, username):
 	requestedUser = CustomUser.objects.get(username=username)
@@ -210,6 +234,10 @@ def delete_team(request, pk):
     Team.objects.get(pk=pk).delete()
     return HttpResponseRedirect(reverse('appEball:teams_list'))
 
+def delete_tournament(request, pk):
+    Tournament.objects.get(pk=pk).delete()
+    return HttpResponseRedirect(reverse('appEball:tournament_list'))
+
 def is_tournament_manager(request, username):
     requestedUser = CustomUser.objects.get(username=username)
     print("tuorn:",requestedUser.isTournamentManager)
@@ -224,27 +252,6 @@ def is_tournament_manager(request, username):
     requestedUser.save()
     n.save()
     return HttpResponseRedirect(reverse('appEball:users'))
-
-
-
-class new_tournament(View):
-    form_class = TournamentCreationForm
-    template_name = 'appEball/new_tournament.html'
-
-    def get(self, request):
-        return render(request, self.template_name,{'week':TournamentCreationForm.week})
-
-    def post(self, request):
-        if request.method=="POST":
-            form = self.form_class(data=request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Tournament created successfuly!')
-                return HttpResponseRedirect(reverse('appEball:tournaments'))
-            else:
-                print(form.errors)
-                messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:new_tournament'))
 
 def notifications(request):
     notifications = list()

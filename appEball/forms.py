@@ -64,5 +64,6 @@ class TeamCreationForm(forms.ModelForm):
         model = Team
         fields = (
             'name',
-            'tactic'
+            'tactic',
+            'tournament',
         )

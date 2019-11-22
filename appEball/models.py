@@ -35,8 +35,9 @@ class Tournament(models.Model):
         beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
         endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
         gameDays=MultiSelectField(choices=dayChoice,default= None )
+        user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
 
-        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate']
+        REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
 
         class Meta:
             db_table = 'Tournament'
@@ -46,23 +47,22 @@ class Tournament(models.Model):
         def __str__(self):
             return self.name
 
-tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
-
-
 class Team(models.Model):
+    tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
+    name=models.CharField(max_length=100, blank=False)
+    tactic=models.CharField(choices=tacticChoice,max_length=100,default = None)
+    tournament=models.ForeignKey(Tournament,default = None,on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
 
-        name=models.CharField(max_length=100, blank=False)
-        tactic=models.CharField(choices=tacticChoice,max_length=100,default= None)
+    REQUIRED_FIELDS = ['name','tactic','tournament','user']
 
-        REQUIRED_FIELDS = ['name','tactic']
+    class Meta:
+        db_table = 'Team'
+        verbose_name = 'Team'
+        verbose_name_plural = 'Teams'
 
-        class Meta:
-            db_table = 'Team'
-            verbose_name = 'Team'
-            verbose_name_plural = 'Teams'
-
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 class Notification(models.Model):
     date = models.DateTimeField(auto_now_add = True)
