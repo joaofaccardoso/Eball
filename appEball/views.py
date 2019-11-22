@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team
+from .models import CustomUser, Tournament, Team, Tactic
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
 from .models import CustomUser,Notification
 from django.http import JsonResponse
@@ -84,11 +84,11 @@ class teams_list(View):
     template_name = 'appEball/teams_list.html'
 
     def get(self, request):
-        tournamentsChoice = Tournament.objects.all()
-        
+        tournaments = Tournament.objects.all()
+        tactics = Tactic.objects.all()
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
-        myTeamsFilter=list(Team.objects.filter(user=request.user))
+        myTeamsFilter=list(Team.objects.filter(captain=request.user))
         myTeams=list()
         f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
@@ -101,17 +101,25 @@ class teams_list(View):
                 allTeams.append(["row1",allTeamsFilter[i]])
                 if(len(myTeamsFilter)>i):
                     myTeams.append(["row1",myTeamsFilter[i]])
-        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'myTeams':myTeams,'tactics':TeamCreationForm.tacticChoice,'tournaments':tournamentsChoice,'form':f})
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
+                                                            'myTeams':myTeams,
+                                                            'tactics':tactics,
+                                                            'tournaments':tournaments,
+                                                            'form':f
+                                                            })
 
     def post(self, request):
         if request.method=="POST":
             form = self.form_class(data=request.POST)
             if form.is_valid():
                 name = form.cleaned_data.get('name')
+                tournamentPK = form.cleaned_data.get('tournament')
+                tacticPK = form.cleaned_data.get('tactic')
+                tournament = Tournament.objects.get(pk=tournamentPK)
                 tactic = form.cleaned_data.get('tactic')
-                tournament = form.cleaned_data.get('tournament')
-                user = CustomUser.objects.get(username=request.user.username)
-                newTeam = Team(name=name,tactic=tactic,tournament=tournament,user=user)
+                tactic = Tactic.objects.get(pk=tacticPK)
+                captain = CustomUser.objects.get(username=request.user.username)
+                newTeam = Team(name=name,tactic=tactic,tournament=tournament,captain=captain, availGK=tactic.nGK, availDF=tactic.nDF, availMF=tactic.nMF, availFW=tactic.nFW, availST=tactic.nST)
                 newTeam.save()
                 messages.success(request, 'Team created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
@@ -176,7 +184,6 @@ class edit_user_profile(View):
         if request.method=="POST":
             form = self.form_class(data=request.POST, instance=request.user)
             if form.is_valid():
-                print("oi2")
                 user=form.save()
 
                 username = form.cleaned_data.get('username')

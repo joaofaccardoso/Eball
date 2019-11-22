@@ -43,8 +43,8 @@
                                 <div class="form-group">
                                     <label for="sel1">Select tactic:</label>
                                     <select class="form-control rounded-pill" id="sel1" name="tactic">
-                                        {% for u in tactics%}
-                                            <option value="{{u.1}}">{{u.1}}</option>
+                                        {% for tactic in tactics%}
+                                            <option value="{{tactic.pk}}">{{tactic.name}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

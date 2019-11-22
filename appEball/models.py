@@ -12,7 +12,6 @@ class CustomUser(AbstractUser):
     profileImg = models.ImageField(upload_to="images")
     isAccepted = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
-    isCaptain = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'firstName', 'lastName', 'ccNumber', 'phoneNumber']
@@ -21,7 +20,7 @@ class CustomUser(AbstractUser):
         db_table = 'User'
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-        ordering = ["-username"]
+        ordering = ["username"]
 
     def __str__(self):
         return self.username
@@ -29,15 +28,25 @@ class CustomUser(AbstractUser):
 
 class Tactic(models.Model):
     name = models.CharField(max_length=10, unique=True, blank=False)
-    nDef = models.IntegerField(blank=False)
-    nMid = models.IntegerField(blank=False)
-    nFor = models.IntegerField(blank=False)
+    nGk = models.IntegerField(default=2, blank=False)
+    nDF = models.IntegerField(default=5, blank=False)
+    nMF = models.IntegerField(default=4, blank=False)
+    nFW = models.IntegerField(default=3, blank=False)
+    nST = models.IntegerField(default=2, blank=False)
+    #imgTactic = models.ImageField(upload_to="images")      para adicionar mais tarde
+
+    class Meta:
+        db_table = 'Tactic'
+        verbose_name = 'Tactic'
+        verbose_name_plural = 'Tactics'
+
+    def __str__(self):
+        return self.name
 
 
 dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
 class Tournament(models.Model):
-
-    name=models.CharField(max_length=100, blank=False)
+    name=models.CharField(max_length=100, blank=False, unique=True)
     maxTeams = models.IntegerField(unique=False, blank=False)
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
     endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
@@ -55,18 +64,23 @@ class Tournament(models.Model):
         return self.name
 
 class Team(models.Model):
-    tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1'),('4-1-2-1-2','4-1-2-1-2'))
     name=models.CharField(max_length=100, blank=False)
-    tactic=models.CharField(choices=tacticChoice,max_length=100,default = None)
+    availGK = models.IntegerField(default=2)
+    availDF = models.IntegerField(default=5)
+    availMF = models.IntegerField(default=4)
+    availFW = models.IntegerField(default=3)
+    availST = models.IntegerField(default=2)
+    tactic = models.ForeignKey(Tactic, default=None, on_delete=models.SET_DEFAULT)
     tournament=models.ForeignKey(Tournament,default = None,on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
+    captain = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
 
-    REQUIRED_FIELDS = ['name','tactic','tournament','user']
+    REQUIRED_FIELDS = ['name','tactic','tournament','captain']
 
     class Meta:
         db_table = 'Team'
         verbose_name = 'Team'
         verbose_name_plural = 'Teams'
+        ordering = ['name']
 
     def __str__(self):
         return self.name
