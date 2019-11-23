@@ -32,7 +32,7 @@
             <div class="tab-pane fade border border-1" id="new" role="tabpanel" aria-labelledby="new-tab">
                 <form method="post">
                     {% csrf_token %}
-                    <div class="content1" style="height: 55%;">
+                    <div class="content1">
                         <div class="row" >
                             <div class="col-sm-2">
                                 <label for="id_name">Tournament's name:</label>
@@ -81,11 +81,8 @@
                         </div>  
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <button class="btn rounded-pill float-right" type="submit" id="pageBtn" style="width: 20%;">Create</button>
-                        </div>
-                        <div class="col">
-                            <a class= "btn rounded-pill float-left" id= "pageBtn" href={{request.META.HTTP_REFERER}} style="width: 20%;">Back</a>
+                        <div class="col text-center">
+                            <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit" style="width: 10%;">Create</button>
                         </div>
                     </div>
                 </form>
@@ -112,9 +109,8 @@
                         </div>
                         <div class="col">
                             {% if user.username == "admin" or t.1.user == user%}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_tournament' t.1.pk %}" id='pageBtn'>Delete Tournament</a>
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_tournament' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                            <a class="btn rounded-pill"  href="" id='pageBtn'>Join Team</a>
                         </div>
                     </div>
                 {% endfor %}

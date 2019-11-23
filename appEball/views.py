@@ -89,8 +89,13 @@ class teams_list(View):
         
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
-        myTeamsFilter=list(Team.objects.filter(user=request.user))
         myTeams=list()
+
+        if(request.user.is_authenticated):
+            myTeamsFilter=list(Team.objects.filter(user=request.user))
+        else:
+            myTeamsFilter=list()
+
         f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
@@ -126,8 +131,11 @@ class tournaments(View):
     def get(self,request):
         allTournamentsFilter=list(Tournament.objects.all())
         allTournaments=[]
-        myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
         myTournaments=[]
+        if(request.user.is_authenticated):
+            myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
+        else:
+            myTournamentsFilter=[]
         for i in range(len(allTournamentsFilter)):
             if(i%2==0):
                 allTournaments.append(["row2",allTournamentsFilter[i]])
@@ -152,7 +160,6 @@ class tournaments(View):
                 user = CustomUser.objects.get(username=request.user.username)
                 newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,gameDays=gameDays,user=user)
                 newTournament.save()
-                print("criei")
                 messages.success(request, 'Tournament created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:tournaments'))
             else:
@@ -161,26 +168,25 @@ class tournaments(View):
                 return HttpResponseRedirect(reverse('appEball:new_tournament'))
 
 def user_profile(request, username):
-	requestedUser = CustomUser.objects.get(username=username)
-	return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
+    requestedUser = CustomUser.objects.get(username=username)
+    print(requestedUser.profileImg.url)
+    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
 
 class edit_user_profile(View):
     form_class = EditProfileForm
 
     def get(self, request,username):
-        print("ALO")
         requestedUser = CustomUser.objects.get(username=username)
-        return render(request, 'appEball/edit_user_profile.html', {'requestedUser':requestedUser})
+        return render(request, 'appEball/edit_user_profile.html', {'requestedUser':requestedUser,'form':self.form_class})
 
     def post(self, request,username):
-        print("oi1")
         if request.method=="POST":
-            form = self.form_class(data=request.POST, instance=request.user)
+            form = self.form_class(request.POST,request.FILES, instance=request.user)
             if form.is_valid():
-                print("oi2")
-                user=form.save()
+                form.save()
 
                 username = form.cleaned_data.get('username')
+                print(request.user.profileImg.url)
                 messages.success(request, ' Profile edited successfuly!')
                 return HttpResponseRedirect(reverse('appEball:userProfile',kwargs= {"username":username}))
             else:
