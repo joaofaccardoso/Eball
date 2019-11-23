@@ -28,7 +28,7 @@ class CustomUser(AbstractUser):
 
 class Tactic(models.Model):
     name = models.CharField(max_length=10, unique=True, blank=False)
-    nGk = models.IntegerField(default=2, blank=False)
+    nGK = models.IntegerField(default=2, blank=False)
     nDF = models.IntegerField(default=5, blank=False)
     nMF = models.IntegerField(default=4, blank=False)
     nFW = models.IntegerField(default=3, blank=False)
@@ -93,13 +93,20 @@ class Notification(models.Model):
     isSeen = models.BooleanField(default = False)
 
 
-positionChoice=(('Goalkeeper','Goalkeeper'),('Defender','Defender'),('Mildfielder','Mildfielder'),('Foward','Foward'),('Striker','Striker'))
 class Player(models.Model):
-    posicao = models.CharField(choices=positionChoice,max_length=100,default= None)
+    posicao = models.CharField(max_length=100,default= None)
     saldo= models.IntegerField(unique=False, default= 0)
     nrGolos= models.IntegerField(unique=False, default= 0)
     isTitular = models.BooleanField(default=False)
-    isReserva = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
     equipa=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, default = None, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'Player'
+        verbose_name = 'Player'
+        verbose_name_plural = 'Players'
+        ordering = ['equipa', '-isTitular', '-posicao']
+    
+    def __str__(self):
+        return self.user.username+" || "+self.equipa.name+' || '+self.posicao
