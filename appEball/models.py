@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
     lastName = models.CharField(max_length=100, blank=False)
     ccNumber = models.IntegerField(unique=True, blank=False)
     phoneNumber = models.IntegerField(unique=True, blank=False)
-    profileImg = models.ImageField(upload_to="appEball/")
+    profileImg = models.ImageField(upload_to="appEball/", default = "/../media/appEball/photo1.png")
     isAccepted = models.BooleanField(default=False)
     isTournamentManager = models.BooleanField(default=False)
 
@@ -94,19 +94,19 @@ class Notification(models.Model):
 
 
 class Player(models.Model):
-    posicao = models.CharField(max_length=100,default= None)
-    saldo= models.IntegerField(unique=False, default= 0)
-    nrGolos= models.IntegerField(unique=False, default= 0)
-    isTitular = models.BooleanField(default=False)
+    position = models.CharField(max_length=100,default= None)
+    balance = models.IntegerField(unique=False, default= 0)
+    nrGoals = models.IntegerField(unique=False, default= 0)
+    isStarter = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
-    equipa=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser, default = None, on_delete=models.CASCADE)
+    team=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'Player'
         verbose_name = 'Player'
         verbose_name_plural = 'Players'
-        ordering = ['equipa', '-isTitular', '-posicao']
+        ordering = ['team', '-isStarter', '-position']
     
     def __str__(self):
-        return self.user.username+" || "+self.equipa.name+' || '+self.posicao
+        return self.user.username+" || "+self.team.name+' || '+self.position

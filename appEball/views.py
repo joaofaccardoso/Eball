@@ -90,7 +90,7 @@ class teams_list(View):
         myTeams=list()
 
         if(request.user.is_authenticated):
-            myTeamsFilter=list(Team.objects.filter(captain=request.user))
+            myTeamsFilter=list(Player.objects.filter(user=request.user))
         else:
             myTeamsFilter=list()
 
@@ -153,10 +153,10 @@ class JoinTeam(View):
         chosenPosition = request.POST['position']
         try:
             player = Player.objects.get(user=request.user)
-            player.posicao = chosenPosition
+            player.position = chosenPosition
             player.save()
         except ObjectDoesNotExist:
-            newPlayer = Player(posicao=chosenPosition, saldo=10,nrGolos=0,isTitular=True,isSub=False,equipa=team,user=request.user)
+            newPlayer = Player(position=chosenPosition, balance=10,nrGoals=0,isStarter=True,isSub=False,team=team,user=request.user)
             newPlayer.save()
         return HttpResponseRedirect(reverse('appEball:teams_list'))
 
@@ -166,11 +166,11 @@ class JoinTeam(View):
         self.mfs = [None]*team.tactic.nMF
         self.dfs = [None]*team.tactic.nDF
         self.gks = [None]*team.tactic.nGK
-        stsObj = Player.objects.filter(equipa=team).filter(posicao='ST')
-        fwsObj = Player.objects.filter(equipa=team).filter(posicao='FW')
-        mfsObj = Player.objects.filter(equipa=team).filter(posicao='MF')
-        dfsObj = Player.objects.filter(equipa=team).filter(posicao='DF')
-        gksObj = Player.objects.filter(equipa=team).filter(posicao='GK')
+        stsObj = Player.objects.filter(team=team).filter(position='ST')
+        fwsObj = Player.objects.filter(team=team).filter(position='FW')
+        mfsObj = Player.objects.filter(team=team).filter(position='MF')
+        dfsObj = Player.objects.filter(team=team).filter(position='DF')
+        gksObj = Player.objects.filter(team=team).filter(position='GK')
         for i in range(len(stsObj)):
             self.sts[i] = stsObj[i]
         for i in range(len(fwsObj)):
@@ -364,10 +364,6 @@ def askSub(request):
 
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
-
-
-def my_teams(request):
-    return render(request, 'appEball/my_teams.html', {})
    
 def tournament_info(request):
     return render(request, 'appEball/tournament_info.html', {})
