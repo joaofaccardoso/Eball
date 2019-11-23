@@ -105,12 +105,7 @@ class teams_list(View):
                 allTeams.append(["row1",allTeamsFilter[i]])
                 if(len(myTeamsFilter)>i):
                     myTeams.append(["row1",myTeamsFilter[i]])
-        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
-                                                            'myTeams':myTeams,
-                                                            'tactics':tactics,
-                                                            'tournaments':tournaments,
-                                                            'form':f
-                                                            })
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams, 'myTeams':myTeams, 'tactics':tactics, 'tournaments':tournaments, 'form':f })
 
     def post(self, request):
         if request.method=="POST":
