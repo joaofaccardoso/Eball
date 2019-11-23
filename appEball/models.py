@@ -77,11 +77,6 @@ class Notification(models.Model):
 
 
 
-class Tactic(models.Model):
-    n_def=models.IntegerField(unique=False, default= 0)
-    n_atac=models.IntegerField(unique=False, default= 0)
-    n_cent=models.IntegerField(unique=False, default= 0)
-    scorer=models.BooleanField(default=False)
 
 
 
