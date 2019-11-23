@@ -6,8 +6,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team, Player, Tactic,Notification
-from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -84,14 +83,17 @@ class teams_list(View):
     template_name = 'appEball/teams_list.html'
 
     def get(self, request):
-        tournamentsChoice = Tournament.objects.all()
-        
+        tournaments = Tournament.objects.all()
+        tactics = Tactic.objects.all()
         allTeamsFilter=list(Team.objects.all())
         allTeams=list()
         myTeams=list()
-        myTeamsFilter=list()
-        if (request.user.is_authenticated):
-            myTeamsFilter=list(Team.objects.filter(user=request.user))
+
+        if(request.user.is_authenticated):
+            myTeamsFilter=list(Player.objects.filter(user=request.user))
+        else:
+            myTeamsFilter=list()
+
         f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
             if(i%2==0):
@@ -103,24 +105,88 @@ class teams_list(View):
                 allTeams.append(["row1",allTeamsFilter[i]])
                 if(len(myTeamsFilter)>i):
                     myTeams.append(["row1",myTeamsFilter[i]])
-        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,'myTeams':myTeams,'tactics':TeamCreationForm.tacticChoice,'tournaments':tournamentsChoice,'form':f})
+        return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
+                                                            'myTeams':myTeams,
+                                                            'tactics':tactics,
+                                                            'tournaments':tournaments,
+                                                            'form':f
+                                                            })
 
     def post(self, request):
         if request.method=="POST":
             form = self.form_class(data=request.POST)
             if form.is_valid():
                 name = form.cleaned_data.get('name')
-                tactic = form.cleaned_data.get('tactic')
                 tournament = form.cleaned_data.get('tournament')
-                user = CustomUser.objects.get(username=request.user.username)
-                newTeam = Team(name=name,tactic=tactic,tournament=tournament,user=user)
+                tactic = form.cleaned_data.get('tactic')
+                captain = request.user
+                newTeam = Team(name=name,tactic=tactic,tournament=tournament,captain=captain, availGK=tactic.nGK, availDF=tactic.nDF, availMF=tactic.nMF, availFW=tactic.nFW, availST=tactic.nST)
                 newTeam.save()
                 messages.success(request, 'Team created successfuly!')
-                return HttpResponseRedirect(reverse('appEball:teams_list'))
+                return HttpResponseRedirect(reverse('appEball:join_team', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:teams_list'))
+                return HttpResponseRedirect('')
+
+
+class JoinTeam(View):
+    sts = None
+    fws = None
+    mfs = None
+    dfs = None
+    gks = None
+    numSubs=5
+    template_name = 'appEball/joinTeam.html'
+    subslist = [None] * numSubs
+
+    def get(self, request, teamId):
+        team = Team.objects.get(pk=teamId)
+        self._getPlayers(team)
+        context = {'team':team, 'sts':self.sts, 'fws':self.fws, 'mfs':self.mfs, 'dfs':self.dfs, 'gks':self.gks}
+        if (None not in (self.sts or self.fws or self.mfs or self.dfs or self.gks)):
+            context['subsList'] = self.subslist
+        return render(request, self.template_name, context)
+
+    def post(self, request, teamId):
+        team = Team.objects.get(pk=teamId)
+        chosenPosition = request.POST['position']
+        try:
+            player = Player.objects.get(user=request.user)
+            player.position = chosenPosition
+            player.save()
+        except ObjectDoesNotExist:
+            newPlayer = Player(position=chosenPosition, balance=10,nrGoals=0,isStarter=True,isSub=False,team=team,user=request.user)
+            newPlayer.save()
+        return HttpResponseRedirect(reverse('appEball:teams_list'))
+
+    def _getPlayers(self, team):
+        self.sts = [None]*team.tactic.nST
+        self.fws = [None]*team.tactic.nFW
+        self.mfs = [None]*team.tactic.nMF
+        self.dfs = [None]*team.tactic.nDF
+        self.gks = [None]*team.tactic.nGK
+        stsObj = Player.objects.filter(team=team).filter(position='ST')
+        fwsObj = Player.objects.filter(team=team).filter(position='FW')
+        mfsObj = Player.objects.filter(team=team).filter(position='MF')
+        dfsObj = Player.objects.filter(team=team).filter(position='DF')
+        gksObj = Player.objects.filter(team=team).filter(position='GK')
+        for i in range(len(stsObj)):
+            self.sts[i] = stsObj[i]
+        for i in range(len(fwsObj)):
+            self.fws[i] = fwsObj[i]
+        for i in range(len(mfsObj)):
+            self.mfs[i] = mfsObj[i]
+        for i in range(len(dfsObj)):
+            self.dfs[i] = dfsObj[i]
+        for i in range(len(gksObj)):
+            self.gks[i] = gksObj[i]
+        self.subslist[0] = self.sts.pop(len(self.sts)-1)
+        self.subslist[1] = self.fws.pop(len(self.fws)-1)
+        self.subslist[2] = self.mfs.pop(len(self.mfs)-1)
+        self.subslist[3] = self.dfs.pop(len(self.dfs)-1)
+        self.subslist[4] = self.gks.pop(len(self.gks)-1)
+        
 
 class tournaments(View):
     form_class = TournamentCreationForm
@@ -128,9 +194,10 @@ class tournaments(View):
         allTournamentsFilter=list(Tournament.objects.all())
         allTournaments=[]
         myTournaments=[]
-        myTournamentsFilter=[]
-        if (request.user.is_authenticated):
+        if(request.user.is_authenticated):
             myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
+        else:
+            myTournamentsFilter=[]
         for i in range(len(allTournamentsFilter)):
             if(i%2==0):
                 allTournaments.append(["row2",allTournamentsFilter[i]])
@@ -155,7 +222,6 @@ class tournaments(View):
                 user = CustomUser.objects.get(username=request.user.username)
                 newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,gameDays=gameDays,user=user)
                 newTournament.save()
-                print("criei")
                 messages.success(request, 'Tournament created successfuly!')
                 return HttpResponseRedirect(reverse('appEball:tournaments'))
             else:
@@ -164,26 +230,22 @@ class tournaments(View):
                 return HttpResponseRedirect(reverse('appEball:new_tournament'))
 
 def user_profile(request, username):
-	requestedUser = CustomUser.objects.get(username=username)
-	return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
+    requestedUser = CustomUser.objects.get(username=username)
+    print(requestedUser.profileImg.url)
+    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
 
 class edit_user_profile(View):
     form_class = EditProfileForm
 
     def get(self, request,username):
-        print("ALO")
         requestedUser = CustomUser.objects.get(username=username)
-        return render(request, 'appEball/edit_user_profile.html', {'requestedUser':requestedUser})
+        return render(request, 'appEball/edit_user_profile.html', {'requestedUser':requestedUser,'form':self.form_class})
 
     def post(self, request,username):
-        print("oi1")
         if request.method=="POST":
-            form = self.form_class(data=request.POST, instance=request.user)
+            form = self.form_class(request.POST,request.FILES, instance=request.user)
             if form.is_valid():
-                print("oi2")
-                user=form.save()
-
-                username = form.cleaned_data.get('username')
+                form.save()
                 messages.success(request, ' Profile edited successfuly!')
                 return HttpResponseRedirect(reverse('appEball:userProfile',kwargs= {"username":username}))
             else:
@@ -302,17 +364,6 @@ def askSub(request):
 
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
-
-
-def my_teams(request):
-    user=request.user
-   
-    players=list(Player.objects.filter(user=user))
-    teams=[]
-    for player in players:
-        teams.append(player.equipa)
-
-    return render(request, 'appEball/my_teams.html', {'teams': teams})
    
 def tournament_info(request):
     return render(request, 'appEball/tournament_info.html', {})

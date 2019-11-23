@@ -75,11 +75,46 @@ h2 {
     color: white;
     width: 180px;
     margin-top: 3%;
+    border-width: 3px;
+    border-color: #727070;
 }
 
 .btn:hover {
     background-color: #FFE603;
+    border-color: #FFE603;
     color: #262626;
     transition:0.5s;
 }
 
+#profileImg{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#profileLabel{
+    background-color: rgb(223, 223, 223);
+    height: 95%;
+    text-align: center;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #262626;
+    border-width: 3px;
+    border-color: #727070;
+}
+
+#profileLabel:hover{
+    cursor: pointer;
+}
+
+#profileLabel:hover {
+    background-color: #727070;
+    color: rgb(223, 223, 223);
+    border-color: rgb(223, 223, 223);
+    transition:0.5s;
+}

@@ -12,7 +12,7 @@
 {% block content2 %}
 	<h2>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</h2>
 	<div class="content" id="profileContent">
-		 <form method="post">
+		 <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 			<div class="col" id="profileCol">
 				<div class="row" id="row1">
@@ -31,13 +31,13 @@
 						<input type="userInfo line" class="form-control rounded-pill" name="lastName" id="lastName" value={{ requestedUser.lastName }}>				
 					</div>
 				</div>
-				<div class="row" id="row1">
+				<div class="row yo" id="row1">
 					<div class="col-sm-2">
 						<p class="userLabel line">Username:</p>
 					</div>
 					<div class="col">
 						<input type="userInfo line" class="form-control rounded-pill" name="username" id="username" value={{ requestedUser.username }}>				
-					</div>
+					</div>							
 				</div>
 				<div class="row" id="row2">
 					<div class="col-sm-2">
@@ -65,20 +65,17 @@
 				</div>
 				<div class="row">
 					<div class="col" align='right'>
-						<button class="btn rounded-pill btn-block" type="submit" >Save</button>
+						<label class="btn rounded-pill" for="profileImg" id="profileLabel">Choose profile pic</label>
+						<input type="file" class="form-control rounded-pill" name ="profileImg" id="profileImg" value={{ requestedUser.profileImg }}>
+					</div>
+					<div class="col " align='center'>
+						<button class="btn rounded-pill " type="submit" >Save</button>
 					</div>
 					<div class="col" align='left'>
-						<a class="btn rounded-pill btn-block" href={{request.META.HTTP_REFERER}}>Back</a>
+						<a class="btn rounded-pill " href={{request.META.HTTP_REFERER}}>Back</a>
 					</div>
 				</div>
 			</div>
-			<!--
-			<div class="col" id="colImg" align="right">
-				<img src="{% static 'appEball/assets/photo1.png' %}" height="350px" alt="">
-			</div>-->
 		</form>
-		
-		
-
 	</div>
 {% endblock %}

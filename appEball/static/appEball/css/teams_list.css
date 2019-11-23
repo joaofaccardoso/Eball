@@ -62,7 +62,7 @@ body {
     font-family: "lucidaSansDemibold";
 }
 
-.nav-tabs a:hover{
+.nav-tabs .nav-link:hover{
     background-color: #3D3B3B;
     color: white;
     border-color: #3D3B3B;
@@ -115,45 +115,16 @@ body {
     float: right;
 }
 
-
-#joinBtn {
-    background-color: #727070;
-    color: white;
+#my #pageBtn{
     float: right;
-    height: 80%;
-    text-align: center;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: 15px;
-    margin-right: 15px;
 }
 
-#joinBtn:hover {
-    background-color: #FFE603;
-    color: #262626;
-    transition:0.5s;
-}
-
-#joinBtnActive {
-    background-color: #727070;
-    color: white;
-    float: right;
-    height: 80%;
-    text-align: center;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: 15px;
-    margin-right: 15px;
-    opacity: 40%;
-}
-
-#joinBtnActive:hover {
-    background-color: #FFE603;
-    color: #262626;
-    transition:0.5s;
+.card{
+    background-color: transparent;
 }
 
 .content1{
+    height: 55%;
     margin-top: 20px;
 
 }

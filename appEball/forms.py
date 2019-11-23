@@ -41,8 +41,8 @@ class EditProfileForm(UserChangeForm):
             'email',
             'ccNumber',
             'phoneNumber',
+            'profileImg',
             )
-
 
 class TournamentCreationForm(forms.ModelForm):
     week=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
@@ -59,7 +59,6 @@ class TournamentCreationForm(forms.ModelForm):
 
 
 class TeamCreationForm(forms.ModelForm):
-    tacticChoice=(('4-3-3','4-3-3'),('4-4-2','4-4-2'),('4-2-3-1','4-2-3-1')) # ('4-1-2-1-2','4-1-2-1-2')
     class Meta:
         model = Team
         fields = (

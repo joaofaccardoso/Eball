@@ -15,24 +15,24 @@
 
         <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
             {% if user.is_authenticated %}
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link" id="new-tab" data-toggle="tab" href="#new" role="tab" >New team</a>
                 </li>
             {% endif %}
-            <li class="nav-item ">
+            <li class="nav-item active">
                 <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" >All teams</a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" id="my-tab" data-toggle="tab" href="#my" role="tab" >My teams</a>
-                </li>
+                </li>             
             {% endif %}
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade border border-1 " id="new" role="tabpanel" aria-labelledby="new-tab">
+            <div class="tab-pane fade border border-1" id="new" role="tabpanel" aria-labelledby="new-tab">
                 <form method="post">
                     {% csrf_token %}
-                    <div class="content1" style="height: 55%;">
+                    <div class="content1">
                         <div class="row" >
                             <div class="col-sm-2">
                                 <label for="id_name">Team's name:</label>
@@ -47,8 +47,8 @@
                             </div>
                             <div class="col-sm-3">
                                 <select class="form-control rounded-pill" id="sel1" name="tactic">
-                                    {% for u in tactics%}
-                                        <option value="{{u.1}}">{{u.1}}</option>
+                                    {% for t in tactics%}
+                                        <option value="{{t.pk}}">{{t.name}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -81,13 +81,9 @@
                         </div>
                         <div class="col">
                             {% if user.username == "admin" %}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                            {% if t.2 == 1 %}
-                            <a class="btn rounded-pill" id='joinBtn'>Join Team</a>
-                            {% else %}
-                            <a class="btn rounded-pill"  href="" id='joinBtnActive'>Join Team</a>
-                            {% endif %}
+                            <a class="btn rounded-pill"  href="{% url 'appEball:join_team' t.1.pk %}" id='pageBtn'>Join Team</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -96,12 +92,13 @@
                 {% for t in myTeams %}
                     <div class="row" id="{{ t.0 }}">
                         <div class="col-sm-5">
-                            <p class="userLabel line"><b>{{ t.1.name }}</b></p>
+                            <p class="userLabel line"><b>{{ t.1.team.name }}</b></p>
                         </div>
                         <div class="col">
                             {% if user.username == "admin" or t.1.user == user%}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn'>Delete Team</a>
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
+                            <a class="btn rounded-pill"  href="{% url 'appEball:join_team' t.1.team.pk %}" id='pageBtn'>Join Team</a>
                         </div>
                     </div>
                 {% endfor %}

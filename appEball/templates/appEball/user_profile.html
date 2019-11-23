@@ -62,13 +62,13 @@
 			{% endif %}
 		</div>
 		<div class="col" id="colImg" align="right">
-			<a href="">
-				{% if requestedUser.profileImg.url is not none %}
-					<img src="{{ requestedUser.profileImg.url }}" height="350px" alt="">
-				{% else %}
-					<img src="{% static 'appEball/assets/photo1.png' %}" height="350px" alt="">
-				{% endif %}
-			</a>
+			<div class="row"></div>
+			<div class="row" >
+				<div class="col" align="right">
+					<img class="rounded-circle border-1" src="{{ requestedUser.profileImg.url }}" style="max-width: 300px; max-height: 300px; border: solid 10px #727070;">
+				</div>
+			</div>
+			<div class="row"></div>
 		</div>
 	</div>
 {% endblock %}

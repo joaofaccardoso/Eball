@@ -59,7 +59,7 @@ body {
     font-family: "lucidaSansDemibold";
 }
 
-.nav-tabs a:hover{
+.nav-tabs .nav-link:hover{
     background-color: #3D3B3B;
     color: white;
     border-color: #3D3B3B;
@@ -112,6 +112,9 @@ body {
     float: right;
 }
 
+#my #pageBtn{
+    float: right;
+}
 
 .btn-secondary{
     margin-right: 20px;
@@ -152,4 +155,14 @@ body {
     padding: 10px;
     margin-left: 10px;
     margin-right:20px ;
+}
+
+.content1{
+    height: 55%;
+    margin-top: 20px;
+
+}
+
+.content1 .row{
+    height: 15%;
 }

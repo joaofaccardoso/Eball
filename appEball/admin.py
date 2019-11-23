@@ -5,7 +5,6 @@ admin.site.register(CustomUser)
 admin.site.register(Tournament)
 admin.site.register(Team)
 admin.site.register(Notification)
-admin.site.register(Player)
-
 admin.site.register(Tactic)
+admin.site.register(Player)
 
