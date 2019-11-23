@@ -91,7 +91,7 @@ body {
     color: white;   
 }
 
-#pageBtn {
+#pageBtn, #pageBtnInactive{
     background-color: #727070;
     color: white;
     height: 80%;
@@ -108,11 +108,11 @@ body {
     transition:0.5s;
 }
 
-#all #pageBtn{
+#all #pageBtn,#pageBtnInactive{
     float: right;
 }
 
-#my #pageBtn{
+#my #pageBtn,#pageBtnInactive{
     float: right;
 }
 

@@ -81,9 +81,14 @@
                         </div>
                         <div class="col">
                             {% if user.username == "admin" %}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                            <a class="btn rounded-pill"  href="{% url 'appEball:join_team' t.1.pk %}" id='pageBtn'>Join Team</a>
+                            {% if t.2 == 0 %}
+                                <a class="btn rounded-pill"  href="{% url 'appEball:join_team' t.1.pk %}" id='pageBtn'>Join Team</a>
+                            {% else %}
+                                <button type="button"  class="btn rounded-pill"  id='pageBtnInactive' disabled>Join Team</a>
+                            {% endif %}
+
                         </div>
                     </div>
                 {% endfor %}
@@ -96,9 +101,8 @@
                         </div>
                         <div class="col">
                             {% if user.username == "admin" or t.1.user == user%}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                            <a class="btn rounded-pill"  href="{% url 'appEball:join_team' t.1.team.pk %}" id='pageBtn'>Join Team</a>
                         </div>
                     </div>
                 {% endfor %}

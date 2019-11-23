@@ -96,15 +96,25 @@ class teams_list(View):
 
         f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
-            if(i%2==0):
-                allTeams.append(["row2",allTeamsFilter[i]])
-                if(len(myTeamsFilter)>i):
-                    myTeams.append(["row2",myTeamsFilter[i]])
-                    
+            if (Player.objects.filter(team=allTeamsFilter[i])):
+                if(i%2==0):
+                    allTeams.append(["row2",allTeamsFilter[i],1])
+                    if(len(myTeamsFilter)>i):
+                        myTeams.append(["row2",myTeamsFilter[i],1])   
+                else:
+                    allTeams.append(["row1",allTeamsFilter[i],1])
+                    if(len(myTeamsFilter)>i):
+                        myTeams.append(["row1",myTeamsFilter[i],1])
             else:
-                allTeams.append(["row1",allTeamsFilter[i]])
-                if(len(myTeamsFilter)>i):
-                    myTeams.append(["row1",myTeamsFilter[i]])
+                if(i%2==0):
+                    allTeams.append(["row2",allTeamsFilter[i],0])
+                    if(len(myTeamsFilter)>i):
+                        myTeams.append(["row2",myTeamsFilter[i],0])
+                        
+                else:
+                    allTeams.append(["row1",allTeamsFilter[i],0])
+                    if(len(myTeamsFilter)>i):
+                        myTeams.append(["row1",myTeamsFilter[i],0])
         return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
                                                             'myTeams':myTeams,
                                                             'tactics':tactics,
