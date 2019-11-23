@@ -96,7 +96,7 @@ class teams_list(View):
 
         f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
-            if (Player.objects.filter(team=allTeamsFilter[i])):
+            if (Player.team== allTeamsFilter[i]):
                 if(i%2==0):
                     allTeams.append(["row2",allTeamsFilter[i],1])
                     if(len(myTeamsFilter)>i):
