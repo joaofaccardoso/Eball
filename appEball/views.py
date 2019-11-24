@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team, Tactic, Notification, Player
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -194,6 +194,7 @@ class tournaments(View):
         allTournamentsFilter=list(Tournament.objects.all())
         allTournaments=[]
         myTournaments=[]
+        fields = Field.objects.all()
         if(request.user.is_authenticated):
             myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
         else:
@@ -208,7 +209,7 @@ class tournaments(View):
                 if(len(myTournamentsFilter)>i):
                     myTournaments.append(["row1",myTournamentsFilter[i]])
 
-        return render(request, 'appEball/tournaments.html', {'allTournaments':allTournaments,'myTournaments':myTournaments,'week':TournamentCreationForm.week})
+        return render(request, 'appEball/tournaments.html', {'allTournaments':allTournaments,'myTournaments':myTournaments,'week':TournamentCreationForm.week,'fields':fields})
     
     def post(self,request):
         if request.method=="POST":
@@ -218,16 +219,45 @@ class tournaments(View):
                 maxTeams = form.cleaned_data.get('maxTeams')
                 beginDate = form.cleaned_data.get('beginDate')
                 endDate = form.cleaned_data.get('endDate')
-                gameDays = form.cleaned_data.get('gameDays')
                 user = CustomUser.objects.get(username=request.user.username)
-                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,gameDays=gameDays,user=user)
-                newTournament.save()
-                messages.success(request, 'Tournament created successfuly!')
+                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,user=user)
+
+                ok = True
+                if(request.POST['gameDays']):
+                    gameDays = request.POST['gameDays']
+                else:
+                    ok=False
+                    messages.warning(request, f'Games days is required')
+                
+                if(request.POST['field']):
+                    field = Field.objects.get(pk=request.POST['field'])
+                else:
+                    ok=False
+                    messages.warning(request, f'Field is required')
+
+                if(request.POST['startHour']):
+                    startHour = request.POST['startHour']
+                else:
+                    ok=False
+                    messages.warning(request, f'Start hour is required')
+
+                if(request.POST['endHour']):
+                    endHour = request.POST['endHour']
+                else:
+                    ok=False
+                    messages.warning(request, f'End hour is required')  
+
+                if(ok):
+                    newTournament.save()
+                    gd = GamesDays(tournament=newTournament,endHour=endHour,startHour=startHour,field=field,gameDays=gameDays)
+                    gd.save()
+                    messages.success(request, 'Tournament created successfuly!')
+
                 return HttpResponseRedirect(reverse('appEball:tournaments'))
             else:
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:new_tournament'))
+                return HttpResponseRedirect(reverse('appEball:tournaments'))
 
 def user_profile(request, username):
     requestedUser = CustomUser.objects.get(username=username)
