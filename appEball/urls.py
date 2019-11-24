@@ -22,13 +22,15 @@ urlpatterns = [
 
     path('teams_list/', views.teams_list.as_view(), name='teams_list'),
     path('join_team/<int:teamId>',views.JoinTeam.as_view(), name='join_team'),
+    path('team_info/<int:teamId>',views.team_info, name='team_info'),
     path('delete_team/<int:pk>', views.delete_team, name='delete_team'),
 
     path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
-    path('tournament_info/', views.tournament_info, name='tournament_info'),
-    path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
+    path('tournament_info/<int:pk>', views.tournament_info.as_view(), name='tournament_info'),
     path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
+    
+    path('generate_games/<int:pk>', views.generate_games, name='generate_games'),
     
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),
