@@ -10,202 +10,249 @@
 {% endblock %}
 
 {% block content2 %}
-    <form method="post">
-    <div class="content">
-         <div class="row">
-            <h2 class="name_Tournament">{{tournament.name}}</h2>
-            {% if manager %}
-            <div class="col-2"></div>
-                 <button class="btn rounded-pill" type="submit" id="generateBtn">Generate Games</button>
-            {% endif %}
+    <h2>{{tournament.name}}</h2>
 
-        </div>
-    
-        
+    <div class="content1">
         <div class="row">
-            <div class="col-4">
-            </div>
-            <div class="col-1">
-            {% if scores %}
-            {# botao para a tras #}
+            {% if manager %}
+                <div class="col">
+                    <a class="btn rounded-pill float-right"  href="{% url 'appEball:generate_games' tournament.pk %}" id='pageBtn'>Generate Games</a>
+                </div>
             {% endif %}
-            </div>
-            <div class="col-3">
-                {% if not scores %}
-                    <p class="days">Game days</p>
-                {% else %}
-                    <p class="days">Round {{tournament.ronda}}</p>
-                {% endif %}
-            </div>
-            <div class="col-1">
-            {% if scores %}
-             {# botao para a frente #}
-            {% endif %}
-            </div>
-
         </div>
-        {% if not scores %}
-            {% for day in Days %}
-                <div class="row traco " id="{{ day.0 }}">
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                        <p class="details" id="details">{{ day.1 }} , horas</p>
-                    </div>
-
-         	      </div>
-             {% endfor %}
-        {% comment %} 
+        {% if scores %}
+            <div class="row" >
+                <div class="col-1">
+                    {% if scores %}
+                        {# botao para a tras #}
+                    {% endif %}
+                </div>
+                <div class="col" align='center'>
+                    <p class="days">Round {{tournament.ronda}}</p>
+                </div>
+                <div class="col-1">
+                    {% if scores %}
+                        {# botao para a frente #}
+                    {% endif %}
+                </div>
+            </div>
         {% else %}
-            {% for jogo in jogos %}
-                <div class="row traco " id="{{ day.0 }}">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <p class="equipa1">{{ jogo.1.equipa1 }}</p>
-                    </div>
-                    <div class="col-4">
-                        <p class="details" id="details">{{ jogo.1.dia }}, {{ jogo.1.horas }} , {{ jogo.1.campo }}</p>
-                    </div>
-                    <div class="col-2">
-                        <p class="equipa2" id="round">{{ jogo.1.equipa2 }}</p>
+            <div class="row">
+                <div class="col" align='center'>
+                    <p class="days">Game days</p>
+                </div>
+            </div> 
+            {% for day in days %}
+                <div class="row" id="{{ day.0 }}" align='center'>
+                    <div class="col" align='center'>
+                        <p class="details" id="details">{{ day.1.gameDays }} , {{ day.1.startHour}} - {{ day.1.endHour}}</p>
                     </div>
                 </div>
             {% endfor %}
-        {% endcomment %}
+            {% comment %} 
+                {% for jogo in jogos %}
+                    <div class="row" id="{{ day.0 }}">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <p class="equipa1">{{ jogo.1.equipa1 }}</p>
+                        </div>
+                        <div class="col-4">
+                            <p class="details" id="details">{{ jogo.1.dia }}, {{ jogo.1.horas }} , {{ jogo.1.campo }}</p>
+                        </div>
+                        <div class="col-2">
+                            <p class="equipa2" id="round">{{ jogo.1.equipa2 }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endcomment %}
         {% endif %}
                        
-       
-        <div class="row space">
-            {% if not scores %}
-               <h2 >Teams</h2>
-            {% else %}
-                <h2 >LeaderBoard</h2>
-            {% endif %}
-        </div>
-        <div class="row traco " id="row2">
-            {% if not scores %}
-                <div class="col-2">
-                    <p class="subtitulo_barra">Teams</p>
-                </div>
-                <div class="col-2">
-                    <p class="subtitulo_barra">Tatic</p>
-                </div>
-                <div class="col-2">
-                    <p class="subtitulo_barra" >Goalkeeper</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Defender</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Midfielder</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Forward</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Striker</p>
-                </div>
-            {% else %}
-                <div class="col-1"></div>
-                <div class="col-2">
-                    <p class="subtitulo_barra">Teams</p>
-                </div>
-      
-                <div class="col-1">
-                    <p class="subtitulo_barra">Points</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Played</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Won</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Drawn</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >Lost</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >GF</p>
-                </div>
-                <div class="col-1">
-                    <p class="subtitulo_barra" >GA</p>
-                </div>
-                 <div class="col-1">
-                    <p class="subtitulo_barra" >GD</p>
-                </div>
-            {% endif %}
-        </div>
-        {% for team in teams %}
-        <div class="row traco " id="{{ team.0 }}">
-            {% if not scores %}
-                <div class="col-2">
-                    <p class="titulo_barra" id="primeiro">{{ team.1.name }}</p>
-                </div>
-         
-                <div class="col-2">
-                    <p class="titulo_barra" id="tatic">{{ team.1.tactic.nDF }}-{{ team.1.tactic.nMF }}-{{ team.1.tactic.nFW }}-{{ team.1.tactic.nST }}</p>
-                </div>
-                <div class="col-2">
-                    <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="Defender">{{ team.1.availDF }}</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="Midfielder">{{ team.1.availMF }}</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="Forward">{{ team.1.availFW }}</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="Striker">{{ team.1.availST }}</p>
-                </div>
-                 <div class="col-2">
-                    {% if manager %}
-                         <button class="btn rounded-pill" type="submit" id="kickBtn">Kick Team</button>
-                    {% else %}
-                        <a class="btn rounded-pill"  href="{% url 'appEball:join_team' team.1.pk %}" id='jointeamBtn'>Join Team</a>
-                    {% endif %}
-                </div>
-            {% else %}
-                <div class="col-1"></div>
-                <div class="col-2">
-                    <p class="titulo_barra" id="primeiro">{{ team.1.name }}</p>
-                </div>
-         
-                <div class="col-1">
-                    <p class="titulo_barra" id="points">5</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="played" >3</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="won">3</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="drawn">0</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="lost">0</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id="GF">8</p>
-                </div>
-                <div class="col-1">
-                    <p class="titulo_barra" id ="GA">1</p>
-                </div>
-                 <div class="col-1">
-                    <p class="titulo_barra" id="GD">+7</p>
-                </div>
-            {% endif %}
-        </div>
-        
-        {% endfor %}
-         <div class="row space"></div>
-        <a class="btn rounded-pill pull-right" role="button" id="backBtn" href={{ request.META.HTTP_REFERER }}>Back</a>
-        
     </div>
-    </form>
+    {% if not scores %}
+        <div class="content2">
+            <div class="row space" >
+                <div class="col" align='center'>
+                    <p class="days">Teams</p>
+                </div>
+            </div>
+            <div class="row geral" id="row2">
+                <div class="col-sm-2">
+                    <div class="row">
+
+                        <div class="col" align='center'>
+                            <p class="subtitulo_barra">Teams</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="row">
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra">Tatic</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Goalkeeper</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Defender</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Midfielder</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Forward</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Striker</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for team in teams %}
+                <div class="row geral">
+                    <div class="col-sm-2">
+                        <div class="row">
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Midfielder">{{ team.1.name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="row">
+                            <div class="col" align='center'>
+                                <p class="titulo_barra" id="tatic">{{ team.1.tactic.nDF }}-{{ team.1.tactic.nMF }}-{{ team.1.tactic.nFW }}-{{ team.1.tactic.nST }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                            </div>
+
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Midfielder">{{ team.1.availMF }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Forward">{{ team.1.availFW }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Striker">{{ team.1.availST }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                                {% if manager %}
+                                    <div class="col" align='center'>
+                                        <a class="btn rounded-pill" href="{% url 'appEball:delete_team' team.1.pk %}" id='pageBtn' >Kick Team</a>
+                                    </div>
+                                {% endif %}
+                                <div class="col" align='center'>
+                                    <a class="btn rounded-pill"  href="{% url 'appEball:join_team' team.1.pk %}" id='pageBtn'>Join Team</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="content2">
+            <div class="row space" >
+                <div class="col" align='center'>
+                    <p class="days">Leader Board</p>
+                </div>
+            </div>
+            <div class="row geral" id="row2">
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra">Teams</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col" align='center'>
+                            <p class="subtitulo_barra">Points</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra">Played</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Won</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Drawn</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >Lost</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >GF</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >GA</p>
+                        </div>
+                        <div class="col"  align='center'>
+                            <p class="subtitulo_barra" >GD</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for team in teams %}
+                <div class="row geral" id="row2">
+                    <div class="col-sm-2">
+                        <div class="row">
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col" align='center'>
+                                <p class="titulo_barra" id="tatic">{{ team.1.tactic.nDF }}-{{ team.1.tactic.nMF }}-{{ team.1.tactic.nFW }}-{{ team.1.tactic.nST }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Midfielder">{{ team.1.availMF }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Midfielder">{{ team.1.availMF }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Forward">{{ team.1.availFW }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Striker">{{ team.1.availST }}</p>
+                            </div>
+                            <div class="col"  align='center'>
+                                <p class="titulo_barra" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                                {% if manager %}
+                                <div class="col" align='center'>
+                                    <button class="btn rounded-pill" type="submit" id="pageBtn">Kick Team</button>
+                                </div>
+                                {% endif %}
+                                <div class="col" align='center'>
+                                    <a class="btn rounded-pill"  href="{% url 'appEball:join_team' team.1.pk %}" id='pageBtn'>Join Team</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     
 {% endblock %}

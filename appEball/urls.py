@@ -30,6 +30,8 @@ urlpatterns = [
     path('tournament_info/<int:pk>', views.tournament_info.as_view(), name='tournament_info'),
     path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
     
+    path('generate_games/<int:pk>', views.generate_games, name='generate_games'),
+    
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),
     path('notifications/', views.notifications, name='notifications'),
