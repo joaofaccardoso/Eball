@@ -27,12 +27,12 @@ function sendAjax(e, pk){
         data:JSON.stringify({ isSeen: true}),
         type: "PATCH",
         contentType:"application/json",
-        // success: (d)=>{
-        //     console.log("RESPONSE===", d);
-        // },
-        // failure:(d)=>{
-        //     console.log("FAILURE===", d);
-        // }
+        success: (response_data)=>{
+            window.location.href=""
+        },
+        failure:(response_data)=>{
+            console.log("FAILURE===", response_data);
+        }
     });
 
 }

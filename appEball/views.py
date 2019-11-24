@@ -39,8 +39,8 @@ class UserRegister(View):
                 user.isTournamentManager = True
                 user.save()
             else:
-                admin = CustomUser.objects.filter(username="admin")
-                n = Notification(text = "New Register!\n"+user.username+" registered.", title = "New Register", user = admin[0])
+                admin = CustomUser.objects.get(username="admin")
+                n = Notification(text = "New Register!\n"+user.username+" registered.", title = "New Register", user = admin)
                 n.save()
             n = Notification(text = "Welcome to Eball!\nHere you can play in different teams with different people.\nJust waiting for admin confirmation.", title = "Welcome to Eball!", user = user)
             n.save()
@@ -57,7 +57,7 @@ class UserLogin(View):
     template_name = 'appEball/login.html'
 
     def get(self, request):
-        return render(request, self.template_name, {'title': 'Login', 'form':self.form_class})
+        return render(request, self.template_name, {'title': 'Login'})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -229,7 +229,7 @@ class JoinTeam(View):
         except ObjectDoesNotExist:
             newPlayer = Player(position=chosenPosition, balance=0,nrGoals=0,isStarter=isStarter,isSub=isSub,team=team,user=request.user)
             newPlayer.save()
-            notification = Notification(title='New Player on '+team.name+'!', text=newPlayer.user.username+' wants to join your team!', user=team.captain)
+            notification = Notification(title='New Player on '+team.name+'!', text=newPlayer.user.username+' joined your team!', user=team.captain)
             notification.save()
         return HttpResponseRedirect(reverse('appEball:teams_list'))
 

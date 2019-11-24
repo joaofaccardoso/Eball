@@ -24,7 +24,7 @@
                     {% endif %}
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'appEball:notifications' %}" id="notificationsNav">Notifications</a>
+                        <a class="nav-link" href="{% url 'appEball:notifications' %}" id="notificationsNav">Notifications <span class="badge badge-light">{{ user.notification_set.count }}</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="myCalendarNav">MyCalendar</a>
