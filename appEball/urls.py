@@ -26,8 +26,7 @@ urlpatterns = [
 
     path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
-    path('tournament_info/', views.tournament_info, name='tournament_info'),
-    path('tournament_teams/', views.tournament_teams, name='tournament_teams'),
+    path('tournament_info/<int:pk>', views.tournament_info.as_view(), name='tournament_info'),
     path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
     
     path('askSub/', views.askSub, name='askSub'),

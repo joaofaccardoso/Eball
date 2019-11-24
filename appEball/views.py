@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 
 
 class HomePage(View):
@@ -365,8 +366,49 @@ def askSub(request):
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
    
-def tournament_info(request):
-    return render(request, 'appEball/tournament_info.html', {})
 
-def tournament_teams(request):
-    return render(request, 'appEball/tournament_teams.html', {})
+
+class tournament_info(View):
+    template_name = 'appEball/tournament_info.html'
+    def get(self,request,pk):
+        #falta buscar o pk certo de quando ele clica no torneio no outro ecra e mandar para aqui      
+        tournament=Tournament.objects.get(pk=pk)
+        Allteams=list(Team.objects.filter(tournament=tournament))
+        AllDays=list(tournament.gameDays)
+        Date=tournament.beginDate
+        Days=list()
+        teams=list()
+        scores=list()
+        jogos=list()
+        present=datetime.now().date()
+
+        manager=request.user.isTournamentManager
+
+        if(Date<present):
+            #fazer algo para os scores e jogos apos termos este modelo com ifs por causa das linhas
+            Days=None
+
+        else:
+            for i in range(len(AllDays)):
+                if(i%2==0):
+                    Days.append(["row2",AllDays[i]])
+                else:
+                    Days.append(["row1",AllDays[i]])
+            scores=None
+            jogos=None
+
+
+        for i in range(len(Allteams)):
+            if(i%2==0):
+                teams.append(["row1",Allteams[i]])
+                    
+            else:
+                teams.append(["row2",Allteams[i]])
+            
+
+       
+        return render(request, self.template_name, {'tournament':tournament,'teams':teams,'Days':Days,'Scores':scores,'Jogos':jogos,'manager':manager})
+
+    def post(self, request,pk):
+         if request.method=="POST":
+            return HttpResponseRedirect(reverse('appEball:join_team', kwargs={'teamId':pk}))
