@@ -51,6 +51,7 @@ class Tournament(models.Model):
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
     endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
+    ronda=models.IntegerField(unique=False,default=1)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
 
