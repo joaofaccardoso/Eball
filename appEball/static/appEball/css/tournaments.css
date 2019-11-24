@@ -28,7 +28,7 @@ body {
 #myTabContent .row{
     padding-top: 10px;
     padding-right: 60px;
-    padding-left: 60px;
+    padding-left: 30px;
     text-align: justify;
     color: white;
     font-family: "lucidaSansRegular";
@@ -164,5 +164,5 @@ body {
 }
 
 .content1 .row{
-    height: 15%;
+    height: 20%;
 }

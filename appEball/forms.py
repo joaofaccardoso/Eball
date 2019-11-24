@@ -53,7 +53,6 @@ class TournamentCreationForm(forms.ModelForm):
             'maxTeams',
             'beginDate',
             'endDate',
-            'gameDays',
         )
 
 
