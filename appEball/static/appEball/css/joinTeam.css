@@ -13,3 +13,12 @@
     color: black;
     transition:0.5s;
 }
+
+#row1{
+    height: 50px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 50px;
+}
