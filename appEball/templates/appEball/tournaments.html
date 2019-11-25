@@ -127,7 +127,7 @@
                             {% if user.username == "admin" %}
                                 <a class="btn rounded-pill" href="{% url 'appEball:delete_tournament' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                            <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk %}" id='pageBtn' style="width: 15%;">Info</a>
+                            <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk t.1.gRound %}" id='pageBtn' style="width: 15%;">Info</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -142,7 +142,7 @@
                             {% if user.username == "admin" or t.1.user == user%}
                                 <a class="btn rounded-pill" href="{% url 'appEball:delete_tournament' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                            <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk %}" id='pageBtn' style="width: 15%;">Info</a>
+                            <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk t.1.gRound %}" id='pageBtn' style="width: 15%;">Info</a>
                         </div>
                     </div>
                 {% endfor %}
