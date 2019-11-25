@@ -37,7 +37,7 @@ h2 {
     background-color: #3D3B3B;
 }
 
-.days{
+.title{
     color:#FFE603;
     font-size: 30px;
 }
@@ -57,38 +57,18 @@ h2 {
     transition:0.5s;
 }
 
-.details{
-    font-size: 19px;
-    color:white;
-}
-
-.subtitulo_barra{
-    color:#FFE603;
-     font-size: 13px;
-}
-
-.titulo_barra{
-    color:white;
-     font-size: 19px;
-}
-.space{
-    margin:1%;
-}
-
-.content1 .row{
-    padding-top: 10px;
-    padding-right: 60px;
-    padding-left: 60px;
-    text-align: justify;
-    color: white;
-    font-family: "lucidaSansRegular";
-}
-
-.content2 .row.geral{
+.content .row{
     padding-top: 5px;
-    padding-right: 20px;
-    padding-left: 20px;
     text-align: justify;
     color: white;
     font-family: "lucidaSansRegular";
+}
+
+#row1{
+    height: 50px;
+}
+
+#row2{
+    background-color: #3D3B3B;
+    height: 50px;
 }
