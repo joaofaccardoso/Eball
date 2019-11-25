@@ -50,7 +50,6 @@ class Tournament(models.Model):
     maxTeams = models.IntegerField(unique=False, blank=False)
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
     endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
-    gameDays=MultiSelectField(choices=dayChoice,default= None )
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
     ronda=models.IntegerField(unique=False,default=1)
 
@@ -63,6 +62,30 @@ class Tournament(models.Model):
 
     def __str__(self):
         return self.name
+
+class Field(models.Model):
+    name = models.CharField(max_length=100, blank=False, unique=True)
+
+    class Meta:
+        db_table = 'Field'
+        verbose_name = 'Field'
+        verbose_name_plural = 'Fields'
+
+    def __str__(self):
+        return self.name
+
+
+class GamesDays(models.Model):
+    gameDays=MultiSelectField(choices=dayChoice,default= None )
+    field = models.ForeignKey(Field,default=None,on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament,default=None,on_delete=models.CASCADE)
+    startHour = models.TimeField(default = None)
+    endHour = models.TimeField(default = None)
+
+    class Meta:
+        db_table = 'GamesDays'
+        verbose_name = 'GamesDays'
+        verbose_name_plural = 'GamesDays'
 
 class Team(models.Model):
     name=models.CharField(max_length=100, blank=False)

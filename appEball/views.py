@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team, Tactic, Notification, Player
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -95,14 +95,17 @@ class teams_list(View):
         else:
             myTeamsFilter=list()
 
-        f = TeamCreationForm()
         for i in range(len(allTeamsFilter)):
                 if(i%2==0):
-                    allTeams.append(["row2",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])
+                    player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
+                    checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    allTeams.append(["row2",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
                     if(len(myTeamsFilter)>i):
                         myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])   
                 else:
-                    allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])
+                    player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
+                    checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
                     if(len(myTeamsFilter)>i):
                         myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])
     
@@ -116,7 +119,6 @@ class teams_list(View):
                                                             'myTeams':myTeams,
                                                             'tactics':tactics,
                                                             'tournaments':tournaments,
-                                                            'form':f
                                                             })
 
     def post(self, request):
@@ -130,6 +132,8 @@ class teams_list(View):
                 newTeam = Team(name=name,tactic=tactic,tournament=tournament,captain=captain, availGK=tactic.nGK, availDF=tactic.nDF, availMF=tactic.nMF, availFW=tactic.nFW, availST=tactic.nST)
                 newTeam.save()
                 messages.success(request, 'Team created successfuly!')
+                newPlayer = Player(position='MF', balance=20,nrGoals=0,isStarter=True,isSub=False,team=newTeam,user=request.user)
+                newPlayer.save()
                 return HttpResponseRedirect(reverse('appEball:join_team', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
@@ -173,55 +177,114 @@ class JoinTeam(View):
     dfs = None
     gks = None
     numSubs=5
+    numPlayers = 11
     template_name = 'appEball/joinTeam.html'
-    subslist = [None] * numSubs
+    subslist = None
+    playersList = None
 
     def get(self, request, teamId):
+        self.subslist = [None] * self.numSubs
+        self.playersList = {}
         team = Team.objects.get(pk=teamId)
         self._getPlayers(team)
-        context = {'team':team, 'sts':self.sts, 'fws':self.fws, 'mfs':self.mfs, 'dfs':self.dfs, 'gks':self.gks}
-        if (None not in (self.sts or self.fws or self.mfs or self.dfs or self.gks)):
-            context['subsList'] = self.subslist
+        context = {'team':team, 'sts':self.sts, 'fws':self.fws, 'mfs':self.mfs, 'dfs':self.dfs, 'gks':self.gks, 'subsList':self.subslist}
         return render(request, self.template_name, context)
 
     def post(self, request, teamId):
+        chosenPosition = None
         team = Team.objects.get(pk=teamId)
-        chosenPosition = request.POST['position']
+        if 'position' in request.POST:
+            chosenPosition = request.POST['position']
+        else:
+            messages.warning(request, 'You need to choose a position!')
+            return HttpResponseRedirect('')
+        isStarter = True
+        isSub=False
+        if chosenPosition == 'subST':
+            chosenPosition = 'ST'
+            isSub = True
+            isStarter = False
+        elif chosenPosition == 'subFW':
+            chosenPosition = 'FW'
+            isSub = True
+            isStarter = False
+        elif chosenPosition == 'subMF':
+            chosenPosition = 'MF'
+            isSub = True
+            isStarter = False
+        elif chosenPosition == 'subDF':
+            chosenPosition = 'DF'
+            isSub = True
+            isStarter = False
+        elif chosenPosition == 'subGK':
+            chosenPosition = 'GK'
+            isSub = True
+            isStarter = False
         try:
-            player = Player.objects.get(user=request.user)
+            player = Player.objects.filter(user=request.user).get(team=team)
             player.position = chosenPosition
+            player.isSub = isSub
+            player.isStarter = isStarter
             player.save()
         except ObjectDoesNotExist:
-            newPlayer = Player(position=chosenPosition, balance=10,nrGoals=0,isStarter=True,isSub=False,team=team,user=request.user)
+            newPlayer = Player(position=chosenPosition, balance=0,nrGoals=0,isStarter=isStarter,isSub=isSub,team=team,user=request.user)
             newPlayer.save()
+            notification = Notification(title='New Player on '+team.name+'!', text=newPlayer.user.username+' wants to join your team!', user=team.captain)
+            notification.save()
         return HttpResponseRedirect(reverse('appEball:teams_list'))
 
     def _getPlayers(self, team):
-        self.sts = [None]*team.tactic.nST
-        self.fws = [None]*team.tactic.nFW
-        self.mfs = [None]*team.tactic.nMF
-        self.dfs = [None]*team.tactic.nDF
-        self.gks = [None]*team.tactic.nGK
+        self.sts = []
+        self.fws = []
+        self.mfs = []
+        self.dfs = []
+        self.gks = []
         stsObj = Player.objects.filter(team=team).filter(position='ST')
         fwsObj = Player.objects.filter(team=team).filter(position='FW')
         mfsObj = Player.objects.filter(team=team).filter(position='MF')
         dfsObj = Player.objects.filter(team=team).filter(position='DF')
         gksObj = Player.objects.filter(team=team).filter(position='GK')
-        for i in range(len(stsObj)):
-            self.sts[i] = stsObj[i]
-        for i in range(len(fwsObj)):
-            self.fws[i] = fwsObj[i]
-        for i in range(len(mfsObj)):
-            self.mfs[i] = mfsObj[i]
-        for i in range(len(dfsObj)):
-            self.dfs[i] = dfsObj[i]
-        for i in range(len(gksObj)):
-            self.gks[i] = gksObj[i]
-        self.subslist[0] = self.sts.pop(len(self.sts)-1)
-        self.subslist[1] = self.fws.pop(len(self.fws)-1)
-        self.subslist[2] = self.mfs.pop(len(self.mfs)-1)
-        self.subslist[3] = self.dfs.pop(len(self.dfs)-1)
-        self.subslist[4] = self.gks.pop(len(self.gks)-1)
+        for st in stsObj:
+            print(st.user.username+'\n ST')
+            if st.isSub:
+                self.subslist[0] = st
+            else:
+                self.sts.append(st)
+        if len(self.sts) < team.tactic.nST-1:
+            self.sts.extend([None]*(team.tactic.nST-1 - len(self.sts)))
+        for fw in fwsObj:
+            print(fw.user.username+'\n FW')
+            if fw.isSub:
+                self.subslist[1] = fw
+            else:
+                self.fws.append(fw)
+        if len(self.fws) < team.tactic.nFW-1:
+            self.fws.extend([None]*(team.tactic.nFW-1 - len(self.fws)))
+        for mf in mfsObj:
+            print(mf.user.username+'\n MF')
+            if mf.isSub:
+                self.subslist[2] = mf
+            else:
+                self.mfs.append(mf)
+        if len(self.mfs) < team.tactic.nMF-1:
+            self.mfs.extend([None]*(team.tactic.nMF-1 - len(self.mfs)))
+        for df in dfsObj:
+            print(df.user.username+'\n DF')
+            if df.isSub:
+                self.subslist[3] = df
+            else:
+                self.dfs.append(df)
+        if len(self.dfs) < team.tactic.nDF-1:
+            self.dfs.extend([None]*(team.tactic.nDF-1 - len(self.dfs)))
+        for gk in gksObj:
+            print(gk.user.username+'\n GK')
+            if gk.isSub:
+                self.subslist[4] = gk
+            else:
+                self.gks.append(gk)
+        if len(self.gks) < team.tactic.nGK-1:
+            self.gks.extend([None]*(team.tactic.nGK-1 - len(self.gks)))
+        print(self.playersList)
         
 
 class tournaments(View):
@@ -230,6 +293,7 @@ class tournaments(View):
         allTournamentsFilter=list(Tournament.objects.all())
         allTournaments=[]
         myTournaments=[]
+        fields = Field.objects.all()
         if(request.user.is_authenticated):
             myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
         else:
@@ -244,7 +308,7 @@ class tournaments(View):
                 if(len(myTournamentsFilter)>i):
                     myTournaments.append(["row1",myTournamentsFilter[i]])
 
-        return render(request, 'appEball/tournaments.html', {'allTournaments':allTournaments,'myTournaments':myTournaments,'week':TournamentCreationForm.week})
+        return render(request, 'appEball/tournaments.html', {'allTournaments':allTournaments,'myTournaments':myTournaments,'week':TournamentCreationForm.week,'fields':fields})
     
     def post(self,request):
         if request.method=="POST":
@@ -254,20 +318,48 @@ class tournaments(View):
                 maxTeams = form.cleaned_data.get('maxTeams')
                 beginDate = form.cleaned_data.get('beginDate')
                 endDate = form.cleaned_data.get('endDate')
-                gameDays = form.cleaned_data.get('gameDays')
                 user = CustomUser.objects.get(username=request.user.username)
-                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,gameDays=gameDays,user=user)
-                newTournament.save()
-                messages.success(request, 'Tournament created successfuly!')
+                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,user=user)
+
+                ok = True
+                if(request.POST['gameDays']):
+                    gameDays = request.POST['gameDays']
+                else:
+                    ok=False
+                    messages.warning(request, f'Games days is required')
+                
+                if(request.POST['field']):
+                    field = Field.objects.get(pk=request.POST['field'])
+                else:
+                    ok=False
+                    messages.warning(request, f'Field is required')
+
+                if(request.POST['startHour']):
+                    startHour = request.POST['startHour']
+                else:
+                    ok=False
+                    messages.warning(request, f'Start hour is required')
+
+                if(request.POST['endHour']):
+                    endHour = request.POST['endHour']
+                else:
+                    ok=False
+                    messages.warning(request, f'End hour is required')  
+
+                if(ok):
+                    newTournament.save()
+                    gd = GamesDays(tournament=newTournament,endHour=endHour,startHour=startHour,field=field,gameDays=gameDays)
+                    gd.save()
+                    messages.success(request, 'Tournament created successfuly!')
+
                 return HttpResponseRedirect(reverse('appEball:tournaments'))
             else:
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
-                return HttpResponseRedirect(reverse('appEball:new_tournament'))
+                return HttpResponseRedirect(reverse('appEball:tournaments'))
 
 def user_profile(request, username):
     requestedUser = CustomUser.objects.get(username=username)
-    print(requestedUser.profileImg.url)
     return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
 
 class edit_user_profile(View):
@@ -325,7 +417,6 @@ def accept_user(request, username):
     requestedUser = CustomUser.objects.get(username=username)
     requestedUser.isAccepted = True
     requestedUser.save()
-    print("accept")
     n = Notification(text = "You have been accepted to the app! Check the teams in need of an element.\n Hope you enjoy!", title = "You have been accepted to the app!", user = requestedUser)
     n.save()
     return HttpResponseRedirect(reverse('appEball:users'))
@@ -344,15 +435,12 @@ def delete_tournament(request, pk):
 
 def is_tournament_manager(request, username):
     requestedUser = CustomUser.objects.get(username=username)
-    print("tuorn:",requestedUser.isTournamentManager)
     if(requestedUser.isTournamentManager == True):
         requestedUser.isTournamentManager = False
         n = Notification(text = "You are no more tournaments manager! You can still create and manage teams or play in another tournaments!", title = "You are no more tournaments manager!", user = requestedUser)
-        print("nhecas")
     else:
         requestedUser.isTournamentManager = True
         n = Notification(text = "You are now tournaments manager! You can create and manage tournaments!", title = "You are now tournaments manager!", user = requestedUser)
-        print("Tornei gestor de torneios")
     requestedUser.save()
     n.save()
     return HttpResponseRedirect(reverse('appEball:users'))
@@ -362,7 +450,6 @@ def notifications(request):
     notificationsNotSeen = list()
     notificationsFilter = Notification.objects.filter(user = request.user).order_by('isSeen','-date')
     for i in range(len(notificationsFilter)):
-        print("olha ue lindo:",notificationsFilter[i].isSeen)
         if(i%2==0):
             notifications.append(["row2","collapseMessage"+str(i),notificationsFilter[i]])
         else:
@@ -400,50 +487,43 @@ def askSub(request):
 
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
-   
-
 
 class tournament_info(View):
     template_name = 'appEball/tournament_info.html'
     def get(self,request,pk):
         #falta buscar o pk certo de quando ele clica no torneio no outro ecra e mandar para aqui      
         tournament=Tournament.objects.get(pk=pk)
-        Allteams=list(Team.objects.filter(tournament=tournament))
-        AllDays=list(tournament.gameDays)
-        Date=tournament.beginDate
-        Days=list()
+        allteams=list(Team.objects.filter(tournament=tournament))
+        allDays=list(GamesDays.objects.filter(tournament=tournament))
+        days=list()
         teams=list()
         scores=list()
         jogos=list()
-        present=datetime.now().date()
 
         manager=request.user.isTournamentManager
 
-        if(Date<present):
-            #fazer algo para os scores e jogos apos termos este modelo com ifs por causa das linhas
-            Days=None
-
-        else:
-            for i in range(len(AllDays)):
-                if(i%2==0):
-                    Days.append(["row2",AllDays[i]])
-                else:
-                    Days.append(["row1",AllDays[i]])
-            scores=None
-            jogos=None
-
-
-        for i in range(len(Allteams)):
+        for i in range(len(allDays)):
             if(i%2==0):
-                teams.append(["row1",Allteams[i]])
+                days.append(["row2",allDays[i]])
+            else:
+                days.append(["row1",allDays[i]])
+        scores=None
+        jogos=None
+
+        for i in range(len(allteams)):
+            if(i%2==0):
+                teams.append(["row1",allteams[i]])
                     
             else:
-                teams.append(["row2",Allteams[i]])
-            
-
+                teams.append(["row2",allteams[i]])
        
-        return render(request, self.template_name, {'tournament':tournament,'teams':teams,'Days':Days,'Scores':scores,'Jogos':jogos,'manager':manager})
+        return render(request, self.template_name, {'tournament':tournament,'teams':teams,'days':days,'Scores':scores,'Jogos':jogos,'manager':manager})
 
     def post(self, request,pk):
          if request.method=="POST":
             return HttpResponseRedirect(reverse('appEball:join_team', kwargs={'teamId':pk}))
+
+def generate_games(request, pk):
+    tournament = Tournament.objects.get(pk=pk)
+    teams = Team.objects.filter(tournament=tournament)
+    return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk}))

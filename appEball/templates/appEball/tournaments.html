@@ -32,53 +32,83 @@
             <div class="tab-pane fade border border-1" id="new" role="tabpanel" aria-labelledby="new-tab">
                 <form method="post">
                     {% csrf_token %}
-                    <div class="content1">
-                        <div class="row" >
-                            <div class="col-sm-2">
-                                <label for="id_name">Tournament's name:</label>
-                            </div>
-                            <div class="col-4">
-                                <input type="text" class="form-control rounded-pill" placeholder="Enter the tournament's name" name="name" maxlength="100" required="" id="id_name">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <label for="id_maxTeams">Max Teams:</label>
-                            </div>
-                            <div class="col-sm-3">
-                                <input type="number" class="form-control rounded-pill" name="maxTeams" maxlength="100" required="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <label for="id_beginDate">Begin date:</label>
-                            </div>
-                            <div class="col-sm-3">
-                                <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" >
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <label for="id_beginDate">End date:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate">
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <label for="id_gameDays">Game Days:</label>
-                            </div>
-                            <div class="col-3">
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    {% for u in week%}
-                                        <label class="btn btn-secondary rounded-pill">
-                                            <input type="checkbox" checked="checked" name="gameDays" value="{{u.0}}"> {{u.0}}
-                                        </label>
-                                    {% endfor %}
+                    <div class="content1 row">
+                        <div class="col">
+                            <div class="row" >
+                                <div class="col-sm-4">
+                                    <label for="id_name">Tournament's name:</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control rounded-pill" placeholder="Enter the tournament's name" name="name" maxlength="100" required="" id="id_name">
                                 </div>
                             </div>
-                        </div>  
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="id_maxTeams">Max Teams:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="number" class="form-control rounded-pill" name="maxTeams" maxlength="100" required="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="id_beginDate">Begin date:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" >
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="id_beginDate">End date:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate">
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="tactic">Select field:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <select class="form-control rounded-pill" id="sel1" name="field">
+                                        {% for f in fields%}
+                                            <option value="{{f.pk}}">{{f.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        {% for u in week%}
+                                            <label class="btn btn-secondary rounded-pill">
+                                                <input type="checkbox" checked="checked" name="gameDays" value="{{u.0}}"> {{u.0}}
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>Start hour:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="time" class="form-control rounded-pill" placeholder="Enter start hour" name="startHour">
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="id_beginDate">End hour:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="time" class="form-control rounded-pill" placeholder="Enter end hour" name="endHour">
+                                </div>
+                            </div>  
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col text-center">
@@ -97,7 +127,7 @@
                             {% if user.username == "admin" %}
                                 <a class="btn rounded-pill" href="{% url 'appEball:delete_tournament' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                                <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk %}" id='pageBtn' style="width: 15%;">Info</a>
+                            <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk %}" id='pageBtn' style="width: 15%;">Info</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -112,7 +142,7 @@
                             {% if user.username == "admin" or t.1.user == user%}
                                 <a class="btn rounded-pill" href="{% url 'appEball:delete_tournament' t.1.pk %}" id='pageBtn' style="width: 15%;">Delete</a>
                             {% endif %}
-                                <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk %}" id='pageBtn' style="width: 15%;">Info</a>
+                            <a class="btn rounded-pill" href="{% url 'appEball:tournament_info' t.1.pk %}" id='pageBtn' style="width: 15%;">Info</a>
                         </div>
                     </div>
                 {% endfor %}
