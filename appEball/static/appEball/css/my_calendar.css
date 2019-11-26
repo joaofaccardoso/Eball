@@ -35,14 +35,14 @@ h2 {
 }
 
 #teams{
-    padding-left: 0px;
-    padding-right: 0px;
+    color: yellow;
 }
 .row{
-    padding-top: 10px;
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
     padding-right: 60px;
     padding-left: 60px;
-    text-align: justify;
 }
 
 #row1{
@@ -56,4 +56,15 @@ h2 {
 
 #t_id{
     padding-left: 40px ;
+    font-size: 14px;
+    color: #E5E5E5;
+}
+ 
+#coluna{
+    text-align: center;
+
+}
+#others{
+    font-size: 14px;
+    color: #E5E5E5;
 }

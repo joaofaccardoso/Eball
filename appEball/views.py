@@ -523,7 +523,8 @@ def tournament_info(request,pk,round):
         else:
             teams.append(["row2",allTeams[i]])
 
-    for i in range(len(gamesRound)):
+    for i in range(len(gamesRound)):    
+        
         if(i%2==0):
             games.append(["row1",gamesRound[i]])
         else:
@@ -590,3 +591,8 @@ def getSlots(days):
     print(slots)
 
     return slots
+
+
+
+def my_calendar(request):
+        return render(request,'appEball/my_calendar.html',{})
