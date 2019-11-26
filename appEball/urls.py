@@ -35,5 +35,6 @@ urlpatterns = [
     path('askSub/', views.askSub, name='askSub'),
     path('askKick/', views.askKick, name='askKick'),
     path('notifications/', views.notifications, name='notifications'),
-    path('is_seen/<int:pk>/', views.is_seen, name='is_seen'),    
+    path('is_seen/<int:pk>/', views.is_seen, name='is_seen'), 
+    path('presencas/<int:pk>/',views.presencas.as_view(),name='presencas'),   
 ]

@@ -1,0 +1,52 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/presencas.css' %}">
+{% endblock %}
+
+{% block content2 %}
+   
+	<h3>Attendance</h3>
+	<div class="row">
+		 <div class="col-3">
+			<h1>{{ team.name }}</h1>
+		</div>
+		<div class="col" >
+			<h2>({{ tournament.name }} | Round {{ tournament.gRound }} )</h2>
+		</div>
+	</div>
+	<form method="post">
+		{% csrf_token %}
+		<div class="content">
+			{% for player in players %}
+			<div class="row text-center" id={{ player.0 }}>
+	            <div class="col-5" >
+	                <p class="subtopRow">{{ player.1.user.firstName }} {{ player.1.user.lastName }}</p>
+	            </div>
+	            <div class="col-2" >
+	                <p class="subtopRow">{{ player.1.position }}</p>
+	            </div>
+	            <div class="col-2" >
+	                <p class="subtopRow">8/8</p>
+	            </div>
+	            <div class="col-2" >
+	                <div class="form-check">
+					    <input type="checkbox" class="form-check-input" name="checks" id="materialUnchecked" value={{ player.1.user.firstName }} style= "width:20px; height:20px;"> 
+					</div>
+	            </div>
+	         </div>
+	         {% endfor %}
+			<div class="row text-center" style="margin-top: 2%">
+				<div class="col-5"></div>
+	            <div class="col" align='center' style="margin-left:5%">
+	                <button class="btn rounded-pill" type="submit" id="pageBtn">Confirm</button>
+	            </div>
+	            <div class="col" align='left'>
+        		<a class="btn rounded-pill pull-right" role="button" id="pageBtn" href={{ request.META.HTTP_REFERER }}>Back</a>
+	            </div>
+	        </div>
+		</div>
+	</form>
+
+{% endblock %}

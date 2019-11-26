@@ -590,3 +590,41 @@ def getSlots(days):
     print(slots)
 
     return slots
+
+
+class presencas(View):
+    template_name= 'appEball/presencas.html'
+   
+
+    def get(self, request,pk):
+        team = Team.objects.get(pk=pk)
+        tournament=team.tournament
+        jogadores=list(Player.objects.filter(team = team))
+        players=list()
+
+        for i in range(len(jogadores)):
+            if(i%2==0):
+                players.append(["row2",jogadores[i]])
+            else:
+                players.append(["row3",jogadores[i]])
+        return render(request, self.template_name, {'team':team,'tournament':tournament,'players':players})
+
+    def post(self, request,pk):
+        if request.method=="POST":
+            nomesMarked =  request.POST.getlist('checks')
+            print(nomesMarked)
+            #comparar nomes desta lista e lista de jogadores e quando encontrar igual adicionar por exemplo 3/4 passa para 4/5
+            #se no fim de percorrer noa encontrar igual aumenta so o numero de jogos, nao de comparencia 3/4 passa para 3/5
+            """
+            team = Team.objects.get(pk=pk)
+            jogadores=list(Player.objects.filter(team = pk))
+            for jogador in jogadores:
+                if jogador.user.firstName in nomesMarked:
+                    adicionar nos dois lados
+                else:
+                    adicionar so o numero de jogos
+
+
+
+            """
+            return HttpResponseRedirect(reverse('appEball:tournaments'))
