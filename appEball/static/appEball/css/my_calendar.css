@@ -38,7 +38,6 @@ h2 {
     color: yellow;
 }
 .row{
-    padding-top: 12px;
     display: flex;
     align-items: center;
     padding-right: 60px;

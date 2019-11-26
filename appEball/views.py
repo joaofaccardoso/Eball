@@ -12,6 +12,8 @@ from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, 
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
+from operator import attrgetter
+
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -509,8 +511,10 @@ def tournament_info(request,pk,gRound):
             games.append(["row2",gamesRound[i]])
         else:
             games.append(["row1",gamesRound[i]])
-    
-    maxRound = list(Game.objects.filter(tournament=tournament).order_by('gRound'))[-1].gRound
+    if(len(list(Game.objects.filter(tournament=tournament)))>0):
+        maxRound = list(Game.objects.filter(tournament=tournament).order_by('gRound'))[-1].gRound
+    else:
+        maxRound=0
     print(maxRound)
     
     return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'teams':teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
@@ -612,3 +616,24 @@ def change_round(request,pk,gRound,change):
         gRound-=1
     
     return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk,'gRound':gRound}))
+
+
+
+
+def my_calendar(request):
+   
+    jogos=[]
+    contador=0
+    players=list(Player.objects.filter(user=request.user))
+    for player in players:
+        jogos_t=list(Game.objects.filter(tournament=player.team.tournament))
+        for jogo in jogos_t:
+            if jogo.date.date()>datetime.date.today():
+                if jogo.team1==player.team or jogo.team2==player.team:
+                    if contador%2==0:
+                        jogos.append([jogo,'row1'])
+                    else:
+                        jogos.append([jogo,'row2'])
+                    contador=contador+1
+    sorted(jogos, key=lambda jogo: jogo[0].date)
+    return render(request,'appEball/my_calendar.html',{'jogos':jogos})
