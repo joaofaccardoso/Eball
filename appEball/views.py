@@ -1,4 +1,5 @@
 import json
+import random
 from django.shortcuts import render, reverse
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
@@ -6,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
 from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm
-from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays, Game
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -86,7 +87,7 @@ class teams_list(View):
     def get(self, request):
         tournaments = Tournament.objects.all()
         tactics = Tactic.objects.all()
-        allTeamsFilter=list(Team.objects.all())
+        allTeamsFilter=list(Team.objects.all().exclude(isDayOff=True))
         allTeams=list()
         myTeams=list()
 
@@ -97,16 +98,22 @@ class teams_list(View):
 
         for i in range(len(allTeamsFilter)):
                 if(i%2==0):
-                    player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                    checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    if(request.user.is_authenticated):
+                        player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
+                        checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    else:
+                        checkPlayer = None
                     allTeams.append(["row2",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
-                    if(len(myTeamsFilter)>i):
+                    if(len(myTeamsFilter)>i and myTeamsFilter[i].team.isDayOff==False):
                         myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])   
                 else:
-                    player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                    checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    if(request.user.is_authenticated):
+                        player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
+                        checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    else:
+                        checkPlayer = None
                     allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
-                    if(len(myTeamsFilter)>i):
+                    if(len(myTeamsFilter)>i and myTeamsFilter[i].team.isDayOff==False):
                         myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])
     
         for i in range(len(allTeams)):
@@ -280,6 +287,7 @@ class tournaments(View):
         allTournaments=[]
         myTournaments=[]
         fields = Field.objects.all()
+
         if(request.user.is_authenticated):
             myTournamentsFilter=list(Tournament.objects.filter(user=request.user))
         else:
@@ -310,6 +318,7 @@ class tournaments(View):
                 ok = True
                 if(request.POST['gameDays']):
                     gameDays = request.POST['gameDays']
+                    print(gameDays)
                 else:
                     ok=False
                     messages.warning(request, f'Games days is required')
@@ -474,42 +483,96 @@ def askSub(request):
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
 
-class tournament_info(View):
-    template_name = 'appEball/tournament_info.html'
-    def get(self,request,pk):
-        #falta buscar o pk certo de quando ele clica no torneio no outro ecra e mandar para aqui      
-        tournament=Tournament.objects.get(pk=pk)
-        allteams=list(Team.objects.filter(tournament=tournament))
-        allDays=list(GamesDays.objects.filter(tournament=tournament))
-        days=list()
-        teams=list()
-        scores=list()
-        jogos=list()
+def tournament_info(request,pk,round):
+    tournament=Tournament.objects.get(pk=pk)
+    if(tournament.gRound==0):
+        allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('name'))
+    else:
+        allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('-points','-goalsDif'))
+    
+    allDays=list(GamesDays.objects.filter(tournament=tournament))
+    gamesRound = list(Game.objects.filter(tournament=tournament,gRound=round))
 
-        manager=request.user.isTournamentManager
+    days=list()
+    teams=list()
+    games=list()
 
-        for i in range(len(allDays)):
-            if(i%2==0):
-                days.append(["row2",allDays[i]])
-            else:
-                days.append(["row1",allDays[i]])
-        scores=None
-        jogos=None
+    for i in range(len(allDays)):
+        if(i%2==0):
+            days.append(["row1",allDays[i]])
+        else:
+            days.append(["row2",allDays[i]])
 
-        for i in range(len(allteams)):
-            if(i%2==0):
-                teams.append(["row1",allteams[i]])
-                    
-            else:
-                teams.append(["row2",allteams[i]])
-       
-        return render(request, self.template_name, {'tournament':tournament,'teams':teams,'days':days,'Scores':scores,'Jogos':jogos,'manager':manager})
+    for i in range(len(allTeams)):
+        if(i%2==0):
+            teams.append(["row1",allTeams[i]])
+        else:
+            teams.append(["row2",allTeams[i]])
 
-    def post(self, request,pk):
-         if request.method=="POST":
-            return HttpResponseRedirect(reverse('appEball:join_team', kwargs={'teamId':pk}))
+    for i in range(len(gamesRound)):
+        if(i%2==0):
+            games.append(["row1",gamesRound[i]])
+        else:
+            games.append(["row2",gamesRound[i]])
+    
+    return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'teams':teams,'days':days,'games':games})
 
 def generate_games(request, pk):
     tournament = Tournament.objects.get(pk=pk)
-    teams = Team.objects.filter(tournament=tournament)
-    return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk}))
+    gameDays = list(GamesDays.objects.filter(tournament = tournament))
+
+    slots=getSlots(gameDays)
+
+    field = Field.objects.get()
+
+    games=list()
+    teams1 = list(Team.objects.filter(tournament=tournament))
+    random.shuffle(teams1)
+
+    nTeams = len(teams1)
+    nRounds = nTeams-1+nTeams%2
+
+    teams2 = teams1.copy()
+    teams2.reverse()
+    teams1=teams1[:nTeams//2]
+    teams2=teams2[:nTeams//2+nTeams%2]
+    
+    if(nTeams%2==1):
+        tactic=Tactic.objects.get()
+        u=list(CustomUser.objects.filter(username=""))
+        if(u==[]):
+            u=CustomUser(email="",firstName="",lastName="",ccNumber=00000000,phoneNumber=000000000)
+            u.save()
+        else:
+            u=u[0]
+        newTeam = Team(name="", tactic=tactic, tournament=tournament, captain=u, isDayOff=True)
+        newTeam.save()
+        teams1.append(newTeam)
+
+    for i in range(1,nRounds+1):
+        for j in range(nTeams//2+nTeams%2):
+            newGame = Game(team1=teams1[j],team2=teams2[j],tournament=tournament,field=field,gRound=i)
+            newGame.save()
+            games.append(newGame)
+        teams1.insert(1,teams2[0])
+        teams2.pop(0)
+        teams2.append(teams1[-1])
+        teams1.pop(-1)
+
+    tournament.gRound = 1
+
+    return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk,'round':tournament.gRound}))
+
+def getSlots(days):
+    slots = list()
+    for d in days:
+        for i in range(len(d.gameDays)):
+            h=d.startHour.hour
+            m=d.startHour.minute
+            while(h+1+(m+30)//60<d.endHour.hour or (h+1+(m+30)//60==d.endHour.hour and (m+30)%60<=d.endHour.minute)):
+                slots.append([d.gameDays[i],h,m])
+                h = h+1+(m+30)//60
+                m = (m+30)%60
+    print(slots)
+
+    return slots

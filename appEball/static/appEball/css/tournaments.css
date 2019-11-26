@@ -42,7 +42,7 @@ body {
     height: 50px;
     background-color: #3D3B3B;
 }
-
+ 
 #row2{
     height: 50px;
 }
@@ -158,11 +158,6 @@ body {
 }
 
 .content1{
-    height: 55%;
     margin-top: 20px;
 
-}
-
-.content1 .row{
-    height: 20%;
 }
