@@ -14,8 +14,8 @@
         <div class="col">
             <h2>{{tournament.name}}</h2>
         </div>
-        <div class="col">
-            {% if tournament.user == user %}
+        <div class="col" style="margin-top: -1%">
+            {% if tournament.user == user and tournament.gRound == 0 and teams|length >= 2 %}
                 <div class="col">
                     <a class="btn rounded-pill float-right"  href="{% url 'appEball:generate_games' tournament.pk %}" id='pageBtn'>Generate Games</a>
                 </div>
@@ -24,20 +24,41 @@
     </div>
 
     <div class="content">
-        {% if tournament.gRound > 0 %}
-            <div class="row" >
-                <div class="col-1">
-                    {# botao para a tras #}
+        {% if gRound > 0 and tournament.gRound != 0  %}
+            <div class="row" style="margin-top: 1%;">
+                <div class="col">
+                    {% if gRound > 1 %}
+                        <a class="float-right" href="{% url 'appEball:change_round' tournament.pk gRound less %}">
+                            <img src="{% static 'appEball/assets/left_arrow.png' %}" alt="">
+                        </a>
+                    {% endif %}
                 </div>
-                <div class="col" align='center'>
-                    <p class="title">Round {{tournament.gRound}}</p>
+                <div class="col-sm-3" align='center'>
+                    <p class="title">Round {{ gRound }}</p>
                 </div>
-                <div class="col-1">
-                    {# botao para a frente #}
+                <div class="col">
+                    {% if maxRound > gRound %}
+                        <a class="float-left" href="{% url 'appEball:change_round' tournament.pk gRound plus %}">
+                            <img src="{% static 'appEball/assets/right_arrow.png' %}" alt="">
+                        </a>
+                    {% endif %}
                 </div>
             </div>
+            {% for game in games %}
+                <div class="row disp" id="{{ game.0 }}" align='center'>
+                    <div class="col" align='right'>
+                        <p class="team">{{ game.1.team1.name }} </p>
+                    </div>
+                    <div class="col-sm-4" align='center'>
+                        <p class="center">{{ game.1.date|date:'d-m-Y, H:i' }}, {{ game.1.field.name }} </p>
+                    </div>
+                    <div class="col" align='left'>
+                        <p class="team">{{ game.1.team2.name }} </p>
+                    </div>
+                </div>
+            {% endfor %}
         {% else %}
-            <div class="row">
+            <div class="row" style="margin-top: 1%;">
                 <div class="col" align='center'>
                     <p class="title">Game days</p>
                 </div>
@@ -45,18 +66,18 @@
             {% for day in days %}
                 <div class="row" id="{{ day.0 }}" align='center'>
                     <div class="col" align='center'>
-                        <p class="details" id="details">{{ day.1.gameDays }} , {{ day.1.startHour}} - {{ day.1.endHour}}</p>
+                        <p class="details" id="details">{{ day.2 }} , {{ day.1.startHour}} - {{ day.1.endHour}}, {{ day.1.field.name }}</p>
                     </div>
                 </div>
             {% endfor %}
         {% endif %}   
-        {% if tournament.gRound == 0 %}
-            <div class="row" >
+        {% if gRound == 0 or tournament.gRound == 0 %}
+            <div class="row" style="margin-top: 2%;">
                 <div class="col" align='center'>
                     <p class="title">Teams</p>
                 </div>
             </div>
-            <div class="row geral" id="row2">
+            <div class="row min" id="row2">
                 <div class="col-sm-2">
                     <div class="row">
                         <div class="col" align='center'>
@@ -134,12 +155,12 @@
                 </div>
             {% endfor %}
         {% else %}
-            <div class="row space" >
+            <div class="row space" style="margin-top: 2%;">
                 <div class="col" align='center'>
                     <p class="title">Leader Board</p>
                 </div>
             </div>
-            <div class="row geral" id="row2">
+            <div class="row min" id="row2">
                 <div class="col-sm-2">
                     <div class="row">
                         <div class="col"  align='center'>
@@ -177,7 +198,7 @@
                 </div>
             </div>
             {% for team in teams %}
-                <div class="row geral" id={{ team.0 }}>
+                <div class="row" id={{ team.0 }}>
                     <div class="col-sm-2">
                         <div class="row">
                             <div class="col"  align='center'>
