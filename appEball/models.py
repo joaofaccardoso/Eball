@@ -44,7 +44,7 @@ class Tactic(models.Model):
         return self.name
 
 
-dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
+dayChoice=(('0','Sun'),('1','Mon'),('2','Tue'),('3','Wed'),('4','Thu'),('5','Fri'),('6','Sat'))
 class Tournament(models.Model):
     name=models.CharField(max_length=100, blank=False, unique=True)
     maxTeams = models.IntegerField(unique=False, blank=False)

@@ -99,14 +99,14 @@
                     <div class="col-sm-7">
                         <div class="row">
                             <div class="col" align='center'>
-                                <p class="topRow" id="tatic">{{ team.1.tactic.nDF }}-{{ team.1.tactic.nMF }}-{{ team.1.tactic.nFW }}-{{ team.1.tactic.nST }}</p>
+                                <p class="topRow" id="tatic">{{ team.1.tactic.name }}</p>
                             </div>
                             <div class="col"  align='center'>
                                 <p class="topRow" id="Goalkeeper" >{{ team.1.availGK }}</p>
                             </div>
 
                             <div class="col"  align='center'>
-                                <p class="topRow" id="Goalkeeper" >{{ team.1.availGK }}</p>
+                                <p class="topRow" id="Goalkeeper" >{{ team.1.availDF }}</p>
                             </div>
                             <div class="col"  align='center'>
                                 <p class="topRow" id="Midfielder">{{ team.1.availMF }}</p>
@@ -127,7 +127,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="col" align='center'>
-                                    <a class="btn rounded-pill"  href="{% url 'appEball:join_team' team.1.pk %}" id='pageBtn'>Join Team</a>
+                                    <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team</a>
                                 </div>
                         </div>
                     </div>
@@ -221,7 +221,7 @@
                                 </div>
                             {% endif %}
                             <div class="col" align='center'>
-                                <a class="btn rounded-pill"  href="{% url 'appEball:join_team' team.1.pk %}" id='pageBtn'>Join Team</a>
+                                <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team</a>
                             </div>
                         </div>
                     </div>

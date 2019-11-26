@@ -141,7 +141,7 @@ class teams_list(View):
                 messages.success(request, 'Team created successfuly!')
                 newPlayer = Player(position='MF', balance=20,nrGoals=0,isStarter=True,isSub=False,team=newTeam,user=request.user)
                 newPlayer.save()
-                return HttpResponseRedirect(reverse('appEball:join_team', kwargs={'teamId':newTeam.pk}))
+                return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
                 messages.warning(request, f'Form is not valid.')
@@ -196,11 +196,41 @@ class TeamInfo(View):
             isStarter = False
         try:
             player = Player.objects.filter(user=request.user).get(team=team)
+            if player.position == 'ST':
+                team.availST = team.availST + 1
+            elif player.position == 'FW':
+                team.availFW = team.availFW + 1
+            elif player.position == 'MF':
+                team.availMF = team.availMF + 1
+            elif player.position == 'DF':
+                team.availDF = team.availDF + 1
+            else:
+                team.availGK = team.availGK + 1
+            if chosenPosition == 'ST':
+                team.availST = team.availST - 1
+            elif chosenPosition == 'FW':
+                team.availFW = team.availFW - 1
+            elif chosenPosition == 'MF':
+                team.availMF = team.availMF - 1
+            elif chosenPosition == 'DF':
+                team.availDF = team.availDF - 1
+            else:
+                team.availGK = team.availGK - 1
             player.position = chosenPosition
             player.isSub = isSub
             player.isStarter = isStarter
             player.save()
         except ObjectDoesNotExist:
+            if chosenPosition == 'ST':
+                team.availST = team.availST - 1
+            elif chosenPosition == 'FW':
+                team.availFW = team.availFW - 1
+            elif chosenPosition == 'MF':
+                team.availMF = team.availMF - 1
+            elif chosenPosition == 'DF':
+                team.availDF = team.availDF - 1
+            else:
+                team.availGK = team.availGK - 1
             newPlayer = Player(position=chosenPosition, balance=0,nrGoals=0,isStarter=isStarter,isSub=isSub,team=team,user=request.user)
             newPlayer.save()
             notification = Notification(title='New Player on '+team.name+'!', text=newPlayer.user.username+' joined your team!', user=team.captain)
