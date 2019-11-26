@@ -83,9 +83,9 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                        {% for u in week%}
-                                            <label class="btn btn-secondary rounded-pill">
-                                                <input type="checkbox" checked="checked" name="gameDays" value="{{u.0}}"> {{u.0}}
+                                        {% for w in week %}
+                                            <label class="btn btn-secondary rounded-pill checkbox">
+                                                <input type="checkbox" name="gameDays" value="{{ w.0 }}"> {{ w.1 }}
                                             </label>
                                         {% endfor %}
                                     </div>
