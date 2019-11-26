@@ -1,0 +1,44 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/my_calendar.css' %}">
+{% endblock %}
+
+{% block title %}
+    My Calendar
+{% endblock %}
+
+{% block content2 %}
+    <div class="row" id="{{ t.0 }}">
+        <div class="col-3">
+            <p class="d-inline-block text-truncat" id="t_id"><b>Tournament 1</b></p>
+            </div>
+    
+        <div class="col-0">
+            <p class="d-inline-block text-truncat" id="line"><b>|</b></p>
+        </div>
+        <div class="col-1">
+            <p class="d-inline-block text-truncat" id="teams"><b>Team 1</b></p>
+            </div>
+        <div class="col-3">
+            <p class="d-inline-block text-truncat"><b>20/10/19, 20:00, Campo Santa Cruz</b></p>
+            </div>
+        <div class="col-1">
+            <p class="d-inline-block text-truncat" id="teams"><b>Team 1</b></p>
+            </div>
+        <div class="col-0">
+                <p class="d-inline-block text-truncat"id="line"><b>|</b></p>
+                </div>
+        <div class="col-2">
+            <p class="d-inline-block text-truncat"><b>Round</b></p>
+            </div>
+        
+
+        </div>
+        
+
+            
+
+	
+{% endblock %}

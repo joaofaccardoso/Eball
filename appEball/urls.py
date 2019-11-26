@@ -20,6 +20,8 @@ urlpatterns = [
     path('accept_user/<str:username>', views.accept_user, name='accept_user'),
     path('delete_user/<str:username>', views.delete_user, name='delete_user'),
 
+    path('my_calendar/', views.my_calendar, name='my_calendar'),
+
     path('teams_list/', views.teams_list.as_view(), name='teams_list'),
     path('join_team/<int:teamId>',views.JoinTeam.as_view(), name='join_team'),
     path('team_info/<int:teamId>',views.team_info, name='team_info'),

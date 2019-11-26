@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "lucidaSansRegular";
+    src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
+}
+
+* {
+    font-family: "lucidaSansRegular";
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background-color: transparent;
+}
+
+p{
+    color: white;
+    text-align: center;
+
+}
+
+#line{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+h2 {
+    margin-left: 40px;
+    font-size: 20px;
+    color: white;
+    margin-top: -10px;
+    color: #E5E5E5;
+}
+
+#teams{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.row{
+    padding-top: 10px;
+    padding-right: 60px;
+    padding-left: 60px;
+    text-align: justify;
+}
+
+#row1{
+    height: 50px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 50px;
+}
+
+#t_id{
+    padding-left: 40px ;
+}

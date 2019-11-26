@@ -324,6 +324,7 @@ class tournaments(View):
                 ok = True
                 if(request.POST['gameDays']):
                     gameDays = request.POST['gameDays']
+                    print(gameDays)
                 else:
                     ok=False
                     messages.warning(request, f'Games days is required')
@@ -431,7 +432,7 @@ def delete_team(request, pk):
 
 def delete_tournament(request, pk):
     Tournament.objects.get(pk=pk).delete()
-    return HttpResponseRedirect(reverse('appEball:tournament_list'))
+    return HttpResponseRedirect(reverse('appEball:tournaments'))
 
 def is_tournament_manager(request, username):
     requestedUser = CustomUser.objects.get(username=username)
@@ -527,3 +528,7 @@ def generate_games(request, pk):
     tournament = Tournament.objects.get(pk=pk)
     teams = Team.objects.filter(tournament=tournament)
     return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk}))
+
+
+def my_calendar(request):
+        return render(request,'appEball/my_calendar.html',{})
