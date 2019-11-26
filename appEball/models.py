@@ -51,7 +51,7 @@ class Tournament(models.Model):
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
     endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
-    ronda=models.IntegerField(unique=False,default=1)
+    gRound=models.IntegerField(unique=False,default=0)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
 
@@ -81,6 +81,7 @@ class GamesDays(models.Model):
     tournament = models.ForeignKey(Tournament,default=None,on_delete=models.CASCADE)
     startHour = models.TimeField(default = None)
     endHour = models.TimeField(default = None)
+    isTemporary = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'GamesDays'
@@ -97,8 +98,18 @@ class Team(models.Model):
     tactic = models.ForeignKey(Tactic, default=None, on_delete=models.SET_DEFAULT)
     tournament=models.ForeignKey(Tournament,default = None,on_delete=models.CASCADE)
     captain = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
+    isDayOff = models.BooleanField(default=False)
+    points = models.IntegerField(default=0)
+    won = models.IntegerField(default=0)
+    lost = models.IntegerField(default=0)
+    drawn = models.IntegerField(default=0)
+    goalsFor = models.IntegerField(default=0)
+    goalsAgainst = models.IntegerField(default=0)
+    goalsDif = models.IntegerField(default=0)
+    played = models.IntegerField(default=0)
 
-    REQUIRED_FIELDS = ['name','tactic','tournament','captain']
+
+    REQUIRED_FIELDS = ['name','tactic','tournament']
 
     class Meta:
         db_table = 'Team'
@@ -134,3 +145,24 @@ class Player(models.Model):
     
     def __str__(self):
         return self.user.username+" || "+self.team.name+' || '+self.position
+
+class Game(models.Model):
+    team1 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team1') 
+    team2 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team2') 
+    field = models.ForeignKey(Field,on_delete=models.SET_DEFAULT,default = None)
+    tournament = models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
+    date = models.DateField(default=datetime.date.today)
+    beginHour = models.TimeField(auto_now=True)
+    gRound = models.IntegerField(default = 0)
+    goalsT1_byT1 = models.IntegerField(default=0)
+    goalsT1_byT2 = models.IntegerField(default=0)
+    goalsT1_byManager = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'Game'
+        verbose_name = 'Game'
+        verbose_name_plural = 'Games'
+    
+    def __str__(self):
+        return self.team1.name + " vs " + self.team2.name
+
