@@ -601,30 +601,23 @@ class presencas(View):
         tournament=team.tournament
         jogadores=list(Player.objects.filter(team = team))
         players=list()
+       
 
         for i in range(len(jogadores)):
             if(i%2==0):
-                players.append(["row2",jogadores[i]])
+                players.append(["row2",jogadores[i],team.played - jogadores[i].faltas])
             else:
-                players.append(["row3",jogadores[i]])
+                players.append(["row3",jogadores[i],team.played - jogadores[i].faltas])
+           
         return render(request, self.template_name, {'team':team,'tournament':tournament,'players':players})
 
     def post(self, request,pk):
         if request.method=="POST":
             nomesMarked =  request.POST.getlist('checks')
-            print(nomesMarked)
-            #comparar nomes desta lista e lista de jogadores e quando encontrar igual adicionar por exemplo 3/4 passa para 4/5
-            #se no fim de percorrer noa encontrar igual aumenta so o numero de jogos, nao de comparencia 3/4 passa para 3/5
-            """
             team = Team.objects.get(pk=pk)
             jogadores=list(Player.objects.filter(team = pk))
             for jogador in jogadores:
-                if jogador.user.firstName in nomesMarked:
-                    adicionar nos dois lados
-                else:
-                    adicionar so o numero de jogos
-
-
-
-            """
+                if jogador.user.firstName not in nomesMarked:
+                    jogador.faltas+=1
+                    jogador.save()
             return HttpResponseRedirect(reverse('appEball:tournaments'))

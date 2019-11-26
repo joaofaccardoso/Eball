@@ -136,6 +136,7 @@ class Player(models.Model):
     isSub = models.BooleanField(default=False)
     team=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    faltas=models.IntegerField(default=0)
 
     class Meta:
         db_table = 'Player'
