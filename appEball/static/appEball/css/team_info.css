@@ -3,13 +3,36 @@
     color: white;
 }
 
-#joinBtn {
+h2 {
+    margin-left: 40px;
+    font-size: 20px;
+    color: white;
+    margin-top: -10px;
+    color: #E5E5E5;
+    padding-bottom: 30px;
+}
+
+.btn {
     background-color: #727070;
     color: white;
 }
 
-#joinBtn:hover {
+.btn:hover {
     background-color: #FFE603;
     color: black;
     transition:0.5s;
+}
+
+#row1{
+    height: 30px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 30px;
+}
+
+.posIcon {
+    margin-top: 3px; 
+    height: 20px;
 }

@@ -141,53 +141,20 @@ class teams_list(View):
                 return HttpResponseRedirect('')
 
 
-def team_info(request,teamId):
-    team = Team.objects.get(pk=teamId)
-    conta=0
-    sts = [None]*team.tactic.nST
-    fws = [None]*team.tactic.nFW
-    mfs = [None]*team.tactic.nMF
-    dfs = [None]*team.tactic.nDF
-    gks = [None]*team.tactic.nGK
-    stsObj = Player.objects.filter(team=team).filter(position='ST')
-    fwsObj = Player.objects.filter(team=team).filter(position='FW')
-    mfsObj = Player.objects.filter(team=team).filter(position='MF')
-    dfsObj = Player.objects.filter(team=team).filter(position='DF')
-    gksObj = Player.objects.filter(team=team).filter(position='GK')
-    for i in range(len(stsObj)):
-        sts[i] = stsObj[i]
-    for i in range(len(fwsObj)):
-        fws[i] = fwsObj[i]
-    for i in range(len(mfsObj)):
-        mfs[i] = mfsObj[i]
-    for i in range(len(dfsObj)):
-        dfs[i] = dfsObj[i]
-    for i in range(len(gksObj)):
-        gks[i] = gksObj[i]
-    context = {'team':team, 'sts':sts, 'fws':fws, 'mfs':mfs, 'dfs':dfs, 'gks':gks}
-    #if (None not in (self.sts or self.fws or self.mfs or self.dfs or self.gks)):
-    #    context['subsList'] = subslist
-    return render(request,'appEball/team_info.html' , context)
-
-
-class JoinTeam(View):
-    sts = None
-    fws = None
-    mfs = None
-    dfs = None
-    gks = None
+class TeamInfo(View):
     numSubs=5
-    numPlayers = 11
-    template_name = 'appEball/joinTeam.html'
+    template_name = 'appEball/team_info.html'
     subslist = None
     playersList = None
+    inTeam = None
+    isFull = None
 
     def get(self, request, teamId):
-        self.subslist = [None] * self.numSubs
-        self.playersList = {}
+        self.inTeam = False
+        self.isFull = False
         team = Team.objects.get(pk=teamId)
-        self._getPlayers(team)
-        context = {'team':team, 'sts':self.sts, 'fws':self.fws, 'mfs':self.mfs, 'dfs':self.dfs, 'gks':self.gks, 'subsList':self.subslist}
+        self._getPlayers(team, request.user)
+        context = {'team':team, 'tactic':team.tactic.name,'playersList': self.playersList, 'subsList':self.subslist, 'inTeam':self.inTeam, 'isFull':self.isFull}
         return render(request, self.template_name, context)
 
     def post(self, request, teamId):
@@ -233,58 +200,77 @@ class JoinTeam(View):
             notification.save()
         return HttpResponseRedirect(reverse('appEball:teams_list'))
 
-    def _getPlayers(self, team):
-        self.sts = []
-        self.fws = []
-        self.mfs = []
-        self.dfs = []
-        self.gks = []
+    def _getPlayers(self, team, user):
+        sts = []
+        fws = []
+        mfs = []
+        dfs = []
+        gks = []
+        self.playersList = []
+        self.subslist = []
+        self.subslist.append([None, 'ST'])
+        self.subslist.append([None, 'FW'])
+        self.subslist.append([None, 'MF'])
+        self.subslist.append([None, 'DF'])
+        self.subslist.append([None, 'GK'])
         stsObj = Player.objects.filter(team=team).filter(position='ST')
         fwsObj = Player.objects.filter(team=team).filter(position='FW')
         mfsObj = Player.objects.filter(team=team).filter(position='MF')
         dfsObj = Player.objects.filter(team=team).filter(position='DF')
         gksObj = Player.objects.filter(team=team).filter(position='GK')
+        try:
+            player = Player.objects.filter(team = team).get(user = user)
+            if player in stsObj or player in fwsObj or player in mfsObj or player in dfsObj or player in gksObj:
+                self.inTeam = True
+        except ObjectDoesNotExist:
+            pass
+        if not (stsObj.count() + fwsObj.count() + mfsObj.count() + dfsObj.count() + gksObj.count()) < 16:
+            self.isFull = True
         for st in stsObj:
-            print(st.user.username+'\n ST')
             if st.isSub:
-                self.subslist[0] = st
+                self.subslist[0] = [st, st.position]
             else:
-                self.sts.append(st)
-        if len(self.sts) < team.tactic.nST-1:
-            self.sts.extend([None]*(team.tactic.nST-1 - len(self.sts)))
+                sts.append([st, st.position])
+        if len(sts) < team.tactic.nST-1:
+            for i in range(team.tactic.nST-1 - len(sts)):
+                sts.append([None, 'ST'])
         for fw in fwsObj:
-            print(fw.user.username+'\n FW')
             if fw.isSub:
-                self.subslist[1] = fw
+                self.subslist[1] = [fw, fw.position]
             else:
-                self.fws.append(fw)
-        if len(self.fws) < team.tactic.nFW-1:
-            self.fws.extend([None]*(team.tactic.nFW-1 - len(self.fws)))
+                fws.append([fw, fw.position])
+        if len(fws) < team.tactic.nFW-1:
+            for i in range(team.tactic.nFW-1 - len(fws)):
+                fws.append([None, 'FW'])
         for mf in mfsObj:
-            print(mf.user.username+'\n MF')
             if mf.isSub:
-                self.subslist[2] = mf
+                self.subslist[2] = [mf, mf.position]
             else:
-                self.mfs.append(mf)
-        if len(self.mfs) < team.tactic.nMF-1:
-            self.mfs.extend([None]*(team.tactic.nMF-1 - len(self.mfs)))
+                mfs.append([mf, mf.position])
+        if len(mfs) < team.tactic.nMF-1:
+            for i in range(team.tactic.nMF-1 - len(mfs)):
+                mfs.append([None, 'MF'])
         for df in dfsObj:
-            print(df.user.username+'\n DF')
             if df.isSub:
-                self.subslist[3] = df
+                self.subslist[3] = [df, df.position]
             else:
-                self.dfs.append(df)
-        if len(self.dfs) < team.tactic.nDF-1:
-            self.dfs.extend([None]*(team.tactic.nDF-1 - len(self.dfs)))
+                dfs.append([df, df.position])
+        if len(dfs) < team.tactic.nDF-1:
+            for i in range(team.tactic.nDF-1 - len(dfs)):
+                dfs.append([None, 'DF'])
         for gk in gksObj:
-            print(gk.user.username+'\n GK')
             if gk.isSub:
-                self.subslist[4] = gk
+                self.subslist[4] = [gk, gk.position]
             else:
-                self.gks.append(gk)
-        if len(self.gks) < team.tactic.nGK-1:
-            self.gks.extend([None]*(team.tactic.nGK-1 - len(self.gks)))
-        print(self.playersList)
+                gks.append([gk, gk.position])
+        if len(gks) < team.tactic.nGK-1:
+            for i in range(team.tactic.nGK-1 - len(gks)):
+                gks.append([None, 'GK'])
+        self.playersList = sts
+        self.playersList.extend(fws)
+        self.playersList.extend(mfs)
+        self.playersList.extend(dfs)
+        self.playersList.extend(gks)
         
 
 class tournaments(View):
