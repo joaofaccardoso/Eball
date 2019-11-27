@@ -374,7 +374,10 @@ class tournaments(View):
 
 def user_profile(request, username):
     requestedUser = CustomUser.objects.get(username=username)
-    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
+    players=list(Player.objects.filter(user=request.user))
+    games=next_matches(players)
+    nextgame=games[0][0]
+    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser, 'nextgame': nextgame})
 
 class edit_user_profile(View):
     form_class = EditProfileForm
@@ -646,19 +649,24 @@ def change_round(request,pk,gRound,change):
 
 
 def my_calendar(request):
-   
-    jogos=[]
-    contador=0
     players=list(Player.objects.filter(user=request.user))
+    games=next_matches(players)
+    return render(request,'appEball/my_calendar.html',{'games':games})
+
+
+def next_matches(players):
+    games=[]
+    contador=0
     for player in players:
-        jogos_t=list(Game.objects.filter(tournament=player.team.tournament))
-        for jogo in jogos_t:
-            if jogo.date.date()>datetime.date.today():
-                if jogo.team1==player.team or jogo.team2==player.team:
+        games_t=list(Game.objects.filter(tournament=player.team.tournament))
+        for game in games_t:
+            if game.date.date()>datetime.date.today():
+                if game.team1==player.team or game.team2==player.team:
                     if contador%2==0:
-                        jogos.append([jogo,'row1'])
+                        games.append([game,'row1'])
                     else:
-                        jogos.append([jogo,'row2'])
+                        games.append([game,'row2'])
                     contador=contador+1
-    sorted(jogos, key=lambda jogo: jogo[0].date)
-    return render(request,'appEball/my_calendar.html',{'jogos':jogos})
+    sorted(games, key=lambda game: game[0].date)
+    return games
+
