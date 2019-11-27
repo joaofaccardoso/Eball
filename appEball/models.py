@@ -44,7 +44,6 @@ class Tactic(models.Model):
         return self.name
 
 
-dayChoice=(('Sun','Sun'),('Mon','Mon'),('Tue','Tue'),('Wed','Wed'),('Thu','Thu'),('Fri','Fri'),('Sat','Sat'))
 class Tournament(models.Model):
     name=models.CharField(max_length=100, blank=False, unique=True)
     maxTeams = models.IntegerField(unique=False, blank=False)
@@ -76,7 +75,9 @@ class Field(models.Model):
 
 
 class GamesDays(models.Model):
-    gameDays=MultiSelectField(choices=dayChoice,default= None )
+    week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
+
+    gameDays=MultiSelectField(choices=week,default= None)
     field = models.ForeignKey(Field,default=None,on_delete=models.CASCADE)
     tournament = models.ForeignKey(Tournament,default=None,on_delete=models.CASCADE)
     startHour = models.TimeField(default = None)
@@ -152,8 +153,7 @@ class Game(models.Model):
     team2 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team2') 
     field = models.ForeignKey(Field,on_delete=models.SET_DEFAULT,default = None)
     tournament = models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
-    date = models.DateField(default=datetime.date.today)
-    beginHour = models.TimeField(auto_now=True)
+    date = models.DateTimeField(default=datetime.date.today)
     gRound = models.IntegerField(default = 0)
     goalsT1_byT1 = models.IntegerField(default=0)
     goalsT1_byT2 = models.IntegerField(default=0)
@@ -167,3 +167,21 @@ class Game(models.Model):
     def __str__(self):
         return self.team1.name + " vs " + self.team2.name
 
+class TournamentDays(models.Model):
+    week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
+
+    gameDays=MultiSelectField(choices=week,default= None )
+    field = models.ForeignKey(Field,default=None,on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament,default=None,on_delete=models.CASCADE)
+    startHour = models.TimeField(default = None)
+    endHour = models.TimeField(default = None)
+    isTemporary = models.BooleanField(default=False)
+
+    name=models.CharField(max_length=100, blank=False, unique=True)
+    maxTeams = models.IntegerField(unique=False, blank=False)
+    beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
+    endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
+    user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
+    gRound=models.IntegerField(unique=False,default=0)
+
+    REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']

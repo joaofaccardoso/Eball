@@ -72,3 +72,24 @@ h2 {
     background-color: #3D3B3B;
     height: 50px;
 }
+
+.row.min{
+    height: 40px !important;
+}
+
+.row.min .row{
+    font-size: 90%;
+    color: #FFE603 !important;
+
+}
+
+.team{
+    color: #FFE603 !important;
+}
+
+.disp{
+    padding-top: 5px !important;
+    text-align: justify;
+    color: white;
+    font-family: "lucidaSansRegular";
+}
