@@ -92,6 +92,7 @@ class teams_list(View):
         allTeamsFilter=list(Team.objects.all().exclude(isDayOff=True))
         allTeams=list()
         myTeams=list()
+        nextGames=list()
 
         if(request.user.is_authenticated):
             myTeamsFilter=list(Player.objects.filter(user=request.user))
@@ -107,7 +108,19 @@ class teams_list(View):
                         checkPlayer = None
                     allTeams.append(["row2",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
                     if(len(myTeamsFilter)>i and myTeamsFilter[i].team.isDayOff==False):
-                        myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])   
+                        t_games=list((Game.objects.filter(team1=myTeamsFilter[i].team) | Game.objects.filter(team2=myTeamsFilter[i].team)).order_by('date'))
+                        print(t_games)
+
+                        for j in range (len(t_games)):
+                            if t_games[j].date.date()>=datetime.date.today():
+                                myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
+                                break
+                            if (j==len(t_games)-1):
+                                myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
+                    
+                        if (len(t_games)==0):
+                            myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
+
                 else:
                     if(request.user.is_authenticated):
                         player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
@@ -116,7 +129,19 @@ class teams_list(View):
                         checkPlayer = None
                     allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
                     if(len(myTeamsFilter)>i and myTeamsFilter[i].team.isDayOff==False):
-                        myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])
+                        t_games=list((Game.objects.filter(team1=myTeamsFilter[i].team) | Game.objects.filter(team2=myTeamsFilter[i].team)).order_by('date'))
+                        print(t_games)
+                        for j in range (len(t_games)):
+                            if t_games[j].date.date()>=datetime.date.today():
+                                myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
+                                break
+                            if (j==len(t_games)-1):
+                                myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
+                        if (len(t_games)==0):
+                            myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
+        
+
+
     
         for i in range(len(allTeams)):
             for j in range (len(myTeamsFilter)):
