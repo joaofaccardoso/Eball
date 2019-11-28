@@ -2,6 +2,7 @@ from django.db import models
 import datetime
 from django.contrib.auth.models import AbstractUser
 from multiselectfield import MultiSelectField
+from django.core.validators import MaxValueValidator, MinValueValidator 
 
 class CustomUser(AbstractUser):
     email = models.EmailField(max_length=255, unique=True, blank=False)
@@ -72,22 +73,6 @@ class Field(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class GamesDays(models.Model):
-    week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
-
-    gameDays=MultiSelectField(choices=week,default= None)
-    field = models.ForeignKey(Field,default=None,on_delete=models.CASCADE)
-    tournament = models.ForeignKey(Tournament,default=None,on_delete=models.CASCADE)
-    startHour = models.TimeField(default = None)
-    endHour = models.TimeField(default = None)
-    isTemporary = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'GamesDays'
-        verbose_name = 'GamesDays'
-        verbose_name_plural = 'GamesDays'
 
 class Team(models.Model):
     name=models.CharField(max_length=100, blank=False)
@@ -165,42 +150,50 @@ class Reserve(models.Model):
 
 
         
+class Slot(models.Model):
+    week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
+    
+    field = models.ForeignKey(Field,default=None,on_delete=models.CASCADE)
+    weekDay = models.IntegerField(choices=week,default=0,validators=[MinValueValidator(0), MaxValueValidator(6)])
+    date = models.DateTimeField(default=None, null=True)
+    start = models.TimeField(default=None, null=True)
+    end = models.TimeField(default=None, null=True)
+    tournament = models.ForeignKey(Tournament, default=None, null=True,on_delete=models.CASCADE)
+
+    REQUIRED_FIELDS = ['field','weekDay','end','start']
+
+    class Meta:
+        db_table = 'Slot'
+        verbose_name = 'Slot'
+        verbose_name_plural = 'Slots'
+    
+    def __str__(self):
+        return str(self.weekDay) + ", " + str(self.start) + " - " + str(self.end)
 
 class Game(models.Model):
     team1 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team1') 
     team2 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team2') 
-    field = models.ForeignKey(Field,on_delete=models.SET_DEFAULT,default = None)
     tournament = models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
-    date = models.DateTimeField(default=datetime.date.today)
     gRound = models.IntegerField(default = 0)
     goalsT1_byT1 = models.IntegerField(default=0)
     goalsT1_byT2 = models.IntegerField(default=0)
     goalsT1_byManager = models.IntegerField(default=0)
+    slot = models.ForeignKey(Slot,default=None,on_delete=models.SET_DEFAULT)
 
     class Meta:
         db_table = 'Game'
-        verbose_name = 'Game'
+        verbose_name = 'Game'   
         verbose_name_plural = 'Games'
     
     def __str__(self):
         return self.team1.name + " vs " + self.team2.name
 
 class TournamentDays(models.Model):
-    week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
-
-    gameDays=MultiSelectField(choices=week,default= None )
-    field = models.ForeignKey(Field,default=None,on_delete=models.CASCADE)
-    tournament = models.ForeignKey(Tournament,default=None,on_delete=models.CASCADE)
-    startHour = models.TimeField(default = None)
-    endHour = models.TimeField(default = None)
-    isTemporary = models.BooleanField(default=False)
 
     name=models.CharField(max_length=100, blank=False, unique=True)
     maxTeams = models.IntegerField(unique=False, blank=False)
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
     endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
-    user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
-    gRound=models.IntegerField(unique=False,default=0)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
 

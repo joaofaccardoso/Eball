@@ -130,7 +130,7 @@ body {
     background-color: #727070;
 }
 
-.row{
+.content1 .row{
     margin-bottom: 10px;
 }
 
@@ -145,10 +145,6 @@ body {
     padding-left:3px;
 }
 
-#space{
-    margin-left:  10px;
-}
-
 #id_beginDate,#id_endDate{
 
     width: 175px;
@@ -160,4 +156,35 @@ body {
 .content1{
     margin-top: 20px;
 
+}
+
+.card{
+    color: white;
+    background-color: #1b1b1b;
+    border-radius: 0;
+}
+
+.card-body{
+    padding-left: 7%;
+    margin-bottom: -0.5%;
+}
+
+.titleRow{
+    text-align: justify;
+    color: white;
+    font-family: "lucidaSansRegular";
+    padding-top: -5px !important;
+}
+
+.contentFieldDay{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#rowButton{
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    color: white;
+    text-decoration: none;
 }

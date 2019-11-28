@@ -81,13 +81,14 @@ class TournamentDaysForm(forms.ModelForm):
             'maxTeams',
             'beginDate',
             'endDate',
-            'gameDays',
-            'field',
-            'startHour',
-            'endHour',
         )
 
-
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("beginDate")
+        end_date = cleaned_data.get("endDate")
+        if end_date != None and start_date != None and end_date < start_date:
+            raise forms.ValidationError("End date should be greater than start date.")
 
 
 class ReserveForm(forms.ModelForm):

@@ -33,7 +33,7 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="content1 row">
-                        <div class="col">
+                        <div class="col leftRow">
                             <div class="row" >
                                 <div class="col-sm-4">
                                     <label for="id_name">Tournament's name:</label>
@@ -50,6 +50,8 @@
                                     <input type="number" class="form-control rounded-pill" name="maxTeams" maxlength="100" required="">
                                 </div>
                             </div>
+                        </div>
+                        <div class="col rightRow">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <label for="id_beginDate">Begin date:</label>
@@ -63,52 +65,57 @@
                                     <label for="id_beginDate">End date:</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate">
+                                    <input type="date" class="form-control rounded-pill" placeholder="Enter end date" name="endDate">
                                 </div>
                             </div> 
+                            
                         </div>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="tactic">Select field:</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <select class="form-control rounded-pill" id="sel1" name="field">
-                                        {% for f in fields%}
-                                            <option value="{{f.pk}}">{{f.name}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                        {% for w in week %}
-                                            <label class="btn btn-secondary rounded-pill checkbox">
-                                                <input type="checkbox" name="gameDays" value="{{ w.0 }}"> {{ w.1 }}
-                                            </label>
-                                        {% endfor %}
+                    </div>
+                    <div class="contentFieldDay row">
+                        <!-- <div class="col"></div> -->
+                        <div class="col" >
+                            <!-- <div class="accordion" id="daysAndFields"> -->
+                            <div id="accordion">
+                                {% for f in fields %}
+                                    {% if f.3 == True and f.4 == True %}
+                                        <div class="row rounded" id={{ f.0 }}>
+                                    {% elif f.4 == True %}
+                                        <div class="row rounded-bottom" id={{ f.0 }}>
+                                    {% elif f.3 == True %}
+                                        <div class="row rounded-top" id={{ f.0 }}>
+                                    {% else %}
+                                        <div class="row" id={{ f.0 }}>
+                                    {% endif %}
+                                        <button class="btn btn-link btn-block left-align" type="button" id="rowButton" name="{{f.2.pk}}" data-toggle="collapse" data-target="#{{ f.1 }}">
+                                            <p class="titleRow">{{f.2.name}}</p>
+                                        </button>
                                     </div>
-
-                                </div>
+                                    <div id={{ f.1 }} name="scroll" class="card collapse" aria-labelledby="headingOne" data-parent="#accordion" >
+                                        <div class="card-body">
+                                            <div class="row">
+                                                {% for day in f.5 %}
+                                                    <div class="col">
+                                                        <div class="row" style="padding-left: 0px; padding-right: 0px; text-align: center; color: #FFE603;">
+                                                            <div class="col"></div>
+                                                            <div class="col"><b>{{day.0}}</b></div>
+                                                            <div class="col"></div>
+                                                        </div>
+                                                        {% for slot in day.1 %}
+                                                            <div class="row form-check" style="font-size: 90%; padding-left: 0px; padding-right: 0px; text-align: center;">
+                                                                <div class="col"></div>
+                                                                <div class="col"><input type="checkbox" name="gameDays" value="{{ slot.pk }}" id={{slot.pk}}> {{ slot.start|date:'H:i' }}</div>
+                                                                <div class="col"></div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Start hour:</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <input type="time" class="form-control rounded-pill" placeholder="Enter start hour" name="startHour">
-                                </div>
-                            </div> 
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="id_beginDate">End hour:</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <input type="time" class="form-control rounded-pill" placeholder="Enter end hour" name="endHour">
-                                </div>
-                            </div>  
                         </div>
+                        <!-- <div class="col"></div> -->
                     </div>
                     <div class="row">
                         <div class="col text-center">
@@ -117,7 +124,7 @@
                     </div>
                 </form>
             </div>
-            <div class="tab-pane fade show active border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
+            <div class="tab-pane show active fade border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
                 {% for t in allTournaments %}
                     <div class="row" id="{{ t.0 }}">
                         <div class="col-sm-5">
