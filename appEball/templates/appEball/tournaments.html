@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/tournaments.css' %}">
+    <script type="text/javascript" src="{% static 'appEball/js/tournaments.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -55,7 +56,7 @@
                                     <label for="id_beginDate">Begin date:</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" >
+                                    <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" id="begin" >
                                 </div>
                             </div> 
                             <div class="row">
@@ -63,7 +64,7 @@
                                     <label for="id_beginDate">End date:</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate">
+                                    <input type="date" class="form-control rounded-pill" placeholder="Enter a username" name="endDate" id="end">
                                 </div>
                             </div> 
                         </div>

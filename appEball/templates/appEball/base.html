@@ -25,8 +25,8 @@
                         </li>
                     {% endif %}
                     
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'appEball:notifications' %}" id="notificationsNav">Notifications {% if user|get_seen:False != 0 %}<span class="badge badge-light">{{ user|get_seen:False }}</span>{% endif %}</a>
+                    <li class="nav-item" id="notificationsNav">
+                        <a class="nav-link" href="{% url 'appEball:notifications' %}">Notifications {% if user|get_seen:False != 0 %}<span class="badge badge-light" id="notificationsCount">{{ user|get_seen:False }}</span>{% endif %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="myCalendarNav">MyCalendar</a>

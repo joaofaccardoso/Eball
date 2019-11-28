@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/teams_list.css' %}">
+    <script type="text/javascript" src="{% static 'appEball/js/checkTeamName.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -58,7 +59,7 @@
                                 <label for="sel1">Select tournament:</label>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control rounded-pill" id="sel1" name="tournament">
+                                <select class="form-control rounded-pill" id="seltournament" name="tournament">
                                     {% for t in tournaments%}
                                         <option value={{t.pk}}>{{t.name}}</option>
                                     {% endfor %}

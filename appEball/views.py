@@ -220,6 +220,7 @@ class TeamInfo(View):
             player.isSub = isSub
             player.isStarter = isStarter
             player.save()
+            team.save()
         except ObjectDoesNotExist:
             if chosenPosition == 'ST':
                 team.availST = team.availST - 1
@@ -235,6 +236,7 @@ class TeamInfo(View):
             newPlayer.save()
             notification = Notification(title='New Player on '+team.name+'!', text=newPlayer.user.username+' joined your team!', user=team.captain)
             notification.save()
+            team.save()
         return HttpResponseRedirect(reverse('appEball:teams_list'))
 
     def _getPlayers(self, team, user):
@@ -255,12 +257,13 @@ class TeamInfo(View):
         mfsObj = Player.objects.filter(team=team).filter(position='MF')
         dfsObj = Player.objects.filter(team=team).filter(position='DF')
         gksObj = Player.objects.filter(team=team).filter(position='GK')
-        try:
-            player = Player.objects.filter(team = team).get(user = user)
-            if player in stsObj or player in fwsObj or player in mfsObj or player in dfsObj or player in gksObj:
-                self.inTeam = True
-        except ObjectDoesNotExist:
-            pass
+        if user.is_authenticated:    
+            try:
+                player = Player.objects.filter(team = team).get(user = user)
+                if player in stsObj or player in fwsObj or player in mfsObj or player in dfsObj or player in gksObj:
+                    self.inTeam = True
+            except ObjectDoesNotExist:
+                pass
         if not (stsObj.count() + fwsObj.count() + mfsObj.count() + dfsObj.count() + gksObj.count()) < 16:
             self.isFull = True
         for st in stsObj:
@@ -606,3 +609,71 @@ def getSlots(days):
     print(slots)
 
     return slots
+
+def checkTeamName(request):
+    if request.user.is_authenticated:
+        data = json.loads(request.body)
+        teamName = data['teamName']
+        tournament = data['tournamentName']
+        try:
+            teamObjs = Team.objects.filter(tournament=tournament)
+            for team in teamObjs:
+                if (team.name.lower() == teamName.lower()):
+                    return JsonResponse({'is_taken':True})
+            return JsonResponse({'is_taken':False})
+        except IntegrityError as err:
+            raise err
+    else:
+        raise Http404
+
+def checkTournamentName(request):
+    if request.user.is_authenticated:
+        data = json.loads(request.body)
+        tournamentName = data['name']
+        try:
+            tournamentObj = Tournament.objects.all()
+            for tournament in tournamentObj:
+                if tournament.name.lower() == tournamentName.lower():
+                    return JsonResponse({'is_taken':True})
+            return JsonResponse({'is_taken': False})
+        except IntegrityError as err:
+            raise err
+    else:
+        raise Http404
+
+def checkDates(request):
+    if request.user.is_authenticated:
+        data = json.loads(request.body)
+        startDate = data['startDate']
+        endDate = data['endDate']
+        if endDate!='' and startDate!='':
+            if (endDate < startDate):
+                return JsonResponse({'is_complete':True, 'is_valid':False})
+            return JsonResponse({'is_complete':True, 'is_valid':True})
+        else:
+            return JsonResponse({'is_complete':False,'is_valid':True})
+    else:
+        raise Http404
+
+def checkRegister(request):
+    data = json.loads(request.body)
+    dataType = data['type']
+    value = data['value']
+    users = CustomUser.objects.all()
+    if dataType == 'username':
+        for user in users:
+            if user.username.lower() == value.lower():
+                return JsonResponse({'is_taken':dataType})
+    elif dataType == 'email':
+        for user in users:
+            if user.email.lower() == value.lower():
+                return JsonResponse({'is_taken':dataType})
+    elif dataType == 'ccNumber':
+        for user in users:
+            if user.ccNumber == int(value):
+                return JsonResponse({'is_taken':dataType})
+    elif dataType == 'phoneNumber':
+        for user in users:
+            if user.phoneNumber == int(value):
+                return JsonResponse({'is_taken':dataType})
+    return JsonResponse({'is_taken':False})
