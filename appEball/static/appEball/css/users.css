@@ -34,10 +34,6 @@ body {
     font-family: "lucidaSansRegular";
 }
 
-.row:hover{
-    cursor: pointer;
-}
-
 #row1{
     height: 50px;
     background-color: #3D3B3B;
@@ -113,4 +109,12 @@ body {
     background-color: #FFE603;
     color: #262626;
     transition:0.5s;
+}
+
+.userLabel {
+    color: white;
+}
+
+.userLabel:hover {
+    color: white;
 }

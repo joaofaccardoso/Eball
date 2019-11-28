@@ -30,9 +30,9 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
                 {% for u in allUsers %}
-                    <div class="row" id={{ u.0 }} onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                    <div class="row" id="{{ u.0 }}" >
                         <div class="col-sm-5">
-                            <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                            <a class="userLabel line" href="{% url 'appEball:userProfile' u.1.username %}"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</a>
                         </div>
                         <div class="col">
                             <a class="btn rounded-pill" href="{% url 'appEball:delete_user' u.1.username %}" id='pageBtn'>Delete User</a>
@@ -51,9 +51,9 @@
             </div>
             <div class="tab-pane fade border border-1" id="accepted" role="tabpanel" aria-labelledby="accepted-tab">
                 {% for u in acceptedUsers %}
-                    <div class="row" id="{{ u.0 }}" onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                    <div class="row" id="{{ u.0 }}">
                         <div class="col-sm-5">
-                            <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                            <a class="userLabel line" href="{% url 'appEball:userProfile' u.1.username %}"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</a>
                         </div>
                         <div class="col">
                             <a class="btn rounded-pill" href="{% url 'appEball:delete_user' u.1.username %}" id='pageBtn'>Delete User</a>
@@ -68,9 +68,9 @@
             </div>
             <div class="tab-pane fade border border-1" id="toAccept" role="tabpanel" aria-labelledby="to-accept-tab">
                 {% for u in notAcceptedUsers %}
-                    <div class="row" id="{{ u.0 }}" onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                    <div class="row" id="{{ u.0 }}">
                         <div class="col-sm-5">
-                            <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                            <a class="userLabel line" href="{% url 'appEball:userProfile' u.1.username %}"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</a>
                         </div>
                         <div class="col">
                             <a class="btn rounded-pill" href="{% url 'appEball:delete_user' u.1.username %}" id='pageBtn'>Delete User</a>
@@ -81,9 +81,9 @@
             </div>
             <div class="tab-pane fade border border-1" id="tManagers" role="tabpanel" aria-labelledby="tournament-tab">
                 {% for u in tournamentsManagers %}
-                    <div class="row" id="{{ u.0 }}" onclick="location.href='{% url 'appEball:userProfile' u.1.username %}'">
+                    <div class="row" id="{{ u.0 }}">
                         <div class="col-sm-5">
-                            <p class="userLabel line"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</p>
+                            <a class="userLabel line" href="{% url 'appEball:userProfile' u.1.username %}"><b>{{ u.1.firstName }} {{ u.1.lastName }}</b> ({{ u.1.username }})</a>
                         </div>
                         <div class="col">
                             <a class="btn rounded-pill" href="{% url 'appEball:delete_user' u.1.username %}" id='pageBtn'>Delete User</a>
