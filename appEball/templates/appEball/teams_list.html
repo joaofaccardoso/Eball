@@ -106,14 +106,14 @@
                             <p class="d-inline-block text-truncat" id="p2">Waiting for tournament to start...</p>
                         {% else %}
                             
-                                <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.date}}</p>
+                            <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date}}</p>
                             </div>
                             <div class="col-1">
                                 <p class="d-inline-block text-truncat" id="p1">Round {{t.3.gRound}}</p>
                             </div>
                                 <div class="col-1"><p class="d-inline-block text-truncat" id="p2"><b> x place</b></p></div>
                             {% endif %}
-                        <div class="col-2">
+                        <div class="col-4">
 
                             <a class="btn rounded-pill" href="{% url 'appEball:join_team' t.1.pk %}" id='pageBtn' >Info</a>
 
