@@ -147,6 +147,18 @@ class Player(models.Model):
     def __str__(self):
         return self.user.username+" || "+self.team.name+' || '+self.position
 
+    
+class Reserve(models.Model):
+    tournament=models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table = 'Reserve'
+        verbose_name = 'Reserve'
+        verbose_name_plural = 'Reserves'
+    
+
+
 class Game(models.Model):
     team1 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team1') 
     team2 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team2') 

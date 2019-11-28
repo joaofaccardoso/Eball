@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser , Tournament, Team, TournamentDays
+from .models import CustomUser , Tournament, Team, TournamentDays, Reserve
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class CustomUserForm(UserCreationForm):
@@ -68,6 +68,9 @@ class TeamCreationForm(forms.ModelForm):
             'tournament',
         )
 
+
+
+
 class TournamentDaysForm(forms.ModelForm):
     week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
 
@@ -82,4 +85,15 @@ class TournamentDaysForm(forms.ModelForm):
             'field',
             'startHour',
             'endHour',
+        )
+
+
+
+
+class ReserveForm(forms.ModelForm):
+
+    class Meta:
+        model = Reserve
+        fields = (
+            
         )

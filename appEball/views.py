@@ -7,8 +7,8 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
-from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm, TournamentDaysForm
-from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays, Game
+from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm, TournamentDaysForm,ReserveForm
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays, Game, Reserve
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -201,6 +201,8 @@ def team_info(request,teamId):
     context = {'team':team, 'sts':sts, 'fws':fws, 'mfs':mfs, 'dfs':dfs, 'gks':gks}
     #if (None not in (self.sts or self.fws or self.mfs or self.dfs or self.gks)):
     #    context['subsList'] = subslist
+
+    
     return render(request,'appEball/team_info.html' , context)
 
 
@@ -499,53 +501,76 @@ def is_seen(request, pk):
             raise err
     raise Http404
 
-def askSub(request):
-    return render(request, 'appEball/askSub.html', {})
+def askSub(request,pk):
+    tournament=Tournament.objects.get(pk=pk)
+    reservest=list(Reserve.objects.filter(tournament=tournament))
+    reserves=[]
+    for i in range (len(reservest)):
+        if i%2==0:
+            reserves.append([reservest[i],"row1"])
+        else:
+            reserves.append([reservest[i],"row2"])
+
+    return render(request, 'appEball/askSub.html', {'reserves':reserves, 'tournament': tournament})
 
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
 
-def tournament_info(request,pk,gRound):
-    tournament=Tournament.objects.get(pk=pk)
-    if(tournament.gRound==0):
-        allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('name'))
-    else:
-        allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('-points','-goalsDif'))
-    
-    allDays=list(GamesDays.objects.filter(tournament=tournament))
-
-    days=list()
-    teams=list()
-    games=list()
-
-    for i in allDays:
-        for j in i.gameDays:
-            if(len(days)%2==0):
-                days.append(["row2",i,TournamentDaysForm.week[int(j)][1]])
-            else:
-                days.append(["row1",i,TournamentDaysForm.week[int(j)][1]])
-
-    for i in range(len(allTeams)):
-        if(i%2==0):
-            teams.append(["row1",allTeams[i]])
+class tournament_info(View):
+    def get(self,request,pk,gRound):
+        tournament=Tournament.objects.get(pk=pk)
+        if(tournament.gRound==0):
+            allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('name'))
         else:
-            teams.append(["row2",allTeams[i]])
-    
-    gamesRound = list(Game.objects.filter(tournament=tournament,gRound=gRound,team1__in=allTeams,team2__in=allTeams))
-
-    for i in range(len(gamesRound)):    
+            allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('-points','-goalsDif'))
         
-        if(i%2==0):
-            games.append(["row2",gamesRound[i]])
+        allDays=list(GamesDays.objects.filter(tournament=tournament))
+
+        days=list()
+        teams=list()
+        games=list()
+
+        for i in allDays:
+            for j in i.gameDays:
+                if(len(days)%2==0):
+                    days.append(["row2",i,TournamentDaysForm.week[int(j)][1]])
+                else:
+                    days.append(["row1",i,TournamentDaysForm.week[int(j)][1]])
+
+        for i in range(len(allTeams)):
+            if(i%2==0):
+                teams.append(["row1",allTeams[i]])
+            else:
+                teams.append(["row2",allTeams[i]])
+        
+        gamesRound = list(Game.objects.filter(tournament=tournament,gRound=gRound,team1__in=allTeams,team2__in=allTeams))
+
+        for i in range(len(gamesRound)):    
+            
+            if(i%2==0):
+                games.append(["row2",gamesRound[i]])
+            else:
+                games.append(["row1",gamesRound[i]])
+        if(len(list(Game.objects.filter(tournament=tournament)))>0):
+            maxRound = list(Game.objects.filter(tournament=tournament).order_by('gRound'))[-1].gRound
         else:
-            games.append(["row1",gamesRound[i]])
-    if(len(list(Game.objects.filter(tournament=tournament)))>0):
-        maxRound = list(Game.objects.filter(tournament=tournament).order_by('gRound'))[-1].gRound
-    else:
-        maxRound=0
-    print(maxRound)
-    
-    return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'teams':teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
+            maxRound=0
+        print(maxRound)
+        
+        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'teams':teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
+
+
+
+    def post(self,request,pk,gRound):
+        tournament = Tournament.objects.get(pk=pk)
+        if request.method=="POST":
+
+            if (not Reserve.objects.filter(user=request.user)):
+                form=ReserveForm(request.POST,request.FILES, instance=request.user)
+                reserve=Reserve(user=request.user,tournament=tournament)
+                reserve.save()
+            return HttpResponseRedirect(reverse('appEball:askSub',kwargs={'pk': pk}))
+
 
 def generate_games(request, pk):
     tournament = Tournament.objects.get(pk=pk)
@@ -647,6 +672,9 @@ def change_round(request,pk,gRound,change):
 
 
 
+def subPage(request,pk,pk2):
+    
+    return render(request,'appEball/subPage.html',{})
 
 def my_calendar(request):
     players=list(Player.objects.filter(user=request.user))

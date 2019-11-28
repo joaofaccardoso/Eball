@@ -18,8 +18,17 @@
             {% if tournament.user == user and tournament.gRound == 0 and teams|length >= 2 %}
                 <div class="col">
                     <a class="btn rounded-pill float-right"  href="{% url 'appEball:generate_games' tournament.pk %}" id='pageBtn'>Generate Games</a>
+                    
                 </div>
             {% endif %}
+
+
+        </div>
+        <div class="col" align='center'>
+                <form method="post">
+                        {% csrf_token %}
+                        <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="submit" >Join as Reserve</button>
+                </form>
         </div>
     </div>
 
