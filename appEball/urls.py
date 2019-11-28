@@ -28,10 +28,11 @@ urlpatterns = [
 
     path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
-    path('tournament_info/<int:pk>/<int:round>/', views.tournament_info, name='tournament_info'),
+    path('tournament_info/<int:pk>/<int:gRound>', views.tournament_info, name='tournament_info'),
     path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
     path('tournaments/checkTournamentName/', views.checkTournamentName, name='check_tournament_name'),
     path('tournaments/checkDates/', views.checkDates, name='check_dates'),
+    path('change_round/<int:pk>/<int:gRound>/<str:change>', views.change_round, name='change_round'),
     
     path('generate_games/<int:pk>', views.generate_games, name='generate_games'),
     
