@@ -18,7 +18,9 @@
               <p class="name line">{{reserve.0.user.firstName}} {{reserve.0.user.lastName}}</p>
             </div>
             <div class="col-6">
-                <a class="btn rounded-pill" href="">Ask to Sub</a>
+                {% if reserve.2 == 1 %}
+                <a class="btn rounded-pill" href="{% url 'appEball:subPage' tournament.pk reserve.0.pk 0  %}">Ask to Sub</a>
+                {% endif %}
             </div>
           </div>
         

@@ -1,13 +1,60 @@
-{% extends 'appEball/base.html' %}
+{% extends 'appEball/base_with_grey_background.html' %}
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/askSub.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/subPage.css' %}">
 {% endblock %}
 
 
 
-{% block content %}
+{% block content2 %}
+
+    {% block title %}
+    Ask {{sub.user.firstName}} {{sub.user.lastName}} to Sub 
+    {% endblock %}
+    <form method="post">
+            {% csrf_token %}
+            <div class="content">
+                {% for game in games %}
+                <div class="row"> <!--{{ t.1 }}-->
+                    <div class="col-2"id="coluna">
+                        <p class="d-inline-block text-truncat" id="t_id">{{game.tournament.name}}</p>
+                        </div>
+                    <div class="col-0"id="coluna">
+                        <p class="d-inline-block text-truncat" id="line"><b>|</b></p>
+                    </div>
+                    <div class="col-2" id="coluna">
+                        <p class="d-inline-block text-truncat" id="teams"><b>{{game.team1}}</b></p>
+                        </div>
+                    <div class="col-4" id="coluna">
+                        <p class="d-inline-block text-truncat" id="others">{{game.date}} {{game.field}}</p>
+                        </div>
+                    <div class="col-2" id="coluna">
+                        <p class="d-inline-block text-truncat" id="teams"><b>{{game.team2}}</b></p>
+                        </div>
+                    <div class="col-0" id="coluna">
+                            <p class="d-inline-block text-truncat"id="line"><b>|</b></p>
+                            </div>
+                    <div class="col-1"id="coluna">
+                        <p class="d-inline-block text-truncat" id="others"><b>Round {{game.gRound}}</b></p>
+                        </div>
+                
+                </div>
+                {% endfor %}
+
+                <div class="row" >
+                    <input type="text" class="form-control rounded-pill" placeholder="Enter the number of games you want to be substituted for" name="subGames" maxlength="100"  id="nGames">
+
+                </div>
+        
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit" style="width: 10%;">Create</button>
+                </div>
+            </div>
+        </form>
+
 
 
 {% endblock %}

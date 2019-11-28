@@ -135,6 +135,8 @@ class Player(models.Model):
     nrGoals = models.IntegerField(unique=False, default= 0)
     isStarter = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
+    isSubbed=models.BooleanField(default=False)
+    subGames=models.IntegerField(unique=False, default= 0)
     team=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
@@ -151,13 +153,18 @@ class Player(models.Model):
 class Reserve(models.Model):
     tournament=models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
     
     class Meta:
         db_table = 'Reserve'
         verbose_name = 'Reserve'
         verbose_name_plural = 'Reserves'
+
+
     
 
+
+        
 
 class Game(models.Model):
     team1 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team1') 
@@ -196,3 +203,20 @@ class TournamentDays(models.Model):
     gRound=models.IntegerField(unique=False,default=0)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
+
+
+
+class Substitute(models.Model):
+    reserveSub=models.ForeignKey(Reserve,null=True, on_delete=models.CASCADE,related_name='reserveSub')
+    playerSub=models.ForeignKey(Player,null=True, on_delete=models.CASCADE)
+    originalPlayer=models.ForeignKey(Player,null=True, on_delete=models.CASCADE,related_name='originalPlayer')
+    hasAccepted= models.BooleanField(default=True) #tem de estar a false mas é so para teste
+    isActive=models.BooleanField(default=True)
+    game =models.ForeignKey(Game, on_delete=models.CASCADE)
+
+
+    class Meta:
+        db_table = 'Substitute'
+        verbose_name = 'Substitute'
+        verbose_name_plural = 'Substitutes'
+         

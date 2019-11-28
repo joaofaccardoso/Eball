@@ -130,6 +130,11 @@
                             <div class="col">
                                 FW
                             </div>
+                            {% if subsList.1 %}
+                            <div class="col">
+                                <a class="btn rounded-pill" href="{% url 'appEball:subPage' team.tournament.pk subsList.1.pk 1  %}" id='pageBtn' style="width: 60%;">Ask to Sub</a>
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="row">
                             <div class="col">
@@ -145,11 +150,17 @@
                             <div class="col">
                                 MF
                             </div>
+                            {% if subsList.2 %}
+                            <div class="col">
+                                <a class="btn rounded-pill" href="{% url 'appEball:subPage' team.tournament.pk subsList.2.pk 1  %}" id='pageBtn' style="width: 60%;">Ask to Sub</a>
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="row">
                             <div class="col">
                                 {% if subsList.3 %}
                                     {{ subsList.3.user.firstName }} {{ subsList.3.user.lastName }}
+
                                 {% else %}
                                     <input type="radio" name="position" value="subDF">Choose this position
                                 {% endif %}
@@ -160,6 +171,12 @@
                             <div class="col">
                                 DF
                             </div>
+                            {% if subsList.3 %}
+                            <div class="col">
+                                <a class="btn rounded-pill" href="{% url 'appEball:subPage' team.tournament.pk subsList.3.pk 1  %}" id='pageBtn' style="width: 60%;">Ask to Sub</a>
+                            </div>
+                            {% endif %}
+                            
                         </div>
                         <div class="row">
                             <div class="col">
@@ -175,11 +192,17 @@
                             <div class="col">
                                 GK
                             </div>
+                            {% if subsList.4 %}
+                            <div class="col">
+                                <a class="btn rounded-pill" href="{% url 'appEball:subPage' team.tournament.pk subsList.4.pk 1  %}"  id='pageBtn' style="width: 60%;">Ask to Sub</a>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col">
                             <button class="btn rounded-pill" id="joinBtn" type="submit">Join Team</button>
-                            <a class="btn rounded-pill float-right"  href="{% url 'appEball:askSub' team.tournament.pk %}" id='pageBtn'>See Reserves</a>
+    height:%;
+                            <a class="btn rounded-pill"  href="{% url 'appEball:askSub' team.tournament.pk %}" id='pageBtn' style="width: 23%;">See Reserves</a>
                     </div>
                 </div>
             </form>

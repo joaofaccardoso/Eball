@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser , Tournament, Team, TournamentDays, Reserve
+from .models import CustomUser , Tournament, Team, TournamentDays, Reserve, Player
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class CustomUserForm(UserCreationForm):
@@ -96,4 +96,13 @@ class ReserveForm(forms.ModelForm):
         model = Reserve
         fields = (
             
+        )
+
+
+class SubForm(forms.ModelForm):
+
+    class Meta:
+        model = Player
+        fields = (
+            'subGames',
         )

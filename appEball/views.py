@@ -7,12 +7,13 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
-from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm, TournamentDaysForm,ReserveForm
-from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays, Game, Reserve
+from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm,TournamentCreationForm, TeamCreationForm, TournamentDaysForm,ReserveForm, SubForm
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, GamesDays, Game, Reserve, Substitute
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
 from operator import attrgetter
+from django.db.models import Q
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -188,21 +189,125 @@ def team_info(request,teamId):
     mfsObj = Player.objects.filter(team=team).filter(position='MF')
     dfsObj = Player.objects.filter(team=team).filter(position='DF')
     gksObj = Player.objects.filter(team=team).filter(position='GK')
-    for i in range(len(stsObj)):
-        sts[i] = stsObj[i]
-    for i in range(len(fwsObj)):
-        fws[i] = fwsObj[i]
-    for i in range(len(mfsObj)):
-        mfs[i] = mfsObj[i]
-    for i in range(len(dfsObj)):
-        dfs[i] = dfsObj[i]
-    for i in range(len(gksObj)):
-        gks[i] = gksObj[i]
+    for st in stsObj:
+            print(st.user.username+'\n ST')
+            if st.isSub:
+                self.subslist[0] = st
+            else:
+                if st.isSubbed:
+                    subs=list(Substitute.objects.filter(originalPlayer=st))
+                    if len(subs)==1:
+                        if subs[0].reserveSub==None:
+                            self.sts.append(subs[0].playerSub)
+                        else:
+                            self.sts.append(subs[0].reserveSub)
+                    else:
+                        sub=list(Substitute.objects.filter(originalPlayer=st).filter(isActive=True))
+                        if sub[0].reserveSub==None:
+                            self.sts.append(sub[0].playerSub)
+                        else:
+                            self.sts.append(sub[0].reserveSub)
+                else:
+                    self.sts.append(st)
+    if len(self.sts) < team.tactic.nST-1:
+        self.sts.extend([None]*(team.tactic.nST-1 - len(self.sts)))
+    for fw in fwsObj:
+        print(fw.user.username+'\n FW')
+        if fw.isSub:
+            self.subslist[1] = fw
+        else:
+            if fw.isSubbed:
+                subs=list(Substitute.objects.filter(originalPlayer=fw))
+                if len(subs)==1:
+                    if subs[0].reserveSub==None:
+                        self.fws.append(subs[0].playerSub)
+                    else:
+                        self.fws.append(subs[0].reserveSub)
+                else:
+                    sub=list(Substitute.objects.filter(originalPlayer=fw).filter(isActive=True))
+                    if sub[0].reserveSub==None:
+                        self.fws.append(sub[0].playerSub)
+                    else:
+                        self.fws.append(sub[0].reserveSub)
+            
+            else:
+                self.fws.append(fw)
+    if len(self.fws) < team.tactic.nFW-1:
+        self.fws.extend([None]*(team.tactic.nFW-1 - len(self.fws)))
+    for mf in mfsObj:
+        print(mf.user.username+'\n MF')
+        if mf.isSub:
+            self.subslist[2] = mf
+        else:
+            if mf.isSubbed:
+                subs=list(Substitute.objects.filter(originalPlayer=mf))
+                if len(subs)==1:
+                    if subs[0].reserveSub==None:
+                        self.mfs.append(subs[0].playerSub)
+                    else:
+                        self.mfs.append(subs[0].reserveSub)
+                else:
+                    sub=list(Substitute.objects.filter(originalPlayer=mf).filter(isActive=True))
+                    if sub[0].reserveSub==None:
+                        self.mfs.append(sub[0].playerSub)
+                    else:
+                        self.mfs.append(sub[0].reserveSub)
+            else:
+                self.mfs.append(mf)
+            
+    if len(self.mfs) < team.tactic.nMF-1:
+        self.mfs.extend([None]*(team.tactic.nMF-1 - len(self.mfs)))
+    for df in dfsObj:
+        print(df.user.username+'\n DF')
+        if df.isSub:
+            self.subslist[3] = df
+        else:
+            if df.isSubbed:
+                subs=list(Substitute.objects.filter(originalPlayer=df))
+                if len(subs)==1:
+                    if subs[0].reserveSub==None:
+                        self.dfs.append(subs[0].playerSub)
+                    else:
+                        self.dfs.append(subs[0].reserveSub)
+                else:
+                    sub=list(Substitute.objects.filter(originalPlayer=df).filter(isActive=True))
+                    if sub[0].reserveSub==None:
+                        self.dfs.append(sub[0].playerSub)
+                    else:
+                        self.dfs.append(sub[0].reserveSub)
+            else:
+                self.dfs.append(df)
+    if len(self.dfs) < team.tactic.nDF-1:
+        self.dfs.extend([None]*(team.tactic.nDF-1 - len(self.dfs)))
+    for gk in gksObj:
+        print(gk.user.username+'\n GK')
+        if gk.isSub:
+            self.subslist[4] = gk
+        else:
+            if gk.isSubbed:
+                subs=list(Substitute.objects.filter(originalPlayer=gk))
+                if len(subs)==1:
+                    if subs[0].reserveSub==None:
+                        self.gks.append(subs[0].playerSub)
+                    else:
+                        self.gks.append(subs[0].reserveSub)
+                else:
+                    sub=list(Substitute.objects.filter(originalPlayer=gk).filter(isActive=True))
+                    if sub[0].reserveSub==None:
+                        self.gks.append(sub[0].playerSub)
+                    else:
+                        self.gks.append(sub[0].reserveSub)
+            else:
+                self.gks.append(gk)
+            
+    if len(self.gks) < team.tactic.nGK-1:
+        self.gks.extend([None]*(team.tactic.nGK-1 - len(self.gks)))
+    print(self.playersList)
     context = {'team':team, 'sts':sts, 'fws':fws, 'mfs':mfs, 'dfs':dfs, 'gks':gks}
     #if (None not in (self.sts or self.fws or self.mfs or self.dfs or self.gks)):
     #    context['subsList'] = subslist
 
-    
+
     return render(request,'appEball/team_info.html' , context)
 
 
@@ -504,12 +609,20 @@ def is_seen(request, pk):
 def askSub(request,pk):
     tournament=Tournament.objects.get(pk=pk)
     reservest=list(Reserve.objects.filter(tournament=tournament))
+    activeSubs=list(Substitute.objects.filter(isActive=True).filter(~Q(reserveSub=None)))
     reserves=[]
     for i in range (len(reservest)):
         if i%2==0:
-            reserves.append([reservest[i],"row1"])
+            if reservest[i] in activeSubs:
+                reserves.append([reservest[i],"row1",1])
+            else:
+                reserves.append([reservest[i],"row1",0])
         else:
-            reserves.append([reservest[i],"row2"])
+            if reservest[i] in activeSubs:
+                reserves.append([reservest[i],"row2",1])
+            else:
+                reserves.append([reservest[i],"row2",0])
+    
 
     return render(request, 'appEball/askSub.html', {'reserves':reserves, 'tournament': tournament})
 
@@ -672,9 +785,62 @@ def change_round(request,pk,gRound,change):
 
 
 
-def subPage(request,pk,pk2):
-    
-    return render(request,'appEball/subPage.html',{})
+class subPage(View):
+    def get(self,request,pk,pksub,subFlag):  
+        tournament=Tournament.objects.get(pk=pk)
+        players=list(Player.objects.filter(user=request.user))
+        teams=list(Team.objects.filter(tournament=tournament))
+        sub=Reserve.objects.get(pk=pksub)
+
+        for player in players:
+            for team in teams:
+                if player.team==team:
+                    pplayer=player
+                    pteam=team
+                    break
+        games=list(Game.objects.filter(team1=pteam))+ list(Game.objects.filter(team2=pteam))
+        return render(request,'appEball/subPage.html',{'games':games, 'team':pteam, 'sub':sub})
+
+    def post(self,request,pk,pksub,subFlag):
+        if request.method=="POST":
+            tournament=Tournament.objects.get(pk=pk)
+            players=list(Player.objects.filter(user=request.user))
+            teams=list(Team.objects.filter(tournament=tournament))
+            for player in players:
+                for team in teams:
+                    if player.team==team:
+                        pplayer=player
+                        pteam=team
+                        break
+            games=list(Game.objects.filter(team1=pteam))+ list(Game.objects.filter(team2=pteam))
+            form = SubForm(data=request.POST)
+            if form.is_valid():
+                if subFlag==0: #quer que um reserva o substitua
+                    reserve=Reserve.objects.get(pk=pksub)
+                    subGames = form.cleaned_data.get('subGames')
+                    pplayer.subGames=subGames
+                    pplayer.isSubbed=True
+                    pplayer.save()
+
+                    for i in range(subGames):
+                        if subGames<=len(games):
+                            sub=Substitute(reserveSub=reserve, originalPlayer=pplayer,game= games[i],isActive=True )
+                            sub.save()
+                else:
+                    player=Player.objects.get(pk=pksub)
+                    subGames = form.cleaned_data.get('subGames')
+                    pplayer.subGames=subGames
+                    pplayer.isSubbed=True
+                    pplayer.save()
+                    for i in range(subGames):
+                        if subGames<=len(games):
+                            sub=Substitute(playerSub=player, originalPlayer=pplayer,game= games[i], isActive=True)
+                            sub.save()
+
+            else:
+                print(form.errors)
+            return HttpResponseRedirect(reverse('appEball:askSub',kwargs={'pk': pk}))
+
 
 def my_calendar(request):
     players=list(Player.objects.filter(user=request.user))
