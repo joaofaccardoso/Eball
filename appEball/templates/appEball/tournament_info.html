@@ -50,7 +50,7 @@
                         <p class="team">{{ game.1.team1.name }} </p>
                     </div>
                     <div class="col-sm-4" align='center'>
-                        <p class="center">{{ game.1.date|date:'d-m-Y, H:i' }}, {{ game.1.field.name }} </p>
+                        <p class="center">{{ game.1.slot.date|date:'d-m-Y, H:m' }}, {{ game.1.slot.field.name }} </p>
                     </div>
                     <div class="col" align='left'>
                         <p class="team">{{ game.1.team2.name }} </p>
@@ -66,7 +66,7 @@
             {% for day in days %}
                 <div class="row" id="{{ day.0 }}" align='center'>
                     <div class="col" align='center'>
-                        <p class="details" id="details">{{ day.2 }} , {{ day.1.startHour}} - {{ day.1.endHour}}, {{ day.1.field.name }}</p>
+                        <p class="details" id="details">{{ day.2 }}, {{day.1.start|date:'H:i'}} - {{day.1.end|date:'H:i'}}, {{ day.1.field.name }}</p>
                     </div>
                 </div>
             {% endfor %}
