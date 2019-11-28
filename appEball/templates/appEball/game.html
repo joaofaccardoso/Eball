@@ -47,7 +47,7 @@
                 <div class="col" align="right" >                
                     <div class="row">                
                         <div class="col" align="right" >
-                            {% if captain2 %}
+                            {% if manager or captain2 %}
                             <div class="row">
                                 <div class="col-1" style="padding-top: 6px">
                                     <a href="">
@@ -77,7 +77,7 @@
                             <p class="center" > {{game.goalsT1_byT2}} </p>
                         </div>
                         <div class="col" align="center" >
-                            {% if captain1 %}
+                            {% if manager or captain1 %}
                             <div class="row">
                                 <div class="col-1" style="padding-top: 6px">
                                     <a href="">
