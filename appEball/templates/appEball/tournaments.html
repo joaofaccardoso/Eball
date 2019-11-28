@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/tournaments.css' %}">
+    <script type="text/javascript" src="{% static 'appEball/js/tournaments.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -57,7 +58,7 @@
                                     <label for="id_beginDate">Begin date:</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" >
+                                    <input  type="date" class="form-control rounded-pill" placeholder="Enter begin date" name="beginDate" id="begin" >
                                 </div>
                             </div> 
                             <div class="row">
@@ -65,16 +66,13 @@
                                     <label for="id_beginDate">End date:</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="date" class="form-control rounded-pill" placeholder="Enter end date" name="endDate">
+                                    <input type="date" class="form-control rounded-pill" placeholder="Enter end date" name="endDate" id="end">
                                 </div>
                             </div> 
-                            
                         </div>
                     </div>
                     <div class="contentFieldDay row">
-                        <!-- <div class="col"></div> -->
                         <div class="col" >
-                            <!-- <div class="accordion" id="daysAndFields"> -->
                             <div id="accordion">
                                 {% for f in fields %}
                                     {% if f.3 == True and f.4 == True %}
@@ -115,7 +113,6 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <!-- <div class="col"></div> -->
                     </div>
                     <div class="row">
                         <div class="col text-center">

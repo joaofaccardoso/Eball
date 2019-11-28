@@ -138,3 +138,12 @@ body {
     margin-right: 20px;
     color: #727070;
 }
+
+.userLabel {
+    color: white;
+}
+
+.userLabel:hover {
+    color: #FFE603;
+    transition:0.5s;
+}

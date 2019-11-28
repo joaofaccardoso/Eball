@@ -8,13 +8,15 @@
 
 {% block content %}
     <div class="card position-static" id="card1" style="background-color: #262626; border: none; height: 80%; border-radius: 0px; overflow-y: scroll; overflow-x: hidden;">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        <div id="messageDivParent">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" id="messageDiv">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
         <h1 style = "margin: 25px; color: white;"><b>
             {% block title %}
             {% endblock %}
