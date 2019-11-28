@@ -508,8 +508,12 @@ def tournament_info(request,pk,gRound):
             games.append(["row2",gamesRound[i]])
         else:
             games.append(["row1",gamesRound[i]])
+
+    if(len(list(Game.objects.filter(tournament=tournament)))>0):
+        maxRound = list(Game.objects.filter(tournament=tournament).order_by('gRound'))[-1].gRound
+    else:
+        maxRound=0
     
-    maxRound = list(Game.objects.filter(tournament=tournament).order_by('gRound'))[-1].gRound
     print(maxRound)
     
     return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'teams':teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
@@ -635,6 +639,7 @@ class presencas(View):
     def post(self, request,pk):
         if request.method=="POST":
             nomesMarked =  request.POST.getlist('checks')
+            print(nomesMarked)
             team = Team.objects.get(pk=pk)
             jogadores=list(Player.objects.filter(team = pk))
             for jogador in jogadores:
@@ -642,3 +647,50 @@ class presencas(View):
                     jogador.faltas+=1
                     jogador.save()
             return HttpResponseRedirect(reverse('appEball:tournaments'))
+
+
+class game(View):
+    template_name='appEball/game.html'
+
+    def get(self,request,pk):
+        game=Game.objects.get(pk=pk)
+        jogadores1=list(Player.objects.filter(team=game.team1))
+        jogadores2=list(Player.objects.filter(team=game.team2))
+        players1=list()
+        players2=list()
+        isSt1=False
+        isSt2=False
+        manager=False
+
+        if(request.user==game.team1.tournament.user.isTournamentManager or request.user==game.team2.tournament.user.isTournamentManager ):
+            manager=True
+
+        for i in range(len(jogadores1)):
+            if(i%2==0):
+                players1.append(["row2",jogadores1[i]])
+            else:
+                players1.append(["row1",jogadores1[i]])
+
+        for i in range(len(jogadores2)):
+            if(i%2==0):
+                players2.append(["row2",jogadores2[i]])
+            else:
+                players2.append(["row1",jogadores2[i]])
+
+        if(request.user==game.team1.captain):
+            idEquipa=game.team1
+            captain1=True
+        elif(request.user==game.team2.captain):
+            idEquipa=game.team2
+            captain2=True
+        else:
+            idEquipa=game.team1
+            captain1=False
+            captain2=False
+
+
+
+        return render(request, self.template_name,{'game':game,'players1':players1,'players2':players2,'idEquipa':idEquipa,'captain1':captain1,'captain2':captain2,'manager':manager})
+
+    
+
