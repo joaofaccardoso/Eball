@@ -708,16 +708,16 @@ def askSub(request,pk):
     check=0
     if (len(checkr)==0):
         check=1 #not reserva
-    activeSubs=list(Substitute.objects.filter(isActive=True))
+    activeSubs=Substitute.objects.filter(isActive=True)
     reserves=[]
-    for j in range(len(activeSubs)):
-        for i in range (len(reservest)):
-            if reservest[i] == activeSubs[j].reserveSub:
-                print("sad2")
-                reserves.append([reservest[i],"row2",1])
-            else:
-                reserves.append([reservest[i],"row2",0])
-                print("idk2")
+
+    for i in range (len(reservest)):
+        if activeSubs.filter(reserveSub=reservest[i]):
+            print("sad2")
+            reserves.append([reservest[i],"row2",1])
+        else:
+            reserves.append([reservest[i],"row2",0])
+            print("idk2")
            
     for i in range(len(reserves)):
         if i%2==0:
@@ -934,24 +934,26 @@ class subPage(View):
                 if subFlag==0: #quer que um reserva o substitua
                     reserve=Reserve.objects.get(pk=pksub)
                     subGames = form.cleaned_data.get('subGames')
-                    pplayer.subGames=subGames
-                    pplayer.isSubbed=True
-                    pplayer.save()
-
-                    for i in range(subGames):
-                        if subGames<=len(games):
-                            sub=Substitute(reserveSub=reserve, originalPlayer=pplayer,game= games[i],isActive=True )
-                            sub.save()
+                    
+                    if subGames<=len(games):
+                        pplayer.subGames=subGames
+                        pplayer.isSubbed=True
+                        pplayer.save()
+                        sub=Substitute(reserveSub=reserve, originalPlayer=pplayer,isActive=True, game=games[0] )
+                        notification = Notification(title='Requested for you to sub!', text=pplayer.user.username+' asked you to sub in his next '+ str(subGames) +' games!' , user=reserve.user)
+                        notification.save()
+                        sub.save()
                 else:
                     player=Player.objects.get(pk=pksub)
                     subGames = form.cleaned_data.get('subGames')
-                    pplayer.subGames=subGames
-                    pplayer.isSubbed=True
-                    pplayer.save()
-                    for i in range(subGames):
-                        if subGames<=len(games):
-                            sub=Substitute(playerSub=player, originalPlayer=pplayer,game= games[i], isActive=True)
-                            sub.save()
+                    if subGames<=len(games):
+                        pplayer.subGames=subGames
+                        pplayer.isSubbed=True
+                        pplayer.save()
+                        sub=Substitute(playerSub=player, originalPlayer=pplayer, isActive=True, game=games[0])
+                        sub.save()
+                        notification = Notification(title='Requested for you to sub!', text=pplayer.user.username+' asked you to sub in his next '+ str(subGames) +' games! ' , user=player.user)
+                        notification.save()
 
             else:
                 print(form.errors)
