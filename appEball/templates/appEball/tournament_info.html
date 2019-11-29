@@ -159,7 +159,11 @@
                                     </div>
                                 {% endif %}
                                 <div class="col" align='center'>
-                                    <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team</a>
+                                    {% if full == False %}
+                                        <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team</a>
+                                    {% else %}
+                                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn">Join Team</button>
+                                    {% endif %}
                                 </div>
                         </div>
                     </div>

@@ -772,13 +772,16 @@ class tournament_info(View):
             maxRound=0
         
         players=list(Player.objects.filter(user=request.user))
+        full=False
+        if len(players)>=16:
+            full=True
         inTeam=False
         for player in players:
             if player.team.tournament==tournament:
                 inTeam=True
                 break
         
-        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,inTeam: 'inTeam', 'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
+        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,inTeam: 'inTeam', 'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'full':full})
 
 
 
