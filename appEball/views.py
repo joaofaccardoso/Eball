@@ -976,6 +976,7 @@ def my_calendar(request):
         else:
             games.append([allGames[i],'row2'])
     return render(request,'appEball/my_calendar.html',{'games':games})
+
 class presencas(View):
     template_name= 'appEball/presencas.html'
    
@@ -1001,7 +1002,7 @@ class presencas(View):
             print(nomesMarked)
             team = Team.objects.get(pk=pk)
             jogadores=list(Player.objects.filter(team = pk))
-
+            
             
             for jogador in jogadores:
                 if jogador.user.firstName not in nomesMarked:
@@ -1009,8 +1010,12 @@ class presencas(View):
                     jogador.isSub=True
                     jogador.isStarter=False
                     jogador.save()
+                    for player in jogadores:
+                        if(player!=jogador and player.isSub==True and player.position==jogador.position):
+                            player.isSub=False
+                            player.isStarter=True
+                            player.save()
                     
-
 
             return HttpResponseRedirect(reverse('appEball:tournaments'))
 
@@ -1182,16 +1187,26 @@ def registar_saldo(request,pk):
     jogadores2=list(Player.objects.filter(team=game.team2))
 
     for jogador1 in jogadores1:
-        if jogador1.balance < game.slot.field.preco:
+        if jogador1.balance < game.slot.field.preco or jogador1.balance<3:
             jogador1.isSub=True
             jogador1.isStarter=False
             jogador1.save()
+            for player in jogadores1:
+                if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
+                    player.isSub=False
+                    player.isStarter=True
+                    player.save()
 
     for jogador2 in jogadores2:
-        if jogador2.balance < game.slot.field.preco:
+        if jogador2.balance < game.slot.field.preco or jogador.balance<3:
             jogador2.isSub=True
             jogador2.isStarter=False
             jogador2.save()
+            for player in jogadores2:
+                if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
+                    player.isSub=False
+                    player.isStarter=True
+                    player.save()
 
 
     return HttpResponseRedirect(reverse('appEball:tournaments'))
