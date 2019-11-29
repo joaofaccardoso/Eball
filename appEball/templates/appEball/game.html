@@ -12,89 +12,92 @@
 {% block content2 %}    
    
     <div class="content">
-            <div class="row" style="margin-top: -5%;">
-                <div class="col">
-                </div>
-                <div class="col-sm-3" align='center'>
-                    <p class="title">Round {{game.gRound}}</p>
-                </div>
-                <div class="col">
-                {% if captain1 or captain2 %}
-                    <a class="btn rounded-pill float-right"  href="{% url 'appEball:presencas' idEquipa.pk %}" id='pageBtn'>Attendance</a>
+        <div class="row" >
+            <div class="col" align='center'>
+                <p class="title">Round {{game.gRound}}</p>
+            </div>
+        </div>
+        <div class="row disp" id="row2" align='center'>
+            <div class="col" ></div>
+            <div class="col-sm-4" align='center'>
+                <p class="center">{{game.slot.date|date:'d-m-Y, H:m'}}, {{game.slot.field}} </p>
+            </div>
+            <div class="col" ></div>          
+        </div>
+        <div class="row disp" id="row1" align='center'>
+            <div class="col">
+                {% if user == game.team1.captain and isOver == True %}
+                    <a class="btn rounded-pill float-right"  id = "pageBtn" href="{% url 'appEball:presencas' game.team2.pk %}" id='pageBtn'style="height: 80%;">Attendance</a>
                 {% endif %}
-                </div>
             </div>
-            <div class="row disp" id="row2" align='center'>
-                <div class="col" ></div>
-                <div class="col-sm-4" align='center'>
-                    <p class="center">{{game.date}},{{game.slot.field}} </p>
-                </div>
-                <div class="col" ></div>          
+            <div class="col" align="right">
+                <p class="center team" style="color:#FFE603"> {{game.team1.name}} </p>
             </div>
-            <div class="row disp" id="row1" align='center'>
-                <div class="col" align="right">
-                    <p class="center" style="color:#FFE603"> {{game.team1.name}} </p>
-                </div>
-                <div class="col-sm-1" align='center'>
-                    <p class="center"> vs </p>
-                </div>
-                <div class="col" align="left" >
-                    <p class="center" style="color:#FFE603"> {{game.team2.name}} </p>
+            <div class="col-sm-1" align='center'>
+                <p class="center"> vs </p>
+            </div>
+            <div class="col" align="left" >
+                <p class="center team" style="color:#FFE603"> {{game.team2.name}} </p>
+            </div>
+            <div class="col">
+                {% if user == game.team2.captain and isOver == True %}
+                    <a class="btn rounded-pill float-left"  id = "pageBtn" href="{% url 'appEball:presencas' game.team2.pk %}" id='pageBtn'style="height: 80%; ">Attendance</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row disp" id="row2" align='center'>
+            <div class="col" align="right" >                
+                <div class="row">                
+                    <div class="col" align="right" >
+                        {% if user == game.tournament.user or user == game.team2.captain %}
+                        <div class="row">
+                            <div class="col-1" style="padding-top: 10px">
+                                <a href="">
+                                    <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
+                                </a>
+                                
+                            </div>
+                            <div class="col-1">
+                                <a href="">
+                                    <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;" alt="" >
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-3" align="right" >
+                        <p class="center goals" > {{game.goalsT1_byT1}} </p>
+                    </div>
                 </div>
 
             </div>
-            <div class="row disp" id="row2" align='center'>
-                <div class="col" align="right" >                
-                    <div class="row">                
-                        <div class="col" align="right" >
-                            {% if manager or captain2 %}
-                            <div class="row">
-                                <div class="col-1" style="padding-top: 10px">
-                                    <a href="">
-                                        <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                    </a>
-                                    
-                                </div>
-                                <div class="col-1">
-                                    <a href="">
-                                        <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;" alt="" >
-                                    </a>
-                                </div>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-3" align="right" >
-                            <p class="center" > {{game.goalsT1_byT1}} </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-1" align='center'>
-                    <p class="center"> - </p>
-                </div>
-                <div class="col" align="left" >        
-                    <div class="row">
-                        <div class="col-3" align="left" >
-                            <p class="center" > {{game.goalsT1_byT2}} </p>
-                        </div>
-                        <div class="col" align="center" >
-                            {% if manager or captain1 %}
-                            <div class="row">
-                                <div class="col-1" style="padding-top: 10px">
-                                    <a href="">
-                                    <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                    </a>
-                                </div>
-                                <div class="col-1" >
-                                     <a href="">
-                                    <img src="{% static 'appEball/assets/plus_preto.png' %}"   style="width:25px;height:25px;" alt="" >
-                                    </a>
-                                </div>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>           
+            <div class="col-sm-1" align='center'>
+                <p class="center"> - </p>
             </div>
+            <div class="col" align="left" >        
+                <div class="row">
+                    <div class="col-3" align="left" >
+                        <p class="center goals" > {{game.goalsT1_byT2}} </p>
+                    </div>
+                    <div class="col" align="center" >
+                        {% if user == game.tournament.user or user == game.team1.captain %}
+                        <div class="row">
+                            <div class="col-1" style="padding-top: 10px">
+                                <a href="">
+                                <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
+                                </a>
+                            </div>
+                            <div class="col-1" >
+                                    <a href="">
+                                <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;"  alt="" >
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>           
+        </div>
         <form method="post">
             <div class="row disp" align='center'>
                 <div class="col" align="right">
@@ -121,7 +124,7 @@
                             <p class="text-center">{{player1.1.user.firstName}} {{player1.1.user.lastName}}</p>
                         </div>
                         <div class="col-3">
-                            {% if captain1 %}
+                            {% if user == game.team1.captain %}
                             <div class="card" style="height:30px;background-color: #727070;border-radius: 20px; ">
 
                                 <div class="row">
@@ -182,7 +185,7 @@
                             
                         </div>
                         <div class="col-3" >
-                            {% if captain2 %}
+                            {% if user == game.team2.captain %}
                              <div class="card" style="height:30px;background-color: #727070;border-radius: 20px; ">
 
                                 <div class="row">
@@ -211,7 +214,7 @@
                 </div>  
             </div>
             <div class="row disp" align='center'>
-                {% if manager or captain1 or captain2%}
+                {% if user == game.tournament.user or user == game.team1.captain or user == game.team2.captain %}
                 <div class="col" align="right" >
                     <a class="btn rounded-pill center"  href="" id='pageBtn'>Confirm</a>
                 </div>

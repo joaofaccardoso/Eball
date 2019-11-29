@@ -28,11 +28,10 @@ h2 {
 }
 
 #profileCol{
-    position: absolute;    
     margin-top: 2%;
 }
 
-.row{
+.row.min{
     padding-top: 10px;
     padding-right: 60px;
     padding-left: 60px;
@@ -69,8 +68,8 @@ h2 {
     background-color: #727070;
     color: white;
     width: 180px;
-    margin-top: 5%;
-    z-index: 2;
+    margin-top: 2%;
+    z-index: 1;
 }
 
 .btn:hover {

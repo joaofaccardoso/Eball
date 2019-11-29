@@ -81,12 +81,14 @@
                             <a class="userLabel line" href="{% url 'appEball:team_info' t.1.pk %}"><b>{{ t.1.name }}</b></a>
                         </div>
                         <div class="col">
-                            {% if user.username == "admin" %}
+                            {% if user.username == "admin"  or t.1.captain == user %}
                                 <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' >Delete</a>
                             {% endif %}
-                            {% if t.3 %}
+                            {% if not user.is_authenticated %}
+                                <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
+                            {% elif user.is_authenticated and t.1.pk not in myTeamsList and t.1.tournament.pk not in tournaments %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' t.1.pk %}" id='pageBtn'>Join Team </a>
-                            {% endif %}
+                            {% endif %} 
                             <p class="d-inline-block text-truncat" id="p1">{{ t.2 }}/15 spots left</p>
                             <p class="d-inline-block text-truncat" id="p2">{{ t.1.tournament.name }}</p>        
                         </div>
@@ -96,24 +98,21 @@
             <div class="tab-pane fade border border-1" id="my" role="tabpanel" aria-labelledby="my-tab">
                 {% for t in myTeams %}
                     <div class="row" id="{{ t.0 }}">
-                        <div class="col-sm-5">
-                            <a class="userLabel line" href="{% url 'appEball:team_info' t.1.team.pk %}"><b>{{ t.1.team.name }}</b></a>
-
+                        <div class="col-sm-3">
+                            <a class="userLabel line" href="{% url 'appEball:team_info' t.1.pk %}"><b>{{ t.1.name }}</b></a>
                         </div>
                         <div class="col" id=colinfo>
-
-                        {% if user.username == "admin" or t.1.user == user%}
-                            <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' >Delete</a>
-                        {% endif %}
-                    
-                        {% if t.3 == 0 %}
-                            <p class="d-inline-block text-truncat" id="p2">Tournament finished.</p>
-                        {% elif t.3 == 1 %}
-                            <p class="d-inline-block text-truncat" id="p2">Waiting for tournament to start...</p>
+                            {% if user.username == "admin" or t.1.captain == user%}
+                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' >Delete</a>
+                            {% endif %}
+                        
+                            {% if t.3 == 0 %}
+                                <p class="d-inline-block text-truncat" id="p2">Tournament finished.</p>
+                            {% elif t.3 == 1 %}
+                                <p class="d-inline-block text-truncat" id="p2">Waiting for tournament to start...</p>
                             {% else %}
-                            <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date}}</p>
-                            <p class="d-inline-block text-truncat" id="p2"><b> x place</b></p>
-                            <p class="d-inline-block text-truncat" id="p1">Round {{t.3.gRound}}</p>
+                                <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date|date:'d-m-Y, H:m'}}</p>
+                                <p class="d-inline-block text-truncat" id="p1">Round {{t.3.gRound}}</p>
                             {% endif %}
                         </div>
                         

@@ -93,3 +93,12 @@ h2 {
     color: white;
     font-family: "lucidaSansRegular";
 }
+
+.game{
+    color: white;
+}
+
+.game:hover{
+    text-decoration: underline;
+    text-decoration-color: white;
+}
