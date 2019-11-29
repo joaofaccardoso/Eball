@@ -982,7 +982,7 @@ def next_matches(players):
                     else:
                         games.append([game,'row2'])
                     contador=contador+1
-    sorted(games, key=lambda game: game[0].date)
+    sorted(games, key=lambda game: game[0].slot.date)
     return games
 
 def checkTeamName(request):

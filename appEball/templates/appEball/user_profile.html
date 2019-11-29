@@ -52,7 +52,7 @@
 					</div>
 					<div class="col">
 						{% if nextgame != 0 %}
-						<p class="userInfo line">{{nextgame.date}}, {{nextgame.field}} - {{nextgame.tournament}}</p>
+						<p class="userInfo line">{{nextgame.slot.date}}, {{nextgame.slot.field}} - {{nextgame.tournament}}</p>
 						{% else %}
 						<p class="userInfo line">No matches in the future.</p>
 						{% endif %}
