@@ -847,3 +847,46 @@ def checkRegister(request):
                 return JsonResponse({'is_taken':dataType})
     return JsonResponse({'is_taken':False})
 
+
+class manage_team(View):
+    template_name='appEball/manage_team.html'
+
+    def get(self,request,pk):
+        team=Team.objects.get(pk=pk)
+        allplayers=list(Player.objects.filter(team=team))
+        players=list()
+
+
+        for i in range(len(allplayers)):
+            if(i%2==0):
+                players.append(["row2",allplayers[i],team.played - allplayers[i].faltas])
+            else:
+                players.append(["row1",allplayers[i],team.played - allplayers[i].faltas])
+
+        return render(request, self.template_name,{'team':team,'players':players})
+
+    def post(self,request,pk):
+        team=Team.objects.get(pk=pk)
+        if request.method=="POST":
+            button_clicked1 =  request.POST.get("submit_1")
+            button_clicked2 =  request.POST.get("submit_2")
+            button_clicked3 =  request.POST.get("submit_3")
+            button_clicked4 =  request.POST.get("submit_4")
+            if(button_clicked1!=None):
+                user=CustomUser.objects.get(pk=button_clicked1)
+                team.captain=user
+                team.save()
+                return HttpResponseRedirect(reverse('appEball:teams_list'))
+            elif(button_clicked2!=None):
+                player=Player.objects.get(pk=button_clicked2)
+                player.isSub=False
+                player.isStarter=True
+                player.save()
+            elif(button_clicked3!=None):
+                player=Player.objects.get(pk=button_clicked3)
+                player.isSub=True
+                player.isStarter=False
+                player.save()
+            elif(button_clicked4!=None):
+                Player.objects.get(pk=button_clicked4).delete()
+            return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk':pk}))
