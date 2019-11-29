@@ -110,7 +110,7 @@ body {
     transition:0.5s;
 }
 
-#all #p1,#p2,#pageBtnInactive, #pageBtn{
+#p1,#p2,#pageBtnInactive, #pageBtn{
     float: right;
 }
 

@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 
 class HomePage(View):
@@ -85,14 +86,16 @@ class teams_list(View):
     template_name = 'appEball/teams_list.html'
 
     def get(self, request):
-        tournaments = Tournament.objects.all()
         tactics = Tactic.objects.all()
         allTeamsFilter=list(Team.objects.all().exclude(isDayOff=True))
         allTeams=list()
         myTeams=list()
 
         if(request.user.is_authenticated):
-            myTeamsFilter=list(Player.objects.filter(user=request.user))
+            myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
+            myTournaments=Team.objects.filter(pk__in=myTeamsList).values_list('tournament',flat=True)
+            tournaments = list(Tournament.objects.all().exclude(pk__in=myTournaments))
+            myTeamsFilter = list(Team.objects.filter(pk__in=myTeamsList))
         else:
             myTeamsFilter=list()
 
@@ -100,28 +103,22 @@ class teams_list(View):
                 if(i%2==0):
                     if(request.user.is_authenticated):
                         player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                        checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                        checkPlayer = (len(player) == 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
                     else:
                         checkPlayer = None
                     allTeams.append(["row2",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
-                    if(len(myTeamsFilter)>i and myTeamsFilter[i].team.isDayOff==False):
+                    if(len(myTeamsFilter)>i and myTeamsFilter[i].isDayOff==False):
                         myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])   
                 else:
                     if(request.user.is_authenticated):
                         player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                        checkPlayer = (len(player) is 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                        checkPlayer = (len(player) == 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
                     else:
                         checkPlayer = None
                     allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
-                    if(len(myTeamsFilter)>i and myTeamsFilter[i].team.isDayOff==False):
+                    if(len(myTeamsFilter)>i and myTeamsFilter[i].isDayOff==False):
                         myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i]))])
     
-        for i in range(len(allTeams)):
-            for j in range (len(myTeamsFilter)):
-                if myTeamsFilter[j].team==allTeams[i][1]:
-                    allTeams[i].append(1)
-                elif ((myTeamsFilter[j].team!=allTeams[i][1]) and (j==len(myTeamsFilter)-1)):
-                    allTeams[i].append(0)
         return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
                                                             'myTeams':myTeams,
                                                             'tactics':tactics,
@@ -420,7 +417,13 @@ class tournaments(View):
 
 def user_profile(request, username):
     requestedUser = CustomUser.objects.get(username=username)
-    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser})
+    myTeamsPk = Player.objects.filter(user=requestedUser).values_list('team',flat=True)
+    myTeams = Team.objects.filter(pk__in=myTeamsPk)
+    nextGame = (Game.objects.filter(team1__in=myTeams) | Game.objects.filter(team2__in=myTeams)).order_by('slot__date').first()
+    print(nextGame)
+    # myGames = myGames.values_list('slot', flat=True)
+    # firstGame = Slot.objects.filter(pk__in=myGames,date__gte=timezone.now()).order_by('date').first()
+    return render(request, 'appEball/user_profile.html', {'requestedUser':requestedUser,'nextGame':nextGame})
 
 class edit_user_profile(View):
     form_class = EditProfileForm

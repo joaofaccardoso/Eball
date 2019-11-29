@@ -11,9 +11,9 @@
 
 {% block content2 %}
 	<h2>{{ requestedUser.firstName }} {{ requestedUser.lastName }}</h2>
-	<div class="content" id="profileContent">
+	<div class="row">
 		<div class="col" id="profileCol">
-			<div class="row" id="row1">
+			<div class="row min" id="row1">
 				<div class="col-sm-2">
 					<p class="userLabel line">Username:</p>
 				</div>
@@ -21,7 +21,7 @@
 					<p class="userInfo line">{{ requestedUser.username }}</p>
 				</div>
 			</div>
-			<div class="row" id="row2">
+			<div class="row min" id="row2">
 				<div class="col-sm-2">
 					<p class="userLabel line">E-mail:</p>
 				</div>
@@ -29,7 +29,7 @@
 					<p class="userInfo line">{{ requestedUser.email }}</p>
 				</div>
 			</div>
-			<div class="row"  id="row1">
+			<div class="row min"  id="row1">
 				<div class="col-sm-2">
 					<p class="userLabel line">CC number:</p>
 				</div>
@@ -37,7 +37,7 @@
 					<p class="userInfo line">{{ requestedUser.ccNumber }}</p>
 				</div>
 			</div>
-			<div class="row" id="row2">
+			<div class="row min" id="row2">
 				<div class="col-sm-2">
 					<p class="userLabel line">Phone number:</p>
 				</div>
@@ -46,15 +46,15 @@
 				</div>
 			</div>
 			{% if user == requestedUser %}
-				<div class="row" id="row1">
+				<div class="row min" id="row1">
 					<div class="col-sm-2">
 						<p class="userLabel line">Next match:</p>
 					</div>
 					<div class="col">
-						<p class="userInfo line"></p>
+						<p class="userInfo line">{{ nextGame.tournament.name}}, {{nextGame.slot.date|date:'d-m-Y, H:m'}}</p>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row min">
 					<div class="col" align='center'>
 						<a class="btn rounded-pill btn-block" href="{% url 'appEball:editUserProfile' user.username %}">Edit Profile</a>
 					</div>
@@ -62,13 +62,13 @@
 			{% endif %}
 		</div>
 		<div class="col" id="colImg" align="right">
-			<div class="row"></div>
-			<div class="row" >
+			<div class="row min"></div>
+			<div class="row min" >
 				<div class="col" align="right">
 					<img class="rounded-circle border-1" src="{{ requestedUser.profileImg.url }}" style="max-width: 300px; max-height: 300px; border: solid 10px #727070;">
 				</div>
 			</div>
-			<div class="row"></div>
+			<div class="row min"></div>
 		</div>
 	</div>
 {% endblock %}
