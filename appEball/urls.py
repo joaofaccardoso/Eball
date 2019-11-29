@@ -7,6 +7,7 @@ urlpatterns = [
     path('register/', views.UserRegister.as_view(), name='register'),
     path('login/', views.UserLogin.as_view(), name='login'),
     path('logout/', views.userLogout, name='logout'),
+    path('register/checkRegister/', views.checkRegister, name='check_register'),
 
     path('profile/<str:username>', views.user_profile, name='userProfile'),
     path('editprofile/<str:username>', views.edit_user_profile.as_view(), name='editUserProfile'),
@@ -23,15 +24,17 @@ urlpatterns = [
     path('my_calendar/', views.my_calendar, name='my_calendar'),
 
     path('teams_list/', views.teams_list.as_view(), name='teams_list'),
-    path('join_team/<int:teamId>',views.JoinTeam.as_view(), name='join_team'),
-    path('team_info/<int:teamId>',views.team_info, name='team_info'),
+    path('team_info/<int:teamId>',views.TeamInfo.as_view(), name='team_info'),
     path('delete_team/<int:pk>', views.delete_team, name='delete_team'),
+    path('teams_list/checkTeamName/', views.checkTeamName, name='check_team_name'),
 
     path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
 
     path('tournament_info/<int:pk>/<int:gRound>', views.tournament_info.as_view(), name='tournament_info'),
     path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
+    path('tournaments/checkTournamentName/', views.checkTournamentName, name='check_tournament_name'),
+    path('tournaments/checkDates/', views.checkDates, name='check_dates'),
     path('change_round/<int:pk>/<int:gRound>/<str:change>', views.change_round, name='change_round'),
     
     path('generate_games/<int:pk>', views.generate_games, name='generate_games'),

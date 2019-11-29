@@ -5,14 +5,10 @@ if(document.readyState === "complete" || (document.readyState!== "loading" && !d
 }
 
 function main(){
-    var button = document.getElementsByTagName("button");
-    
-    for(let i=0;i<button.length;i++){        
-        button[i].addEventListener("click", function(e){
-            sendAjax(e, button[i].name);
-        })
-    }
+    var buttons = document.getElementsByTagName("button");
+    btnEvents(buttons)
 }
+
 function sendAjax(e, pk){
     const csrf_token = document.getElementsByName("csrfmiddlewaretoken")[0].value
     $.ajaxSetup({
@@ -27,12 +23,22 @@ function sendAjax(e, pk){
         data:JSON.stringify({ isSeen: true}),
         type: "PATCH",
         contentType:"application/json",
-        // success: (d)=>{
-        //     console.log("RESPONSE===", d);
-        // },
-        // failure:(d)=>{
-        //     console.log("FAILURE===", d);
-        // }
+        success: (response_data)=>{
+            $('#notificationsNav').load(' #notificationsNav');
+            $('#myTabContent').load(' #myTabContent');
+        },
+        failure:(response_data)=>{
+            console.log("FAILURE===", response_data);
+        }
     });
 
+}
+
+function btnEvents(buttons) {
+    console.log('entrei');
+    for(let i=0;i<buttons.length;i++){        
+        buttons[i].addEventListener("click", function(e){
+            sendAjax(e, buttons[i].name);
+        })
+    }
 }

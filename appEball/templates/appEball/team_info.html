@@ -1,0 +1,126 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'appEball/css/team_info.css' %}">
+{% endblock %}
+
+{% block title %}
+    {{ team.name }} 
+{% endblock %}
+
+{% block content2 %}
+    <h2>Tournament: {{ team.tournament.name }}</h2>
+    <div class="row">
+        <div class="col">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col" id="playersCol">
+                        {% for player in playersList %}
+                            <div class="row" id="{% cycle 'row1' 'row2' %}">
+                                <div class="col-7">
+                                    {% if player.0 %}
+                                        <input type="radio" name="position" style="opacity: 0%;" disabled value="{{ player.1 }}"> {{ player.0.user.firstName }} {{ player.0.user.lastName }}
+                                    {% else %}
+                                        {% if user.isAccepted %}
+                                            <input type="radio" name="position" value="{{ player.1 }}"> Choose this position
+                                        {% else %}
+                                            <input type="radio" name="position" style="opacity: 0%;" disabled value="{{ player.1 }}"> No one in this position yet
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-3" style="padding: 0%;" align='right'>
+                                    {% if player.1 == 'ST' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/ST.png' %}" alt="">
+                                    {% elif player.1 == 'FW' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/FW.png' %}" alt="">
+                                    {% elif player.1 == 'MF' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/MF.png' %}" alt="">
+                                    {% elif player.1 == 'DF' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/DF.png' %}" alt="">
+                                    {% elif player.1 == 'GK' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/GK.png' %}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="col" style="padding: 0%;" align='center'>
+                                    {{ player.1 }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% for sub in subsList %}
+                            <div class="row" id="{% cycle 'row2' 'row1' %}">
+                                <div class="col-7">
+                                    {% if sub.0 %}
+                                        <input type="radio" name="position" disabled style="opacity: 0%;" value="sub{{ sub.1 }}"> {{ sub.0.user.firstName }} {{ sub.0.user.lastName }}
+                                    {% else %}
+                                        {% if user.isAccepted %}
+                                            <input type="radio" name="position" value="sub{{ sub.1 }}"> Choose this position
+                                        {% else %}
+                                            <input type="radio" name="position" disabled style="opacity: 0%;" value="sub{{ sub.1 }}"> No one in this position yet
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-3" style="padding: 0%;" align='right'>
+                                    {% if inTeam and isFull %}
+                                        <a class="btn btn-sm rounded-pill" href="{% url 'appEball:subPage' team.tournament.pk sub.pk 1  %}" style="height: 20px; font-size: 12px; line-height: 10px;">Ask to sub</a>
+                                    {% endif %}
+                                    <img class="posIcon" data-toggle="tooltip" data-placement="bottom" title="substitute" src="{% static 'appEball/assets/sub.png' %}" style="margin-right: 3px;" alt="">
+                                    {% if sub.1 == 'ST' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/ST.png' %}" alt="">
+                                    {% elif sub.1 == 'FW' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/FW.png' %}" alt="">
+                                    {% elif sub.1 == 'MF' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/MF.png' %}" alt="">
+                                    {% elif sub.1 == 'DF' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/DF.png' %}" alt="">
+                                    {% elif sub.1 == 'GK' %}
+                                        <img class="posIcon" src="{% static 'appEball/assets/GK.png' %}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="col" style="padding: 0%;" align='center'>
+                                    {{ sub.1 }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if inTeam and not isFull and user.isAccepted %}
+                            <button class="btn rounded-pill" style="margin-left: 40%; margin-top: 30px;" id="joinBtn" type="submit">Change position</button>
+                        {% elif not isFull and user.isAccepted %}
+                            <button class="btn rounded-pill" style="margin-left: 40%; margin-top: 30px;" id="joinBtn" type="submit">Join Team</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col" align='center'>
+            {% if tactic == '4-3-3' %}
+                <img src="{% static 'appEball/assets/4-3-3.png' %}" {% if user.isAccepted %} height="54%" {% else %} height="58%" {% endif %} alt="">
+            {% elif tactic == '4-2-3-1' %}
+                <img src="{% static 'appEball/assets/4-2-3-1.png' %}" {% if user.isAccepted %} height="54%" {% else %} height="58%" {% endif %} alt="">
+            {% elif tactic == '3-4-3' %}
+                <img src="{% static 'appEball/assets/3-4-3.png' %}" {% if user.isAccepted %} height="54%" {% else %} height="58%" {% endif %} alt="">
+            {% elif tactic == '4-4-1-1' %}
+                <img src="{% static 'appEball/assets/4-4-1-1.png' %}" {% if user.isAccepted %} height="54%" {% else %} height="58%" {% endif %} alt="">
+            {% elif tactic == '4-1-4-1' %}
+                <img src="{% static 'appEball/assets/4-1-4-1.png' %}" {% if user.isAccepted %} height="54%" {% else %} height="58%" {% endif %} alt="">
+            {% endif %}
+
+            <div class="row" align='right'>
+                <div class="col" align= 'right'>
+                    {% if user.isAccepted %}
+                        <div class="row">
+                        {% if user.pk is team.captain.pk %}
+                            <a class="btn rounded-pill" style="width: 200px; margin-top: 33px; margin-left:10px;" href="#" >Manage Team</a>
+                        {% else %}
+                            <a class="btn rounded-pill" style="width: 120px; margin-top: 33px; margin-left:10px;" href="#">Leave Team</a>
+                        {% endif %}
+                        </div>
+                        <div class="row">
+                            <a class="btn rounded-pill"  href="{% url 'appEball:askSub' team.tournament.pk %}" style="width: 200px; margin-left:10px; margin-top: 15px;">See Reserves</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

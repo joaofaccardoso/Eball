@@ -138,3 +138,20 @@ body {
     margin-right: 20px;
     color: #727070;
 }
+
+#p1{
+    text-align:right;
+    margin-right: 20px
+}
+.userLabel {
+    color: white;
+}
+
+.userLabel:hover {
+    color: #FFE603;
+    transition:0.5s;
+}
+
+#colinfo{
+    text-align: right;
+}

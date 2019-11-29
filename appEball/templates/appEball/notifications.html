@@ -19,9 +19,9 @@
             <li class="nav-item">
                 <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" >All notifications</a>
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" id="not-seen-tab" data-toggle="tab" href="#not-seen" role="tab" >Not seen</a>
-            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" id="not-seen-tab" data-toggle="tab" href="#notSeen" role="tab" >Not seen</a>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active border border-1" id="all" role="tabpanel" aria-labelledby="all-tab">
@@ -29,10 +29,10 @@
                     {% for n in notifications %}
                         <div class="row" id={{ n.0 }}>
                             <div class="col-sm-10">
-                                <button class="btn btn-link btn-block left-align" id="rowButton" name="{{n.2.pk}}" data-toggle="collapse" data-target="#{{ n.1 }}" aria-expanded="true" aria-controls={{ n.1 }}>
+                                <a class="btn btn-link btn-block left-align" id="rowButton" data-toggle="collapse" data-target="#{{ n.1 }}" aria-expanded="true" aria-controls={{ n.1 }}>
                                     <span class="col-1"><b>{{ n.2.date }}</b></span>
                                     <span class="col">{{ n.2.title }}</span>
-                                </button>
+                                </a>
                             </div>
                             <div class="col">
 
@@ -45,20 +45,23 @@
                             <div class="card-body" style="border-width: 2px;">
                                 <p><b>{{ n.2.title }}</b></p>
                                 <p id="p2">{{ n.2.text }}</p>
+                                {% if n.2.isSeen == False%}
+                                    <button class="btn" id="readBtn" name="{{n.2.pk}}">Mark as read</button>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
-            <div class="tab-pane fade border border-1" id="not-seen" role="tabpanel" aria-labelledby="not-seen-tab">
+            <div class="tab-pane fade border border-1" id="notSeen" role="tabpanel" aria-labelledby="not-seen-tab">
                 <div id="accordion">
                     {% for n in notificationsNotSeen %}
                         <div class="row" id={{ n.0 }}>
                             <div class="col-sm-10">
-                                <button class="btn btn-link btn-block left-align" id="rowButton" name="{{n.2.pk}}" data-toggle="collapse" data-target="#{{ n.1 }}" aria-expanded="true" aria-controls={{ n.1 }}>
+                                <a class="btn btn-link btn-block left-align" id="rowButton" data-toggle="collapse" data-target="#{{ n.1 }}" aria-expanded="true" aria-controls={{ n.1 }}>
                                     <span class="col-1"><b>{{ n.2.date }}</b></span>
                                     <span class="col">{{ n.2.title }}</span>
-                                </button>
+                                </a>
                             </div>
                             <div class="col">
                                 <img src ="{% static 'appEball/assets/bell.png' %}" style="height: 24px; float: right;">
@@ -68,6 +71,9 @@
                             <div class="card-body" style="border-width: 2px;">
                                 <p><b>{{ n.2.title }}</b></p>
                                 <p id="p2">{{ n.2.text }}</p>
+                                {% if n.2.isSeen == False%}
+                                    <button class="btn" id="readBtn" name="{{n.2.pk}}">Mark as read</button>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}

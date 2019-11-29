@@ -42,21 +42,7 @@ class EditProfileForm(UserChangeForm):
             'ccNumber',
             'phoneNumber',
             'profileImg',
-            )
-
-class TournamentCreationForm(forms.ModelForm):
-    week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
-
-    class Meta:
-        model=Tournament
-        fields = (
-            'name',
-            'maxTeams',
-            'beginDate',
-            'endDate',
         )
-
-
 
 class TeamCreationForm(forms.ModelForm):
 
