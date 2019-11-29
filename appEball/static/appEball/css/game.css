@@ -1,0 +1,84 @@
+@font-face {
+    font-family: "lucidaSansRegular";
+    src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
+}
+
+@font-face {
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
+}
+
+* {
+    font-family: "lucidaSansRegular";
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background: inherit;
+    background-blend-mode: inherit;
+}
+
+#Tournament_Nav{
+    color: #FFE603;
+}
+
+h2 {
+    margin-left: 40px;
+    font-size: 20px;
+    color: white;
+    margin-top: -10px;
+    color: #FFE603;
+}
+
+#row2{
+    background-color: #3D3B3B;
+}
+
+.title{
+    color:#FFE603;
+    font-size: 30px;
+}
+
+#pageBtn {
+    background-color: #727070;
+    color: white;
+    height: 80%;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#pageBtn:hover {
+    background-color: #FFE603;
+    color: #262626;
+    transition:0.5s;
+}
+
+.content .row{
+    padding-top: 5px;
+    text-align: justify;
+    color: white;
+    font-family: "lucidaSansRegular";
+}
+
+#row1{
+    height: 50px;
+  
+}
+
+#row2{
+    background-color: #3D3B3B;
+    height: 50px;
+   
+}
+
+.disp{
+    padding-top: 5px !important;
+    text-align: justify;
+    color: white;
+    font-family: "lucidaSansRegular";
+    font-size: 20px;
+}

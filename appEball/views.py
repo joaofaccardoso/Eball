@@ -962,6 +962,83 @@ def my_calendar(request):
         else:
             games.append([allGames[i],'row2'])
     return render(request,'appEball/my_calendar.html',{'games':games})
+class presencas(View):
+    template_name= 'appEball/presencas.html'
+   
+
+    def get(self, request,pk):
+        team = Team.objects.get(pk=pk)
+        tournament=team.tournament
+        jogadores=list(Player.objects.filter(team = team))
+        players=list()
+       
+
+        for i in range(len(jogadores)):
+            if(i%2==0):
+                players.append(["row2",jogadores[i],team.played - jogadores[i].faltas])
+            else:
+                players.append(["row3",jogadores[i],team.played - jogadores[i].faltas])
+           
+        return render(request, self.template_name, {'team':team,'tournament':tournament,'players':players})
+
+    def post(self, request,pk):
+        if request.method=="POST":
+            nomesMarked =  request.POST.getlist('checks')
+            print(nomesMarked)
+            team = Team.objects.get(pk=pk)
+            jogadores=list(Player.objects.filter(team = pk))
+            for jogador in jogadores:
+                if jogador.user.firstName not in nomesMarked:
+                    jogador.faltas+=1
+                    jogador.save()
+            return HttpResponseRedirect(reverse('appEball:tournaments'))
+
+
+class game(View):
+    template_name='appEball/game.html'
+
+    def get(self,request,pk):
+        game=Game.objects.get(pk=pk)
+        jogadores1=list(Player.objects.filter(team=game.team1))
+        jogadores2=list(Player.objects.filter(team=game.team2))
+        players1=list()
+        players2=list()
+        isSt1=False
+        isSt2=False
+        manager=False
+
+        if(request.user==game.team1.tournament.user.isTournamentManager or request.user==game.team2.tournament.user.isTournamentManager ):
+            manager=True
+
+        for i in range(len(jogadores1)):
+            if(i%2==0):
+                players1.append(["row2",jogadores1[i]])
+            else:
+                players1.append(["row1",jogadores1[i]])
+
+        for i in range(len(jogadores2)):
+            if(i%2==0):
+                players2.append(["row2",jogadores2[i]])
+            else:
+                players2.append(["row1",jogadores2[i]])
+
+        if(request.user==game.team1.captain):
+            idEquipa=game.team1
+            captain1=True
+        elif(request.user==game.team2.captain):
+            idEquipa=game.team2
+            captain2=True
+        else:
+            idEquipa=game.team1
+            captain1=False
+            captain2=False
+
+
+
+        return render(request, self.template_name,{'game':game,'players1':players1,'players2':players2,'idEquipa':idEquipa,'captain1':captain1,'captain2':captain2,'manager':manager})
+
+    
+
 
 def checkTeamName(request):
     if request.user.is_authenticated:
@@ -1030,3 +1107,4 @@ def checkRegister(request):
             if user.phoneNumber == int(value):
                 return JsonResponse({'is_taken':dataType})
     return JsonResponse({'is_taken':False})
+
