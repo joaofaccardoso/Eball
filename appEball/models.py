@@ -206,7 +206,6 @@ class Substitute(models.Model):
     originalPlayer=models.ForeignKey(Player,null=True, on_delete=models.CASCADE,related_name='originalPlayer')
     hasAccepted= models.BooleanField(default=True) #tem de estar a false mas é so para teste
     isActive=models.BooleanField(default=True)
-    game =models.ForeignKey(Game, on_delete=models.CASCADE)
 
 
     class Meta:
