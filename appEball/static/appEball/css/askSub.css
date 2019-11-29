@@ -43,7 +43,7 @@ body {
 
 .name {
 	color: white;
-    margin-left: 30px;
+    margin-left: 80px;
 }
 .btn {
     background-color: #727070;
@@ -60,4 +60,19 @@ body {
     transition:0.5s;
 }
 
+h4,h2 {
+    margin-left: 40px;
+    color: white;
+}
+#reserves{
+    color:yellow;
+}
 
+#row1{
+    height: 50px;
+    background-color: #3D3B3B;
+}
+
+#row2{
+    height: 50px;
+}

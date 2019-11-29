@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser , Tournament, Team, TournamentDays
+from .models import CustomUser , Tournament, Team, TournamentDays, Reserve, Player
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class CustomUserForm(UserCreationForm):
@@ -54,6 +54,9 @@ class TeamCreationForm(forms.ModelForm):
             'tournament',
         )
 
+
+
+
 class TournamentDaysForm(forms.ModelForm):
     week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
 
@@ -64,4 +67,29 @@ class TournamentDaysForm(forms.ModelForm):
             'maxTeams',
             'beginDate',
             'endDate',
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("beginDate")
+        end_date = cleaned_data.get("endDate")
+        if end_date != None and start_date != None and end_date < start_date:
+            raise forms.ValidationError("End date should be greater than start date.")
+
+
+class ReserveForm(forms.ModelForm):
+
+    class Meta:
+        model = Reserve
+        fields = (
+            
+        )
+
+
+class SubForm(forms.ModelForm):
+
+    class Meta:
+        model = Player
+        fields = (
+            'subGames',
         )

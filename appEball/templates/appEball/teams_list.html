@@ -98,16 +98,29 @@
                     <div class="row" id="{{ t.0 }}">
                         <div class="col-sm-5">
                             <a class="userLabel line" href="{% url 'appEball:team_info' t.1.team.pk %}"><b>{{ t.1.team.name }}</b></a>
+
                         </div>
-                        <div class="col">
-                            {% if user.username == "admin" or t.1.user == user%}
-                                <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' >Delete</a>
+                        <div class="col" id=colinfo>
+
+                        {% if user.username == "admin" or t.1.user == user%}
+                            <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.team.pk %}" id='pageBtn' >Delete</a>
+                        {% endif %}
+                    
+                        {% if t.3 == 0 %}
+                            <p class="d-inline-block text-truncat" id="p2">Tournament finished.</p>
+                        {% elif t.3 == 1 %}
+                            <p class="d-inline-block text-truncat" id="p2">Waiting for tournament to start...</p>
+                            {% else %}
+                            <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date}}</p>
+                            <p class="d-inline-block text-truncat" id="p2"><b> x place</b></p>
+                            <p class="d-inline-block text-truncat" id="p1">Round {{t.3.gRound}}</p>
                             {% endif %}
                         </div>
+                        
                     </div>
                 {% endfor %}
             </div>
         </div>
-    </div>
+    
 
     {% endblock %}

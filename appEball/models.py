@@ -120,6 +120,8 @@ class Player(models.Model):
     nrGoals = models.IntegerField(unique=False, default= 0)
     isStarter = models.BooleanField(default=False)
     isSub = models.BooleanField(default=False)
+    isSubbed=models.BooleanField(default=False)
+    subGames=models.IntegerField(unique=False, default= 0)
     team=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     faltas=models.IntegerField(default=0)
@@ -133,6 +135,22 @@ class Player(models.Model):
     def __str__(self):
         return self.user.username+" || "+self.team.name+' || '+self.position
 
+    
+class Reserve(models.Model):
+    tournament=models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    
+    class Meta:
+        db_table = 'Reserve'
+        verbose_name = 'Reserve'
+        verbose_name_plural = 'Reserves'
+
+
+    
+
+
+        
 class Slot(models.Model):
     week=((0,'Sun'),(1,'Mon'),(2,'Tue'),(3,'Wed'),(4,'Thu'),(5,'Fri'),(6,'Sat'))
     
@@ -179,3 +197,20 @@ class TournamentDays(models.Model):
     endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
+
+
+
+class Substitute(models.Model):
+    reserveSub=models.ForeignKey(Reserve,null=True, on_delete=models.CASCADE,related_name='reserveSub')
+    playerSub=models.ForeignKey(Player,null=True, on_delete=models.CASCADE)
+    originalPlayer=models.ForeignKey(Player,null=True, on_delete=models.CASCADE,related_name='originalPlayer')
+    hasAccepted= models.BooleanField(default=True) #tem de estar a false mas é so para teste
+    isActive=models.BooleanField(default=True)
+    game =models.ForeignKey(Game, on_delete=models.CASCADE)
+
+
+    class Meta:
+        db_table = 'Substitute'
+        verbose_name = 'Substitute'
+        verbose_name_plural = 'Substitutes'
+         

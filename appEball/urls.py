@@ -21,6 +21,8 @@ urlpatterns = [
     path('accept_user/<str:username>', views.accept_user, name='accept_user'),
     path('delete_user/<str:username>', views.delete_user, name='delete_user'),
 
+    path('my_calendar/', views.my_calendar, name='my_calendar'),
+
     path('teams_list/', views.teams_list.as_view(), name='teams_list'),
     path('team_info/<int:teamId>',views.TeamInfo.as_view(), name='team_info'),
     path('delete_team/<int:pk>', views.delete_team, name='delete_team'),
@@ -28,7 +30,8 @@ urlpatterns = [
 
     path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
-    path('tournament_info/<int:pk>/<int:gRound>', views.tournament_info, name='tournament_info'),
+
+    path('tournament_info/<int:pk>/<int:gRound>', views.tournament_info.as_view(), name='tournament_info'),
     path('delete_tournament/<int:pk>', views.delete_tournament, name='delete_tournament'),
     path('tournaments/checkTournamentName/', views.checkTournamentName, name='check_tournament_name'),
     path('tournaments/checkDates/', views.checkDates, name='check_dates'),
@@ -36,7 +39,8 @@ urlpatterns = [
     
     path('generate_games/<int:pk>', views.generate_games, name='generate_games'),
     
-    path('askSub/', views.askSub, name='askSub'),
+    path('askSub/<int:pk>', views.askSub, name='askSub'),
+    path('subPage/<int:pk>/<int:pksub>/<int:subFlag>', views.subPage.as_view(), name='subPage'),
     path('askKick/', views.askKick, name='askKick'),
     path('notifications/', views.notifications, name='notifications'),
     path('is_seen/<int:pk>/', views.is_seen, name='is_seen'), 
