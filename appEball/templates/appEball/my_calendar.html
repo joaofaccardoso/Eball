@@ -1,0 +1,69 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/my_calendar.css' %}">
+{% endblock %}
+
+{% block title %}
+    My Calendar
+{% endblock %}
+
+{% block content2 %}
+<div class="row" id="row2">
+    <div class="col-2"id="coluna">
+        <p class="d-inline-block text-truncat" id="bar"><b>Tournament</b></p>
+        </div>
+    <div class="col-0"id="coluna">
+        <p class="d-inline-block text-truncat" id="bar"><b>|</b></p>
+    </div>
+    <div class="col-2" id="coluna">
+        <p class="d-inline-block text-truncat" id="bar"><b>Team1</b></p>
+        </div>
+    <div class="col-4" id="coluna">
+        <p class="d-inline-block text-truncat" id="bar"><b>Date and Location</b></p>
+        </div>
+    <div class="col-2" id="coluna">
+        <p class="d-inline-block text-truncat" id="bar"><b>Team2</b></p>
+        </div>
+    <div class="col-0" id="coluna">
+            <p class="d-inline-block text-truncat"id="bar"><b>|</b></p>
+            </div>
+    <div class="col-1"id="coluna">
+        <p class="d-inline-block text-truncat" id="bar"><b>Round</b></p>
+        </div>
+
+</div>
+{% for game in games %}
+    <div class="row" id={{game.1}}> <!--{{ t.1 }}-->
+        <div class="col-2" id="coluna">
+            <p class="d-inline-block text-truncat" id="t_id">{{game.0.tournament.name}}</p>
+            </div>
+        <div class="col-0" id="coluna">
+            <p class="d-inline-block text-truncat" id="line"><b>|</b></p>
+        </div>
+        <div class="col-2" id="coluna">
+            <p class="d-inline-block text-truncat" id="teams"><b>{{game.0.team1}}</b></p>
+            </div>
+        <div class="col-4" id="coluna" align="center">
+            <p class="d-inline-block text-truncat" id="others">{{game.0.slot.date|date:'d-m-Y, H:m'}}, {{game.0.slot.field}}</p>
+            </div>
+        <div class="col-2" id="coluna">
+            <p class="d-inline-block text-truncat" id="teams"><b>{{game.0.team2}}</b></p>
+            </div>
+        <div class="col-0" id="coluna">
+                <p class="d-inline-block text-truncat"id="line"><b>|</b></p>
+                </div>
+        <div class="col-1"id="coluna">
+            <p class="d-inline-block text-truncat" id="others"><b>Round {{game.0.gRound}}</b></p>
+            </div>
+    
+    </div>
+        {% endfor %}
+
+    
+
+            
+
+	
+{% endblock %}

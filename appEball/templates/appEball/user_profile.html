@@ -51,7 +51,11 @@
 						<p class="userLabel line">Next match:</p>
 					</div>
 					<div class="col">
-						<p class="userInfo line">{{ nextGame.tournament.name}}, {{nextGame.slot.date|date:'d-m-Y, H:m'}}</p>
+						{% if nextGame %}
+							<p class="userInfo line">{{ nextGame.tournament.name}}, {{ nextGame.slot.field.name}}, {{nextGame.slot.date|date:'d-m-Y, H:m'}}</p>
+						{% else %}
+							<p class="userInfo line">No matches in the future.</p>
+						{% endif %}
 					</div>
 				</div>
 				<div class="row min">
