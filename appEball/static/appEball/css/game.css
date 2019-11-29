@@ -45,7 +45,7 @@ h2 {
 #pageBtn {
     background-color: #727070;
     color: white;
-    height: 80%;
+    height: 90%;
     text-align: center;
     padding-left: 15px;
     padding-right: 15px;
@@ -80,5 +80,8 @@ h2 {
     text-align: justify;
     color: white;
     font-family: "lucidaSansRegular";
+}
+
+.team, .goals{
     font-size: 20px;
 }
