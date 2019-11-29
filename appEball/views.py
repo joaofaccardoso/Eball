@@ -933,10 +933,17 @@ class presencas(View):
             print(nomesMarked)
             team = Team.objects.get(pk=pk)
             jogadores=list(Player.objects.filter(team = pk))
+
+            
             for jogador in jogadores:
                 if jogador.user.firstName not in nomesMarked:
                     jogador.faltas+=1
+                    jogador.isSub=True
+                    jogador.isStarter=False
                     jogador.save()
+                    
+
+
             return HttpResponseRedirect(reverse('appEball:tournaments'))
 
 
@@ -952,6 +959,8 @@ class game(View):
         isSt1=False
         isSt2=False
         manager=False
+        captain1=False
+        captain2=False
 
         if(request.user==game.team1.tournament.user.isTournamentManager or request.user==game.team2.tournament.user.isTournamentManager ):
             manager=True
@@ -1177,3 +1186,27 @@ class manage_team(View):
             elif(button_clicked4!=None):
                 Player.objects.get(pk=button_clicked4).delete()
             return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk':pk}))
+
+
+
+def registar_saldo(request,pk):
+    game=Game.objects.get(pk=pk)
+    jogadores1=list(Player.objects.filter(team=game.team1))
+    jogadores2=list(Player.objects.filter(team=game.team2))
+
+    for jogador1 in jogadores1:
+        if jogador1.balance < game.slot.field.preco:
+            jogador1.isSub=True
+            jogador1.isStarter=False
+            jogador1.save()
+
+    for jogador2 in jogadores2:
+        if jogador2.balance < game.slot.field.preco:
+            jogador2.isSub=True
+            jogador2.isStarter=False
+            jogador2.save()
+
+
+    return HttpResponseRedirect(reverse('appEball:tournaments'))
+
+
