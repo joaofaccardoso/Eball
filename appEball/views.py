@@ -93,7 +93,6 @@ class teams_list(View):
         allTeamsFilter=list(Team.objects.all().exclude(isDayOff=True))
         allTeams=list()
         myTeams=list()
-        nextGames=list()
 
         if(request.user.is_authenticated):
             myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
@@ -124,23 +123,23 @@ class teams_list(View):
                 
                     if (len(t_games)==0):
                         myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
+            else:
+                if(request.user.is_authenticated):
+                    player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
+                    checkPlayer = (len(player) == 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
                 else:
-                    if(request.user.is_authenticated):
-                        player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                        checkPlayer = (len(player) == 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
-                    else:
-                        checkPlayer = None
-                    allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
-                    if(len(myTeamsFilter)>i and myTeamsFilter[i].isDayOff==False):
-                        t_games=list((Game.objects.filter(team1=myTeamsFilter[i]) | Game.objects.filter(team2=myTeamsFilter[i])).order_by('slot__date'))
-                        for j in range (len(t_games)):
-                            if t_games[j].slot.date()>=timezone.now():
-                                myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
-                                break
-                            if (j==len(t_games)-1):
-                                myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
-                        if (len(t_games)==0):
-                            myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
+                    checkPlayer = None
+                allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
+                if(len(myTeamsFilter)>i and myTeamsFilter[i].isDayOff==False):
+                    t_games=list((Game.objects.filter(team1=myTeamsFilter[i]) | Game.objects.filter(team2=myTeamsFilter[i])).order_by('slot__date'))
+                    for j in range (len(t_games)):
+                        if t_games[j].slot.date>=timezone.now():
+                            myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
+                            break
+                        if (j==len(t_games)-1):
+                            myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
+                    if (len(t_games)==0):
+                        myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
     
         return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
                                                             'myTeams':myTeams,

@@ -58,13 +58,20 @@
             {% for game in games %}
                 <div class="row disp" id="{{ game.0 }}" align='center'>
                     <div class="col" align='right'>
-                        <p class="team">{{ game.1.team1.name }} </p>
+                        <a class="team" href="{% url 'appEball:team_info' game.1.team1.pk %}">
+                            <p class="team">{{ game.1.team1.name }} </p>
+                        </a>
                     </div>
                     <div class="col-sm-4" align='center'>
-                        <p class="center">{{ game.1.slot.date|date:'d-m-Y, H:m' }}, {{ game.1.slot.field.name }} </p>
+                        <a class="team" href="#">
+                            <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:m' }}, {{ game.1.slot.field.name }} </p>
+                        </a>
                     </div>
+                        </a>
                     <div class="col" align='left'>
-                        <p class="team">{{ game.1.team2.name }} </p>
+                        <a class="team" href="{% url 'appEball:team_info' game.1.team2.pk %}">
+                            <p class="team">{{ game.1.team2.name }} </p>
+                        </a>
                     </div>
                 </div>
             {% endfor %}
