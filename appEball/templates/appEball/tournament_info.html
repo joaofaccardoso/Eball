@@ -27,8 +27,8 @@
         <div class="col" align='center'>
                 <form method="post">
                         {% csrf_token %}
-                        {% if inTeam == False %}
-                            <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="submit" >Join as Reserve</button>
+                        {% if inTeam != True %}
+                        <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="submit" >Join as Reserve</button>
                         {% endif %}
                 </form>
         </div>

@@ -714,22 +714,27 @@ def is_seen(request, pk):
 def askSub(request,pk):
     tournament=Tournament.objects.get(pk=pk)
     reservest=list(Reserve.objects.filter(tournament=tournament))
-    activeSubs=list(Substitute.objects.filter(isActive=True).filter(~Q(reserveSub=None)))
+    checkr=list(Reserve.objects.filter(user=request.user))
+    check=0
+    if (len(checkr)==0):
+        check=1 #not reserva
+    activeSubs=list(Substitute.objects.filter(isActive=True))
     reserves=[]
-    for i in range (len(reservest)):
-        if i%2==0:
-            if reservest[i] in activeSubs:
-                reserves.append([reservest[i],"row1",1])
-            else:
-                reserves.append([reservest[i],"row1",0])
-        else:
-            if reservest[i] in activeSubs:
+    for j in range(len(activeSubs)):
+        for i in range (len(reservest)):
+            if reservest[i] == activeSubs[j].reserveSub:
+                print("sad2")
                 reserves.append([reservest[i],"row2",1])
             else:
                 reserves.append([reservest[i],"row2",0])
-    
+                print("idk2")
+           
+    for i in range(len(reserves)):
+        if i%2==0:
+            reserves[i][1]="row1"
 
-    return render(request, 'appEball/askSub.html', {'reserves':reserves, 'tournament': tournament})
+
+    return render(request, 'appEball/askSub.html', {'reserves':reserves, 'tournament': tournament, 'check':check})
 
 def askKick(request):
     return render(request, 'appEball/askKick.html', {})
@@ -772,13 +777,15 @@ class tournament_info(View):
             maxRound=0
         
         players=list(Player.objects.filter(user=request.user))
+        print(players)
         inTeam=False
         for player in players:
-            if player.team.tournament==tournament:
+            if player.team.tournament.pk== tournament.pk:
+                print("wtf")
                 inTeam=True
                 break
         
-        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,inTeam: 'inTeam', 'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
+        return render(request, 'appEball/tournament_info.html', {'tournament':tournament, 'inTeam': inTeam, 'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound})
 
 
 
@@ -1011,6 +1018,17 @@ class presencas(View):
                 if jogador.user.firstName not in nomesMarked:
                     jogador.faltas+=1
                     jogador.save()
+            for player in jogadores:
+                if player.isSubbed:
+                    player.subGames=-1
+                    player.save()
+                    if player.subGames==0:
+                        player.isSubbed=False
+                        sub= Substitute.objects.filter(originalPlayer=player).get(isActive=True)
+                        sub.isActive=False
+                        player.save()
+                        sub.save()
+
             return HttpResponseRedirect(reverse('appEball:tournaments'))
 
 
