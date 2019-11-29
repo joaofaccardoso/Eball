@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content2 %}
-<div class="row" id="row2"> <!--{{ t.1 }}-->
+<div class="row" id="row2">
     <div class="col-2"id="coluna">
         <p class="d-inline-block text-truncat" id="bar"><b>Tournament</b></p>
         </div>
@@ -36,17 +36,17 @@
 </div>
 {% for game in games %}
     <div class="row" id={{game.1}}> <!--{{ t.1 }}-->
-        <div class="col-2"id="coluna">
+        <div class="col-2" id="coluna">
             <p class="d-inline-block text-truncat" id="t_id">{{game.0.tournament.name}}</p>
             </div>
-        <div class="col-0"id="coluna">
+        <div class="col-0" id="coluna">
             <p class="d-inline-block text-truncat" id="line"><b>|</b></p>
         </div>
         <div class="col-2" id="coluna">
             <p class="d-inline-block text-truncat" id="teams"><b>{{game.0.team1}}</b></p>
             </div>
-        <div class="col-4" id="coluna">
-            <p class="d-inline-block text-truncat" id="others">{{game.0.slot.date}} {{game.0.slot.field}}</p>
+        <div class="col-4" id="coluna" align="center">
+            <p class="d-inline-block text-truncat" id="others">{{game.0.slot.date|date:'d-m-Y, H:m'}}, {{game.0.slot.field}}</p>
             </div>
         <div class="col-2" id="coluna">
             <p class="d-inline-block text-truncat" id="teams"><b>{{game.0.team2}}</b></p>
