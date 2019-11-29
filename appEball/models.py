@@ -124,6 +124,7 @@ class Player(models.Model):
     subGames=models.IntegerField(unique=False, default= 0)
     team=models.ForeignKey(Team, default = None, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    faltas=models.IntegerField(default=0)
 
     class Meta:
         db_table = 'Player'
