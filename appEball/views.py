@@ -736,9 +736,7 @@ class tournament_info(View):
         if(tournament.gRound==0):
             allTeams=Team.objects.filter(tournament=tournament).order_by('name')
             allTeams=list(allTeams)
-            print(allTeams[0].availDF,allTeams[0].availST,allTeams[0].availGK,allTeams[0].availMF,allTeams[0].availFW)
             nCompleteTeams = Team.objects.filter(tournament=tournament).filter(availDF=0,availFW=0,availGK=0,availMF=0,availST=0).count()
-            print(nCompleteTeams)
         else:
             allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('-points','-goalsDif'))
 
@@ -1174,14 +1172,15 @@ class manage_team(View):
     def post(self,request,pk):
         team=Team.objects.get(pk=pk)
         if request.method=="POST":
-            button_clicked1 =  request.POST.get("submit_1")
-            button_clicked2 =  request.POST.get("submit_2")
-            button_clicked3 =  request.POST.get("submit_3")
-            button_clicked4 =  request.POST.get("submit_4")
+            button_clicked1 = request.POST.get("submit_1")
+            button_clicked2 = request.POST.get("submit_2")
+            button_clicked3 = request.POST.get("submit_3")
+            button_clicked4 = request.POST.get("submit_4")
             if(button_clicked1!=None):
                 user=CustomUser.objects.get(pk=button_clicked1)
                 team.captain=user
                 team.save()
+                print(team.captain)
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
             elif(button_clicked2!=None):
                 player=Player.objects.get(pk=button_clicked2)
@@ -1196,7 +1195,7 @@ class manage_team(View):
             elif(button_clicked4!=None):
                 Player.objects.get(pk=button_clicked4).delete()
             return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk':pk}))
-            
+
 def registar_saldo(request,pk):
     game=Game.objects.get(pk=pk)
     jogadores1=list(Player.objects.filter(team=game.team1))
