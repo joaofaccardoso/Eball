@@ -893,15 +893,10 @@ def get_slots(startDate,nGames,tournamentSlots):
         hEnd=tournamentSlots[i].end.hour
         mEnd=tournamentSlots[i].end.minute
 
-        newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
         while(hStart+1+(mStart+30)//60<hEnd or (hStart+1+(mStart+30)//60==hEnd and (mStart+30)%60<=mEnd)):
+            newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
             daySlots=list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=newDate))
             if(len(daySlots)==0):
-                s1=newDate+datetime.timedelta(minutes=30)
-                while(list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=s1))!=0):
-                    s1=s1+datetime.timedelta(minutes=30)
-
-                s2=s1+datetime.timedelta(minutes=30)
                 newSlot=Slot(weekDay=newDate.weekday(),date=newDate,field=tournamentSlots[i].field)
                 newSlot.save()
                 slotsDays.append(newSlot)
@@ -1244,5 +1239,3 @@ def registar_saldo(request,pk):
 
 
     return HttpResponseRedirect(reverse('appEball:tournaments'))
-
-

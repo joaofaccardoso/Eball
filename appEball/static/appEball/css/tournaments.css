@@ -188,3 +188,11 @@ body {
     color: white;
     text-decoration: none;
 }
+
+.userLabel {
+    color: white;
+}
+
+.userLabel:hover {
+    color: white;
+}
