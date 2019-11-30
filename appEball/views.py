@@ -23,6 +23,16 @@ class HomePage(View):
     template_name = 'appEball/home_page.html'
 
     def get(self, request):
+        """tatic1=Tactic(name="4-3-3")
+        tatic1.save()
+        tatic2=Tactic(name="4-2-3-1")
+        tatic2.save()
+        tatic3=Tactic(name="4-4-1-1")
+        tatic3.save()
+        campo1=Field(name="Campo Cruz")
+        campo1.save()
+        campo2=Field(name="Campo Benfica")
+        campo2.save()"""
         return render(request, self.template_name, {'title': 'Home'})
 
 class UserRegister(View):
@@ -483,7 +493,7 @@ class tournaments(View):
         allTournaments=[]
         myTournaments=[]
         fieldsFilter = list(Field.objects.all())
-        # self._create_slots(fieldsFilter)
+        #self._create_slots(fieldsFilter)
         fields=list()
 
         week={0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'}
@@ -1196,14 +1206,18 @@ class manage_team(View):
                 Player.objects.get(pk=button_clicked4).delete()
             return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk':pk}))
 
+
+
 def registar_saldo(request,pk):
     game=Game.objects.get(pk=pk)
     jogadores1=list(Player.objects.filter(team=game.team1))
     jogadores2=list(Player.objects.filter(team=game.team2))
 
     for jogador1 in jogadores1:
-        if jogador1.balance < game.slot.field.price or jogador1.balance<3:
+
+        if jogador1.balance < game.slot.field.price:
             jogador1.isSub=True
+            jogador1.faltas+=1
             jogador1.isStarter=False
             jogador1.save()
             for player in jogadores1:
@@ -1212,9 +1226,24 @@ def registar_saldo(request,pk):
                     player.isStarter=True
                     player.save()
 
+        elif jogador1.balance>game.slot.field.price:
+            jogador1.balance-=game.slot.field.price
+            if jogador1.balance<3:
+                jogador1.isSub=True
+                jogador1.isStarter=False
+                jogador1.save()
+                for player in jogadores1:
+                    if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
+                        player.isSub=False
+                        player.isStarter=True
+                        player.save()
+
+
     for jogador2 in jogadores2:
-        if jogador2.balance < game.slot.field.price or jogador.balance<3:
+
+        if jogador2.balance < game.slot.field.price :
             jogador2.isSub=True
+            jogador2.faltas+=1
             jogador2.isStarter=False
             jogador2.save()
             for player in jogadores2:
@@ -1222,6 +1251,19 @@ def registar_saldo(request,pk):
                     player.isSub=False
                     player.isStarter=True
                     player.save()
+        
+        elif jogador2.balance>game.slot.field.price:
+            jogador2.balance-=game.slot.field.price
+            if jogador2.balance<3:
+                jogador2.isSub=True
+                jogador2.isStarter=False
+                jogador2.save()
+                for player in jogadores2:
+                    if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
+                        player.isSub=False
+                        player.isStarter=True
+                        player.save()
+
 
 
     return HttpResponseRedirect(reverse('appEball:tournaments'))

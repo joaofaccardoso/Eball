@@ -3,6 +3,8 @@
 import os
 import sys
 
+os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
+
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Eball.settings')
