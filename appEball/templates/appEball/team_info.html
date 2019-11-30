@@ -52,7 +52,7 @@
                     <div class="row" id="{% cycle 'row2' 'row1' %}">
                         <div class="col-7">
                             {% if sub.0 %}
-                                <input type="radio" name="position" disabled style="opacity: 0%;" value="sub{{ sub.1 }}"> {{ sub.0.user.firstName }} {{ sub.0.user.lastName }}
+                                <input type="radio" name="position" disabled style="opacity: 0%;" value="sub{{ sub.1 }}"> {{ sub.0.user.firstName }} {{ sub.0.user.lastName }} {% if sub.0.user.pk is team.captain.pk %} (captain) {%endif%}
                             {% else %}
                                 {% if user.isAccepted %}
                                     <input type="radio" name="position" value="sub{{ sub.1 }}"> Choose this position

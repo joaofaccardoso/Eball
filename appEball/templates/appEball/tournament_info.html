@@ -24,10 +24,12 @@
         <div class="col" align='center'>
             <form method="post">
                 {% csrf_token %}
-                {% if user.is_authenticated and inTeam == False and inTournament == False %}
+                {% if user.is_authenticated and inTeam == False and inTournament == False and user.isAccepted%}
                     <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="submit"  style="width: 160px;">Join as Reserve</button>
                 {% endif %}
-                <a class="btn rounded-pill"  href="{% url 'appEball:askSub' tournament.pk %}" id='pageBtn' style="width: 160px; padding-top: 2%; margin-left: 20px;">See Reserves</a>
+                {% if user.is_authenticated and user.isAccepted %}
+                    <a class="btn rounded-pill"  href="{% url 'appEball:askSub' tournament.pk %}" id='pageBtn' style="width: 160px; padding-top: 2%; margin-left: 20px;">See Reserves</a>
+                {% endif %}
             </form>
         </div>
     </div>
@@ -56,25 +58,43 @@
             {% for game in games %}
                 <div class="row disp" id="{{ game.0 }}" align='center'>
                     <div class="col" align='right'>
-                        <a class="team" href="{% url 'appEball:team_info' game.1.team1.pk %}">
-                            <p class="team">{{ game.1.team1.name }} </p>
-                        </a>
+                        {% if user.is_authenticated %}
+                            <a class="team" href="{% url 'appEball:team_info' game.1.team1.pk %}">
+                                <p class="team">{{ game.1.team1.name }} </p>
+                            </a>
+                        {% else %}
+                            <a class="team" href="{% url 'appEball:login' %}">
+                                <p class="team">{{ game.1.team1.name }} </p>
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="col-1" align='right' style="margin: none;">
                         <p>{% if game.1.result.goalsT1Final < 0 and game.1.result.goalsT2Final < 0 %} NF {% else %} {{ game.1.result.goalsT1Final }} {% endif %}</p>
                     </div>
                     <div class="col-sm-4" align='center'>
-                        <a class="team" href="{% url 'appEball:game' game.1.pk %}">
-                            <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:i' }}, {{ game.1.slot.field.name }} </p>
-                        </a>
+                        {% if user.is_authenticated %}
+                            <a class="team" href="{% url 'appEball:game' game.1.pk %}">
+                                <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:i' }}, {{ game.1.slot.field.name }} </p>
+                            </a>
+                        {% else %}
+                            <a class="team" href="{% url 'appEball:login' %}">
+                                <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:i' }}, {{ game.1.slot.field.name }} </p>
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="col-1" align='left' style="margin: none;">
                         <p>{% if game.1.result.goalsT1Final < 0 and game.1.result.goalsT2Final < 0 %} NF {% else %} {{ game.1.result.goalsT2Final }} {% endif %}</p>
                     </div>
                     <div class="col" align='left'>
-                        <a class="team" href="{% url 'appEball:team_info' game.1.team2.pk %}">
-                            <p class="team"> {{ game.1.team2.name }} </p>
-                        </a>
+                        {% if user.is_authenticated %}
+                            <a class="team" href="{% url 'appEball:team_info' game.1.team2.pk %}">
+                                <p class="team"> {{ game.1.team2.name }} </p>
+                            </a>
+                        {% else %}
+                            <a class="team" href="{% url 'appEball:login' %}">
+                                <p class="team"> {{ game.1.team2.name }} </p>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
@@ -171,7 +191,7 @@
                                 </div>
                             {% endif %}
                             {% if not user.is_authenticated %}
-                                <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
+                                <a class="btn rounded-pill"  href="{% url 'appEball:login' %}" id='pageBtn'>Join Team</a>
                             {% elif user.is_authenticated and team.1.pk not in myTeamsList and team.1.tournament.pk not in myTournamentsList %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team </a>
                             {% else %}
@@ -269,7 +289,7 @@
                                 </div>
                             {% endif %}
                             {% if not user.is_authenticated %}
-                                <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
+                                <a class="btn rounded-pill"  href="{% url 'appEball:login' %}" id='pageBtn'>Join Team</a>
                             {% elif user.is_authenticated and team.1.pk not in myTeamsList and team.1.tournament.pk not in myTournamentsList %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team </a>
                             {% else %}

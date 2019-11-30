@@ -15,7 +15,7 @@
     <div class="content" id="tabsContent">
 
         <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.isAccepted %}
                 <li class="nav-item">
                     <a class="nav-link" id="new-tab" data-toggle="tab" href="#new" role="tab" >New team</a>
                 </li>
@@ -23,7 +23,7 @@
             <li class="nav-item active">
                 <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" >All teams</a>
             </li>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.isAccepted %}
                 <li class="nav-item">
                     <a class="nav-link" id="my-tab" data-toggle="tab" href="#my" role="tab" >My teams</a>
                 </li>             
@@ -78,18 +78,22 @@
                 {% for t in allTeams %}
                     <div class="row" id="{{ t.0 }}">
                         <div class="col-sm-5">
-                            <a class="userLabel line" href="{% url 'appEball:team_info' t.1.pk %}"><b>{{ t.1.name }}</b></a>
+                            {% if user.is_authenticated and user.isAccepted %}
+                                <a class="userLabel line" href="{% url 'appEball:team_info' t.1.pk %}"><b>{{ t.1.name }}</b></a>
+                            {% else %}
+                                <a class="userLabel line" href="{% url 'appEball:login' %}"><b>{{ t.1.name }}</b></a>
+                            {% endif %}
                         </div>
                         <div class="col">
                             {% if user.username == "admin"  or t.1.captain == user %}
                                 <a class="btn rounded-pill" href="{% url 'appEball:delete_team' t.1.pk %}" id='pageBtn' >Delete</a>
                             {% endif %}
                             {% if not user.is_authenticated %}
-                                <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
+                                <a class="btn rounded-pill"  href="{% url 'appEball:login' %}" id='pageBtn'>Join Team</a>
                             {% elif user.is_authenticated and t.1.pk not in myTeamsList and t.1.tournament.pk not in myTournaments %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' t.1.pk %}" id='pageBtn'>Join Team </a>
                             {% else %}
-                                <a class="btn rounded-pill disabled" href="{% url 'appEball:register' %}" id='pageBtn' style="border-width: 0px; background-color: transparent; color: transparent;">Join Team</a>
+                                <a class="btn rounded-pill disabled" href="{% url 'appEball:login' %}" id='pageBtn' style="border-width: 0px; background-color: transparent; color: transparent;">Join Team</a>
                             {% endif %} 
                             <p class="d-inline-block text-truncat" id="p1">{{ t.2 }}/16 spots left</p>
                             <p class="d-inline-block text-truncat" id="p2">{{ t.1.tournament.name }}</p>        
