@@ -54,8 +54,9 @@ class UserRegister(View):
             return HttpResponseRedirect(reverse('appEball:home_page'))
         else:
             print(form.errors)
-            messages.warning(request, f'Form is not valid.')
-            return HttpResponseRedirect(reverse('appEball:register'))
+            messages.warning(request, 'Password needs to be at least 8 chars long or passwords do not match!')
+            context = {'title': 'Register', 'firstName': form.cleaned_data.get('firstName'), 'lastName':form.cleaned_data.get('lastName'), 'username':form.cleaned_data.get('username'), 'email':form.cleaned_data.get('email'), 'ccNumber':form.cleaned_data.get('ccNumber'),'phoneNumber':form.cleaned_data.get('phoneNumber')}
+            return render(request, self.template_name, context)
 
 class UserLogin(View):
     form_class = CustomUserLoginForm
@@ -194,6 +195,8 @@ class teams_list(View):
                 messages.success(request, 'Team created successfuly!')
                 newPlayer = Player(position='MF', balance=20,nrGoals=0,isStarter=True,isSub=False,team=newTeam,user=request.user)
                 newPlayer.save()
+                newTeam.availMF -= 1
+                newTeam.save()
                 return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
@@ -510,7 +513,7 @@ class tournaments(View):
         allTournaments=[]
         myTournaments=[]
         fieldsFilter = list(Field.objects.all())
-        # self._create_slots(fieldsFilter)
+        #self._create_slots(fieldsFilter)
         fields=list()
 
         week={0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'}
@@ -557,10 +560,9 @@ class tournaments(View):
                 name = form.cleaned_data.get('name')
                 maxTeams = form.cleaned_data.get('maxTeams')
                 beginDate = form.cleaned_data.get('beginDate')
-                endDate = form.cleaned_data.get('endDate')
 
                 user = CustomUser.objects.get(username=request.user.username)
-                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,user=user)
+                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,user=user)
                 newTournament.save()
 
                 tournamentSlots = list()
@@ -812,18 +814,22 @@ class tournament_info(View):
         myTeamsList=list()
         myTournaments = list()
         inTeam=False
+        inTournament=False
         if(request.user.is_authenticated):
             myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
             myTeamsFilter=Team.objects.filter(pk__in=myTeamsList)
             myTournaments = myTeamsFilter.values_list('tournament',flat=True)
-            if myTeamsFilter.filter(tournament=tournament) :
+            if len(list(myTeamsFilter.filter(tournament=tournament)))!=0 :
                 inTeam=True
+
+            myReservesFilter = Reserve.objects.filter(user=request.user).values_list('tournament',flat=True)
+            myTournaments=Tournament.objects.filter(pk__in=myReservesFilter)
+            if(len(list(myTournaments))>0):
+                inTournament = True
         else:
             inTeam= True
-
-            print(myTournaments)
-        
-        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'inTeam': inTeam,'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'myTeamsList':myTeamsList,'myTournamentsList':myTournaments})
+    
+        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'inTeam': inTeam,'inTournament': inTournament,'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'myTeamsList':myTeamsList,'myTournamentsList':myTournaments})
 
 
 
@@ -852,7 +858,7 @@ def generate_games(request, pk):
     nRounds = nTeams-1+nTeams%2
     nGames = nRounds*(nTeams//2+nTeams%2)
 
-    slots=get_slots(tournament.beginDate,tournament.endDate,nGames,tournamentSlots)
+    slots=get_slots(tournament.beginDate,nGames,tournamentSlots)
 
     teams2 = teams1.copy()
     teams2.reverse()
@@ -890,7 +896,7 @@ def generate_games(request, pk):
     return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk,'gRound':tournament.gRound}))
 
 
-def get_slots(startDate,endDate,nGames,tournamentSlots):
+def get_slots(startDate,nGames,tournamentSlots):
     
     slotsDays = list()
     game=0
@@ -913,15 +919,10 @@ def get_slots(startDate,endDate,nGames,tournamentSlots):
         hEnd=tournamentSlots[i].end.hour
         mEnd=tournamentSlots[i].end.minute
 
-        newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
         while(hStart+1+(mStart+30)//60<hEnd or (hStart+1+(mStart+30)//60==hEnd and (mStart+30)%60<=mEnd)):
+            newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
             daySlots=list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=newDate))
             if(len(daySlots)==0):
-                s1=newDate+datetime.timedelta(minutes=30)
-                while(list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=s1))!=0):
-                    s1=s1+datetime.timedelta(minutes=30)
-
-                s2=s1+datetime.timedelta(minutes=30)
                 newSlot=Slot(weekDay=newDate.weekday(),date=newDate,field=tournamentSlots[i].field)
                 newSlot.save()
                 slotsDays.append(newSlot)
@@ -1061,17 +1062,16 @@ class presencas(View):
                     jogador.faltas+=1
                     jogador.isSub=True
                     jogador.isStarter=False
-                    jogador.save()
+                    jogador.save()  
             for player in jogadores:
                 if player.isSubbed:
                     player.subGames=-1
-                    player.save()
                     if player.subGames==0:
                         player.isSubbed=False
                         sub= Substitute.objects.filter(originalPlayer=player).get(isActive=True)
                         sub.isActive=False
-                        player.save()
-                        sub.save()
+                        sub.delete()
+                    player.save()
 
             return HttpResponseRedirect(reverse('appEball:tournaments'))
 
@@ -1088,23 +1088,49 @@ class game(View):
         isSt1=False
         isSt2=False
 
-        for i in range(len(jogadores1)):
-            if(i%2==0):
-                players1.append(["row2",jogadores1[i]])
-            else:
-                players1.append(["row1",jogadores1[i]])
-
-        for i in range(len(jogadores2)):
-            if(i%2==0):
-                players2.append(["row2",jogadores2[i]])
-            else:
-                players2.append(["row1",jogadores2[i]])
-
         isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
 
-        return render(request, self.template_name,{'isOver':isOver,'game':game,'players1':players1,'players2':players2})
+        allPlayers1 = Player.objects.filter(team=game.team1).values_list('user',flat = True)
+        allPlayers2 = Player.objects.filter(team=game.team2).values_list('user',flat = True)
 
-    
+        subs1 = Substitute.objects.filter(originalPlayer__in=allPlayers1)
+        subs2 = Substitute.objects.filter(originalPlayer__in=allPlayers2)
+
+        starterPlayers1Filter = list(Player.objects.filter(team=game.team1,isSubbed=False))
+        starterPlayers2Filter = list(Player.objects.filter(team=game.team2,isSubbed=False))
+        if(subs1.count()!=0):
+            starterPlayers1Filter.append(subs1)
+        if(subs2.count()!=0):
+            starterPlayers2Filter.append(subs2)
+        starterPlayers2Filter.append(subs2)
+        print(starterPlayers2Filter)
+
+        starterPlayers1 = list()
+        starterPlayers2 = list()
+        for i in range(len(starterPlayers1Filter)):
+            if(i%2==0):
+                if(isinstance(starterPlayers1Filter[i], Player)):
+                    starterPlayers1.append(['row2',starterPlayers1Filter[i],True])
+                else:
+                    starterPlayers1.append(['row2',starterPlayers1Filter[i],False])
+
+                if(isinstance(starterPlayers2Filter[i], Player)):
+                    starterPlayers2.append(['row2',starterPlayers2Filter[i],True])
+                else:
+                    starterPlayers2.append(['row2',starterPlayers2Filter[i],False])
+            else:
+                if(isinstance(starterPlayers1Filter[i], Player)):
+                    starterPlayers1.append(['row1',starterPlayers1Filter[i],True])
+                else:
+                    starterPlayers1.append(['row1',starterPlayers1Filter[i],False])
+
+                if(isinstance(starterPlayers2Filter[i], Player)):
+                    starterPlayers2.append(['row1',starterPlayers2Filter[i],True])
+                else:
+                    starterPlayers2.append(['row1',starterPlayers2Filter[i],False])
+
+        return render(request, self.template_name,{'isOver':isOver,'game':game,'starterPlayers1':starterPlayers1,'starterPlayers2':starterPlayers2})
+
 
 def next_matches(players):
     games=[]
@@ -1158,13 +1184,12 @@ def checkDates(request):
     if request.user.is_authenticated:
         data = json.loads(request.body)
         startDate = data['startDate']
-        endDate = data['endDate']
-        if endDate!='' and startDate!='':
-            if (endDate < startDate):
-                return JsonResponse({'is_complete':True, 'is_valid':False})
-            return JsonResponse({'is_complete':True, 'is_valid':True})
+        if startDate!='':
+            if (str(timezone.now()) > startDate):
+                return JsonResponse({'is_valid':False})
+            return JsonResponse({'is_valid':True})
         else:
-            return JsonResponse({'is_complete':False,'is_valid':True})
+            return JsonResponse({'is_valid':False})
     else:
         raise Http404
 

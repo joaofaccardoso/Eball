@@ -25,12 +25,6 @@ body {
     color: #FFE603;
 }
 
-
-h3{
-    color:white;
-    margin-top: -20px;
-    margin-left:5%;
-}
 h2{
     color:white;
     margin-top: -20px;
@@ -54,19 +48,13 @@ h2{
    
 }
 
-
-
 #pageBtn {
     background-color: #727070;
     color: white;
     height: 80%;
     text-align: center;
-    padding-left: 15px;
-    padding-right: 15px;
 
 }
-
-
 
 #pageBtn:hover {
     background-color: #FFE603;

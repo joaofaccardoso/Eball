@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content2 %}    
-   
+    <h2>{{game.tournament.name}}</h2>
     <div class="content">
         <div class="row" >
             <div class="col" align='center'>
@@ -20,7 +20,7 @@
         <div class="row disp" id="row2" align='center'>
             <div class="col" ></div>
             <div class="col-sm-4" align='center'>
-                <p class="center">{{game.slot.date|date:'d-m-Y, H:m'}}, {{game.slot.field}} </p>
+                <p class="center">{{game.slot.date|date:'d-m-Y, H:i'}}, {{game.slot.field}} </p>
             </div>
             <div class="col" ></div>          
         </div>
@@ -99,12 +99,12 @@
             </div>           
         </div>
         <form method="post">
-            <div class="row disp" align='center'>
+            <div class="row disp" align='center' style="margin-top: 20px;">
                 <div class="col" align="right">
                     {% if game.team1.tactic.nST > 0 %}
-                    <p class="center" > Tactic: {{game.team1.tactic.nDF}} -{{game.team1.tactic.nMF}} -{{game.team1.tactic.nFW}}-{{game.team1.tactic.nST}} </p>
+                        <p class="center" > Tactic: {{game.team1.tactic.nDF}} -{{game.team1.tactic.nMF}} -{{game.team1.tactic.nFW}}-{{game.team1.tactic.nST}} </p>
                     {% else %}
-                    <p class="center" > Tactic: {{game.team1.tactic.nDF}} -{{game.team1.tactic.nMF}} -{{game.team1.tactic.nFW}} </p>
+                        <p class="center" > Tactic: {{game.team1.tactic.nDF}} -{{game.team1.tactic.nMF}} -{{game.team1.tactic.nFW}} </p>
                     {% endif %}
                 </div>
                 <div class="col-sm-5" align='center'></div>
@@ -118,10 +118,16 @@
             </div>
             <div class="row disp" align='center' >
                 <div class="col" style="margin-right: 2%">
-                    {% for player1 in players1 %}
-                    <div class="row disp" id="{{player1.0}}" style="height: 40px;font-size: 20px;">
-                        <div class="col-5" >
-                            <p class="text-center">{{player1.1.user.firstName}} {{player1.1.user.lastName}}</p>
+                    {% for player in starterPlayers1 %}
+                    <div class="row disp" id="{{player.0}}" style="height: 40px;font-size: 20px;">
+                        <div class="col-5">
+                            {% if player.2 %}
+                                <p class="text-left">{{player.1.user.firstName}} {{player.1.user.lastName}}</p>
+                            {% elif player.1.playerSub != None %}
+                                <p class="text-left">{{player.1.playerSub.user.firstName}} {{player.1.playerSub.user.lastName}}</p>
+                            {% elif player.1.reserveSub != None %}
+                                <p class="text-left">{{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}}</p>
+                            {% endif %}
                         </div>
                         <div class="col-3">
                             {% if user == game.team1.captain %}
@@ -146,83 +152,105 @@
                             {% endif %}              
                         </div>
                         <div class="col-2" >
-                            {% if player1.1.nrGoals > 0 %}
                             <div class="row">
                                 <div class="col">
-                                    <p class="text-right">{{player1.1.nrGoals}}</p>
+                                {% if player.2 and player.1.nrGoals > 0 %}
+                                    <p class="text-right">{{player.1.nrGoals}}</p>
+                                {% elif player.1.playerSub != None and player.1.playerSub.nrGoals > 0 %}
+                                    <p class="text-right">{{player.1.playerSub.nrGoals}}</p>
+                                {% elif player.1.reserveSub != None and player.1.playerSub.nrGoals > 0 %}
+                                    <p class="text-right">{{player.1.playerSub.nrGoals}}</p>
+                                {% endif %}
                                 </div>
                                 <div class="col" >
                                     <img src="{% static 'appEball/assets/football_branco.png' %}" alt="">
                                 </div>
                             </div>
-                            {% endif %}
                             
                         </div>
                         <div class="col-2" >
-                            <p class="text-right">{{ player1.1.position}}</p>
+                            {% if player.2 %}
+                                <p class="text-right">{{ player.1.position}}</p>
+                            {% else %}
+                                <p class="text-right">{{ player.1.playerSub.position}}</p>
+                            {% endif %}
+                            
                         </div>
                     </div>
                     {% endfor %}
                 </div>
 
-                <div class="col" >
-                     {% for player2 in players2 %}
-                    <div class="row disp" id="row2" style="height: 40px;font-size: 20px;">
+                <div class="col" align='right' style="margin-left: 2%">
+                    {% for player in starterPlayers2 %}
+                    <div class="row disp" id="{{player.0}}" style="height: 40px;font-size: 20px;">
                         <div class="col-2" >
-                            <p class="text-left">{{ player2.1.position}}</p>
+                            {% if player.2 %}
+                                <p class="text-left">{{ player.1.position}}</p>
+                            {% else %}
+                                <p class="text-left">{{ player.1.playerSub.position}}</p>
+                            {% endif %}
                         </div>
                         <div class="col-2" >
-                            {% if player2.1.nrGoals > 0 %}
                             <div class="row">
-                                <div class="col" >
-                                   <img src="{% static 'appEball/assets/football_branco.png' %}" alt="">
+                                <div class="col">
+                                {% if player.2 and player.1.nrGoals > 0 %}
+                                    <p class="text-left">{{player.1.nrGoals}}</p>
+                                {% elif player.1.playerSub != None and player.1.playerSub.nrGoals > 0 %}
+                                    <p class="text-left">{{player.1.playerSub.nrGoals}}</p>
+                                {% elif player.1.reserveSub != None and player.1.playerSub.nrGoals > 0 %}
+                                    <p class="text-left">{{player.1.playerSub.nrGoals}}</p>
+                                {% endif %}
                                 </div>
-                                <div class="col" >                 
-                                    <p class="text-left">{{player2.1.nrGoals}}</p>
+                                <div class="col">
+                                    <img src="{% static 'appEball/assets/football_branco.png' %}" alt="">
                                 </div>
                             </div>
-                            {% endif %}
-                            
                         </div>
-                        <div class="col-3" >
+                        <div class="col-3">
                             {% if user == game.team2.captain %}
-                             <div class="card" style="height:30px;background-color: #727070;border-radius: 20px; ">
+                            <div class="card" style="height:30px;background-color: #727070;border-radius: 20px; ">
 
                                 <div class="row">
-                                    <div class="col-1" style="padding-right:6%;padding-top: 10px">
+                                    <div class="col-1" style="padding-left:6%;padding-top: 10px">
                                         <a href="">
                                         <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                         </a>
+                                        </a>
                                     </div>
-                                    <div class="col-5" align="right">
+                                    <div class="col-5" align="left">
                                         <img src="{% static 'appEball/assets/football_preto.png' %}"  alt="" height="22" width="22">
                                     </div>
-                                   <div class="col-1" >
+                                   <div class="col-1">
                                         <a href="">
-                                        <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;" alt="" >
-                                         </a>
+                                        <img src="{% static 'appEball/assets/plus_preto.png' %}"   style="width:25px;height:25px;" alt="" >
+                                        </a>
                                     </div>
                                 </div>
-                            </div> 
-                            {% endif %} 
+                            </div>
+                            {% endif %}              
                         </div>
                         <div class="col-5" >
-                            <p class="text-center">{{player2.1.user.firstName}} {{player2.1.user.lastName}}</p>
-                        </div>      
+                            {% if player.2 %}
+                                <p class="text-right">{{player.1.user.firstName}} {{player.1.user.lastName}}</p>
+                            {% elif player.1.playerSub != None %}
+                                <p class="text-right">{{player.1.playerSub.user.firstName}} {{player.1.playerSub.user.lastName}}</p>
+                            {% elif player.1.reserveSub != None %}
+                                <p class="text-right">{{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}}</p>
+                            {% endif %}
+                        </div>
                     </div>
                     {% endfor %}
-                </div>  
+                </div>
             </div>
-            <div class="row disp" align='center'>
+            <div class="row disp" align='center' style="margin-top: 20px;">
                 {% if user == game.tournament.user or user == game.team1.captain or user == game.team2.captain %}
                 <div class="col" align="right" >
-                    <a class="btn rounded-pill center"  href="" id='pageBtn'>Confirm</a>
+                    <a class="btn rounded-pill center"  href="" id='pageBtn' style="width: 160px;">Confirm</a>
                 </div>
                 <div class="col" align="left">
                 {% else %}
                     <div class="col" align="center">
                 {% endif %}
-                    <a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}" id='pageBtn'>Back</a>
+                    <a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}" id='pageBtn' style="width: 160px;">Back</a>
                 
                 </div>          
             </div>

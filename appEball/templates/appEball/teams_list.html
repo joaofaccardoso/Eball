@@ -88,6 +88,8 @@
                                 <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
                             {% elif user.is_authenticated and t.1.pk not in myTeamsList and t.1.tournament.pk not in myTournaments %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' t.1.pk %}" id='pageBtn'>Join Team </a>
+                            {% else %}
+                                <a class="btn rounded-pill disabled" href="{% url 'appEball:register' %}" id='pageBtn' style="border-width: 0px; background-color: transparent; color: transparent;">Join Team</a>
                             {% endif %} 
                             <p class="d-inline-block text-truncat" id="p1">{{ t.2 }}/16 spots left</p>
                             <p class="d-inline-block text-truncat" id="p2">{{ t.1.tournament.name }}</p>        
@@ -111,7 +113,7 @@
                             {% elif t.3 == 1 %}
                                 <p class="d-inline-block text-truncat" id="p2">Waiting for tournament to start...</p>
                             {% else %}
-                                <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date|date:'d-m-Y, H:m'}}</p>
+                                <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date|date:'d-m-Y, H:i'}}</p>
                                 <p class="d-inline-block text-truncat" id="p1">Round {{t.3.gRound}}</p>
                             {% endif %}
                         </div>
