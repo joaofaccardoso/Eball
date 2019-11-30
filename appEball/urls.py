@@ -39,12 +39,13 @@ urlpatterns = [
     
     path('generate_games/<int:pk>', views.generate_games, name='generate_games'),
     
-    path('askSub/<int:pk>', views.askSub, name='askSub'),
-    path('subPage/<int:pk>/<int:pksub>/<int:subFlag>', views.subPage.as_view(), name='subPage'),
+    path('askSub/<int:pk>', views.askSub.as_view(), name='askSub'),
+    path('sub_perm/<int:teamId>/<int:subId>',views.sub_perm,name='sub_perm'),
     path('askKick/', views.askKick, name='askKick'),
     path('notifications/', views.notifications, name='notifications'),
     path('is_seen/<int:pk>/', views.is_seen, name='is_seen'), 
     path('presencas/<int:pk>/',views.presencas.as_view(),name='presencas'),
     path('game/<int:pk>',views.game.as_view(),name='game'),
     path('manage_team/<int:pk>',views.manage_team.as_view(),name='manage_team'),
+    path('leave_team/<int:teamId>',views.leave_team,name='leave_team'),
 ]

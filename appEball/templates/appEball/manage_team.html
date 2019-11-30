@@ -22,12 +22,12 @@
 
         <div class="row " id={{player.0}} style="height: 45px">
                 <div class="col-1" align="center">
-                        {% if player.1.user.firstName == team.captain.firstName %}
-                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603; color: #262626;">C</button>
-                        {% else %}
-                         <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_1" value="{{player.1.user.pk}}">C</button>
-                        {% endif %}
-                    </div>
+                    {% if player.1.user.firstName == team.captain.firstName %}
+                    <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603; color: #262626;">C</button>
+                    {% else %}
+                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_1" value="{{player.1.user.pk}}">C</button>
+                    {% endif %}
+                </div>
                 <div class="col-sm-4" >
                     {% if player.1.user.firstName == team.captain.firstName %}
                      <p class="subtopRow">{{ player.1.user.firstName }} {{ player.1.user.lastName }} (Captain)</p>

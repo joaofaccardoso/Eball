@@ -2,41 +2,66 @@
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/askSub.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'appEball/css/askSub.css' %}">
 {% endblock %}
 
 {% block title %}
-    <strong>Reserves</strong>
+<strong>Reserves</strong>
 {% endblock %}
 
 {% block content2 %}
     <div class="row">
-      <div class="col">
-        <h2>{{tournament.name}}</h2>
-      </div>
-      <div class="col" align="right">
-        <a class="btn rounded-pill" role="button" style="width: 160px; margin-right: 20px; margin-top: -5px;" href={{ request.META.HTTP_REFERER }}>Back</a>
-      </div>
-    </div>
-    <div class="content" style="margin-top: 20px;">
-      <div class="row">
         <div class="col">
-
-          {% for reserve in reserves %}
-            <div class="row" id ="{{reserve.1}}">
-                <div class="col-sm-6">
-                  <p class="name line">{{reserve.0.user.firstName}} {{reserve.0.user.lastName}}</p>
-                </div>
-                <div class="col-sm-6">
-                    {% if reserve.2 == 0 and check == 1   %}
-                    <a class="btn rounded-pill" href="{% url 'appEball:subPage' tournament.pk reserve.0.pk 0  %}">Ask to Sub</a>
-                    {% endif %}
-                </div>
-              </div>
-            
-          {% endfor %}
+            <h2>{{tournament.name}}</h2>
         </div>
-      </div>
+        <div class="col" align="right">
+            <a class="btn rounded-pill" role="button" style="width: 160px; margin-right: 20px; margin-top: -5px;" href={{ request.META.HTTP_REFERER }}>Back</a>
+        </div>
     </div>
+    <form method="post" style="margin-top: 20px;">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col">
+
+                {% for reserve in reserves %}
+                    <div class="row" id ="{{reserve.1}}">
+                        <div class="col-sm-6">
+                            <p class="name line">{{reserve.0.user.firstName}} {{reserve.0.user.lastName}}</p>
+                        </div>
+                        <div class="col-sm-6">
+                            {% if reserve.2 == 0 and check == 1   %}
+                                <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#exampleModal" id="pageBtn" style="margin-left: 70%;">
+                                    Ask to sub
+                                </button>   
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">  
+                                                <h5 class="modal-title" id="exampleModalLabel">Time to sub</h5>
+                                                <button type="button rounded-pill" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="number" class="form-control rounded-pill" placeholder="Number of games" name="nGames" maxlength="100"  id="nGames">                 
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="col" align='center'>
+                                                    <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="sub" style="width: 160px;" value={{reserve.0.pk}}>Ask to sub</button>
+                                                </div>
+                                                <div class="col" align='center'>
+                                                    <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="permanently" style="width: 160px;" value={{reserve.0.pk}}>Permanently</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
 
 {% endblock %}

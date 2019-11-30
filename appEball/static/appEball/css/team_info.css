@@ -30,8 +30,13 @@ h2 {
     font-size: 20px;
     color: white;
     margin-top: -10px;
-    color: #E5E5E5;
-    padding-bottom: 30px;
+    color: #FFE603;
+    margin-bottom: 20px;;
+}
+
+h2:hover{
+    text-decoration: underline;
+    text-decoration-color: #FFE603;
 }
 
 .btn {
