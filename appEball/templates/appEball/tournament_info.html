@@ -24,12 +24,13 @@
 
         </div>
         <div class="col" align='center'>
-                <form method="post">
-                        {% csrf_token %}
-                        {% if user.is_authenticated and inTeam == False %}
-                        <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="submit" >Join as Reserve</button>
-                        {% endif %}
-                </form>
+            <form method="post">
+                {% csrf_token %}
+                {% if user.is_authenticated and inTeam == False and inTournament == False %}
+                    <button class="btn rounded-pill" type="submit" href="" id='pageBtn' name="submit"  style="width: 160px;">Join as Reserve</button>
+                {% endif %}
+                <a class="btn rounded-pill"  href="{% url 'appEball:askSub' tournament.pk %}" id='pageBtn' style="width: 160px; padding-top: 2%; margin-left: 20px;">See Reserves</a>
+            </form>
         </div>
     </div>
 

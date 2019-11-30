@@ -786,18 +786,22 @@ class tournament_info(View):
         myTeamsList=list()
         myTournaments = list()
         inTeam=False
+        inTournament=False
         if(request.user.is_authenticated):
             myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
             myTeamsFilter=Team.objects.filter(pk__in=myTeamsList)
             myTournaments = myTeamsFilter.values_list('tournament',flat=True)
-            if myTeamsFilter.filter(tournament=tournament) :
+            if len(list(myTeamsFilter.filter(tournament=tournament)))!=0 :
                 inTeam=True
+
+            myReservesFilter = Reserve.objects.filter(user=request.user).values_list('tournament',flat=True)
+            myTournaments=Tournament.objects.filter(pk__in=myReservesFilter)
+            if(len(list(myTournaments))>0):
+                inTournament = True
         else:
             inTeam= True
-
-            print(myTournaments)
-        
-        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'inTeam': inTeam,'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'myTeamsList':myTeamsList,'myTournamentsList':myTournaments})
+    
+        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'inTeam': inTeam,'inTournament': inTournament,'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'myTeamsList':myTeamsList,'myTournamentsList':myTournaments})
 
 
 
@@ -1035,17 +1039,16 @@ class presencas(View):
                     jogador.faltas+=1
                     jogador.isSub=True
                     jogador.isStarter=False
-                    jogador.save()
+                    jogador.save()  
             for player in jogadores:
                 if player.isSubbed:
                     player.subGames=-1
-                    player.save()
                     if player.subGames==0:
                         player.isSubbed=False
                         sub= Substitute.objects.filter(originalPlayer=player).get(isActive=True)
                         sub.isActive=False
-                        player.save()
-                        sub.save()
+                        sub.delete()
+                    player.save()
 
             return HttpResponseRedirect(reverse('appEball:tournaments'))
 
@@ -1076,9 +1079,10 @@ class game(View):
 
         isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
 
+        
+
         return render(request, self.template_name,{'isOver':isOver,'game':game,'players1':players1,'players2':players2})
 
-    
 
 def next_matches(players):
     games=[]

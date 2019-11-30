@@ -8,39 +8,34 @@
 {% block content2 %}    
 
     <div class="row" alin="left" style="margin-left: 2%">
-        <h2>{{ team.name }} ({{ team.tournament.name }})</h2>
+        <div class="col">
+            <h2>{{ team.name }} ({{ team.tournament.name }})</h2>
+        </div>
+        <div class="col">
+            <a class="btn rounded-pill float-right" role="button" id="pageBtn" style="width: 160px; margin-right: 30px;" href={{ request.META.HTTP_REFERER }}>Back</a>
+        </div>
     </div>
     <div class="content">
-        <div class="row" style="margin-bottom: 1%">
-            <div class="col" >
-                <div class="row" style="margin-top: -5%">             
-                    <div clas="col"  style="margin-left: 7%" align="right">
-                        <a class="btn rounded-pill pull-right" role="button" id="pageBtn" style="width: 160px" href={{ request.META.HTTP_REFERER }}>Back</a>
-                    </div>
-                </div>           
-            </div>
-        </div>
         <form method="post">
-            {% csrf_token %}
+        {% csrf_token %}
         {% for player in players %}
 
         <div class="row " id={{player.0}} style="height: 45px">
                 <div class="col-1" align="center">
                         {% if player.1.user.firstName == team.captain.firstName %}
-                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603;
-    color: #262626;">C</button>
+                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603; color: #262626;">C</button>
                         {% else %}
                          <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_1" value="{{player.1.user.pk}}">C</button>
                         {% endif %}
                     </div>
-                <div class="col-3" >
+                <div class="col-sm-4" >
                     {% if player.1.user.firstName == team.captain.firstName %}
                      <p class="subtopRow">{{ player.1.user.firstName }} {{ player.1.user.lastName }} (Captain)</p>
                     {% else %}
                         <p class="subtopRow">{{ player.1.user.firstName }} {{ player.1.user.lastName }}</p>
                     {% endif %}
                 </div>
-                <div class="col-1" >
+                <div class="col" >
                     <div class="row">
                         <div class="col">
                             {% if player.1.position == 'ST' %}
@@ -55,38 +50,37 @@
                                 <img class="posIcon" src="{% static 'appEball/assets/GK.png' %}" alt="">
                             {% endif %}
                         </div>
-                        <div class="col" style="margin-top: -3%">
+                        <div class="col" style="margin-top: -3% ">
                              <p class="subtopRow">{{ player.1.position }}</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-1" >
+                <div class="col" >
                     <p class="subtopRow">{{ player.2 }}/{{ team.played }}</p>
                 </div>
-                <div class="col-1" >
-                    
+                <div class="col" >
                         {% if player.1.isStarter %}
-                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603;
-    color: #262626;">Starter</button>
+                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603; color: #262626; width: 100px;">Starter</button>
                         {% else %}
-                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_2" value="{{player.1.pk}}">Starter</button>
+                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_2" value="{{player.1.pk}}" style=" width: 100px;">Starter</button>
                         {% endif %}
                 </div>
-                 <div class="col-1" >
+                 <div class="col" >
                     {% if player.1.isSub %}
-                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603;
-    color: #262626;">Sub</button>
-                        {% else %}
-                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_3" value="{{player.1.pk}}">Sub</button>
-                        {% endif %}
-                    
+                        <button class="btn rounded-pill pull-right disabled"  disabled="disabled" type="button" id="pageBtn" style=" background-color: #FFE603; color: #262626; width: 100px;">Sub</button>
+                    {% else %}
+                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_3" value="{{player.1.pk}}" style="width: 100px; ">Sub</button>
+                    {% endif %}
                 </div>
-                 <div class="col-2" >
+                 <div class="col" >
                     <a class="btn rounded-pill pull-right"  id="pageBtn" href="{% url 'appEball:userProfile' player.1.user.username %}" style="width: 160px">Update Balance</a>
                 </div>
-                 <div class="col-2" >
+                 <div class="col" >
                     {% if player.1.user.firstName != team.captain.firstName %}
-                    <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_4" value="{{player.1.pk}}" style="width: 160px">Kick Player</button>
+                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit_4" value="{{player.1.pk}}" style="width: 160px; margin-right: 20px;">Kick Player</button>
+                    {% else %}
+                        <button class="btn rounded-pill disabled" type="submit" id="pageBtn" name="submit_4" value="{{player.1.pk}}" disabled style="width: 160px; background-color: transparent; color: transparent; margin-right: 20px;">Kick Player</button>
+
                     {% endif %}
                 </div>
                 
