@@ -50,6 +50,7 @@ class Tournament(models.Model):
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
     gRound=models.IntegerField(unique=False,default=0)
+    isFull = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','user']
 
@@ -203,8 +204,6 @@ class TournamentDays(models.Model):
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
 
     REQUIRED_FIELDS = ['name','maxTeams','beginDate','user']
-
-
 
 class Substitute(models.Model):
     reserveSub=models.ForeignKey(Reserve,null=True, on_delete=models.CASCADE,related_name='reserveSub')

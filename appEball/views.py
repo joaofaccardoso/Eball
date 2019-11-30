@@ -103,7 +103,7 @@ class teams_list(View):
             myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
             myTeamsFilter=Team.objects.filter(pk__in=myTeamsList)
             myTournaments = myTeamsFilter.values_list('tournament',flat=True)
-            tournaments = Tournament.objects.all().exclude(pk__in=myTournaments)
+            tournaments = Tournament.objects.all().exclude(pk__in=myTournaments,isFull=True)
             myTeamsFilter=list(myTeamsFilter)
         else:
             tournaments=list(Tournament.objects.all())
@@ -171,6 +171,11 @@ class teams_list(View):
                 newPlayer.save()
                 newTeam.availMF -= 1
                 newTeam.save()
+
+                nTeams = Team.objects.filter(tournament = tournament).count()
+                if(nTeams==tournament.maxTeams):
+                    tournament.isFull==True
+                    tournament.save()
                 return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
@@ -680,11 +685,18 @@ class tournament_info(View):
         days=list()
         teams=list()
 
+        nTeamsBalance = 0
+
         for i in range(len(allTeams)):
+            n = Player.objects.filter(team = allTeams[i],balance__lt=20).count()
+            if(n==0 and allTeams[i].availDF==0 and allTeams[i].availFW ==0 and allTeams[i].availGK==0 and allTeams[i].availMF==0 and allTeams[i].availST==0):
+                nTeamsBalance+=1
             if(i%2==0):
                 teams.append(["row1",allTeams[i]])
             else:
                 teams.append(["row2",allTeams[i]])
+
+        print(nTeamsBalance)
 
         for i in allDays:
             if(len(days)%2==0):
@@ -723,7 +735,7 @@ class tournament_info(View):
         else:
             inTeam= True
     
-        return render(request, 'appEball/tournament_info.html', {'tournament':tournament,'inTeam': inTeam,'inTournament': inTournament,'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'myTeamsList':myTeamsList,'myTournamentsList':myTournaments})
+        return render(request, 'appEball/tournament_info.html', {'generate':nTeamsBalance==len(allTeams),'tournament':tournament,'inTeam': inTeam,'inTournament': inTournament,'teams': teams,'days':days,'games':games,'gRound':gRound,'plus':'plus','less':'less','maxRound':maxRound,'myTeamsList':myTeamsList,'myTournamentsList':myTournaments})
 
 
 
@@ -913,56 +925,44 @@ class game(View):
     template_name='appEball/game.html'
 
     def get(self,request,pk):
-        game=Game.objects.get(pk=pk)
-        jogadores1=list(Player.objects.filter(team=game.team1))
-        jogadores2=list(Player.objects.filter(team=game.team2))
-        players1=list()
-        players2=list()
-        isSt1=False
-        isSt2=False
+        game=Game.objects.get(pk=pk)   
 
-        isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
+        allPlayers1 = Player.objects.filter(team=game.team1)
+        allPlayers2 = Player.objects.filter(team=game.team2)
+        
+        starters1 = list(Player.objects.filter(team=game.team1,isSubbed = False))
+        starters2 = list(Player.objects.filter(team=game.team2,isSubbed = False))
 
-        allPlayers1 = Player.objects.filter(team=game.team1).values_list('user',flat = True)
-        allPlayers2 = Player.objects.filter(team=game.team2).values_list('user',flat = True)
+        subs1 = list(Substitute.objects.filter(originalPlayer__in=allPlayers1))
+        subs2 = list(Substitute.objects.filter(originalPlayer__in=allPlayers2))
 
-        subs1 = Substitute.objects.filter(originalPlayer__in=allPlayers1)
-        subs2 = Substitute.objects.filter(originalPlayer__in=allPlayers2)
-
-        starterPlayers1Filter = list(Player.objects.filter(team=game.team1,isSubbed=False))
-        starterPlayers2Filter = list(Player.objects.filter(team=game.team2,isSubbed=False))
-        if(subs1.count()!=0):
-            starterPlayers1Filter.append(subs1)
-        if(subs2.count()!=0):
-            starterPlayers2Filter.append(subs2)
-        starterPlayers2Filter.append(subs2)
-        print(starterPlayers2Filter)
-
-        starterPlayers1 = list()
-        starterPlayers2 = list()
-        for i in range(len(starterPlayers1Filter)):
+        allStarters1=list()
+        allStarters2=list()
+        for i in range(16):
             if(i%2==0):
-                if(isinstance(starterPlayers1Filter[i], Player)):
-                    starterPlayers1.append(['row2',starterPlayers1Filter[i],True])
+                if(len(starters1)>i):
+                    allStarters1.append(["row2",starters1[i],True])
                 else:
-                    starterPlayers1.append(['row2',starterPlayers1Filter[i],False])
+                    allStarters1.append(["row2",subs1[i-len(starters1)],False])
 
-                if(isinstance(starterPlayers2Filter[i], Player)):
-                    starterPlayers2.append(['row2',starterPlayers2Filter[i],True])
+                if(len(starters2)>i):
+                    allStarters2.append(["row2",starters2[i],True])
                 else:
-                    starterPlayers2.append(['row2',starterPlayers2Filter[i],False])
+                    allStarters2.append(["row2",subs2[i-len(starters2)],False])
             else:
-                if(isinstance(starterPlayers1Filter[i], Player)):
-                    starterPlayers1.append(['row1',starterPlayers1Filter[i],True])
+                if(len(starters1)>i):
+                    allStarters1.append(["row1",starters1[i],True])
                 else:
-                    starterPlayers1.append(['row1',starterPlayers1Filter[i],False])
+                    allStarters1.append(["row1",subs1[i-len(starters1)],False])
 
-                if(isinstance(starterPlayers2Filter[i], Player)):
-                    starterPlayers2.append(['row1',starterPlayers2Filter[i],True])
+                if(len(starters2)>i):
+                    allStarters2.append(["row1",starters2[i],True])
                 else:
-                    starterPlayers2.append(['row1',starterPlayers2Filter[i],False])
-
-        return render(request, self.template_name,{'isOver':isOver,'game':game,'starterPlayers1':starterPlayers1,'starterPlayers2':starterPlayers2})
+                    allStarters2.append(["row1",subs2[i-len(starters2)],False])
+            
+        isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
+        print(allStarters1)
+        return render(request, self.template_name,{'allStarters1':allStarters1,'allStarters2':allStarters2,'isOver':isOver,'game':game})
 
     def post(self, request, pk):
         form = GameForm(request.POST)
@@ -1011,7 +1011,8 @@ class game(View):
                 team2 = game.team2
                 self._teamPoints(result, team1, team2)
             return HttpResponseRedirect(reverse('appEball:game', kwargs={'pk':pk}))
-
+            
+    
     def _registar_saldo(self, pk):
         game=Game.objects.get(pk=pk)
         jogadores1=list(Player.objects.filter(team=game.team1))
@@ -1024,11 +1025,17 @@ class game(View):
                 jogador1.faltas+=1
                 jogador1.isStarter=False
                 jogador1.save()
+                n = Notification(text = "You don't have enough money to play, now you are a sub", title = "Not enough money", user = jogador1.user)
+                n.save()
+                n = Notification(text = "The player "+jogador1.user.username+" doesn't have enough money to play", title = "Player without enough money", user = jogador1.team.captain)
+                n.save()
                 for player in jogadores1:
                     if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
                         player.isSub=False
                         player.isStarter=True
                         player.save()
+                        n = Notification(text = "Someone didn't have enough money , so now you're a starter", title = "Promoted to Starter", user = player.user)
+                        n.save()
 
             elif jogador1.balance>game.slot.field.price:
                 jogador1.balance-=game.slot.field.price
@@ -1036,13 +1043,17 @@ class game(View):
                     jogador1.isSub=True
                     jogador1.isStarter=False
                     jogador1.save()
+                    n = Notification(text = "Balance lower than 3 euros, so now you're a sub", title = "Balance lower than minimum", user = jogador1.user)
+                    n.save()
+                    n = Notification(text = "The player "+jogador1.user.username+" have a balance lower than 3 euros", title = "Player without enough money", user = jogador1.team.captain)
+                    n.save()
                     for player in jogadores1:
                         if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
                             player.isSub=False
                             player.isStarter=True
                             player.save()
-
-
+                            n = Notification(text = "Someone didn't have the mininum balance, so now you're a starter", title = "Promoted to Starter", user = player.user)
+                            n.save()
         for jogador2 in jogadores2:
 
             if jogador2.balance < game.slot.field.price :
@@ -1050,11 +1061,17 @@ class game(View):
                 jogador2.faltas+=1
                 jogador2.isStarter=False
                 jogador2.save()
+                n = Notification(text = "You don't have enough money to play, now you are a sub", title = "Not enough money", user = jogador2.user)
+                n.save()
+                n = Notification(text = "The player "+jogador2.user.username+" doesn't have enough money to play", title = "Player without enough money", user = jogador2.team.captain)
+                n.save()
                 for player in jogadores2:
                     if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
                         player.isSub=False
                         player.isStarter=True
                         player.save()
+                        n = Notification(text = "Someone didn't have enough money , so now you're a starter", title = "Promoted to Starter", user = player.user)
+                        n.save()
             
             elif jogador2.balance>game.slot.field.price:
                 jogador2.balance-=game.slot.field.price
@@ -1062,11 +1079,17 @@ class game(View):
                     jogador2.isSub=True
                     jogador2.isStarter=False
                     jogador2.save()
+                    n = Notification(text = "Balance lower than 3 euros, so now you're a sub", title = "Balance lower than minimum", user = jogador2.user)
+                    n.save()
+                    n = Notification(text = "The player "+jogador2.user.username+" have a balance lower than 3 euros", title = "Player without enough money", user = jogador2.team.captain)
+                    n.save()
                     for player in jogadores2:
                         if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
                             player.isSub=False
                             player.isStarter=True
                             player.save()
+                            n = Notification(text = "Someone didn't have the mininum balance, so now you're a starter", title = "Promoted to Starter", user = player.user)
+                            n.save()
 
     def _teamPoints(self, result , team1, team2):
         if result.goalsT1Final > result.goalsT2Final:
@@ -1258,8 +1281,27 @@ def sub_perm(request,teamId,subId):
     user.isSub = True
     user.isStarter = False
     user.save()
+
+    notification = Notification(title='Requested for you to be starter!', text=user.user.username+' asked you to be starter!' , user=sub.user)
+    notification.save()
     return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':teamId}))
 
 def leave_team(request,teamId):
     player = Player.obejcts.get(team=teamId,user = request.user).delete()
     return HttpResponseRedirect(reverse('appEball:teams_list'))
+
+class updateBalance(View):
+    
+    def get(self,request,pk):
+        player=Player.objects.get(pk=pk)
+        return render(request,'appEball/updateBalance.html',{'player':player})
+    
+    def post(self,request,pk):
+        if request.method=='POST':
+            player=Player.objects.get(pk=pk)
+
+            increase = request.POST.get('increase')
+            increase=int(increase)
+            player.balance+=increase
+            player.save()
+        return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk': player.team.pk}))

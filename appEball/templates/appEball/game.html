@@ -123,46 +123,41 @@
             </div>
             <div class="row disp" align='center' >
                 <div class="col" style="margin-right: 2%">
-                    {% for player in starterPlayers1 %}
+                    {% for player in allStarters1 %}
                     <div class="row disp" id="{{player.0}}" style="height: 40px;font-size: 20px;">
                         <div class="col-5">
                             {% if player.2 %}
                                 <p class="text-left">{{player.1.user.firstName}} {{player.1.user.lastName}}</p>
-                            {% elif player.1.playerSub != None %}
-                                <p class="text-left">{{player.1.playerSub.user.firstName}} {{player.1.playerSub.user.lastName}}</p>
-                            {% elif player.1.reserveSub != None %}
-                                <p class="text-left">{{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}}</p>
+                            {% else %}
+                                <p class="text-left">{{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}} (sub)</p>
                             {% endif %}
                         </div>
                         <div class="col" align='right'>
                             {% if player.2 %}
                                 <p class="text-right">{{ player.1.position}}</p>
                             {% else %}
-                                <p class="text-right">{{ player.1.playerSub.position}}</p>
+                                <p class="text-right">{{ player.1.originalPlayer.position}}</p>
                             {% endif %}
-                            
                         </div>
                     </div>
                     {% endfor %}
                 </div>
 
                 <div class="col" align='right' style="margin-left: 2%">
-                    {% for player in starterPlayers2 %}
+                    {% for player in allStarters2 %}
                     <div class="row disp" id="{{player.0}}" style="height: 40px;font-size: 20px;">
                         <div class="col-2" >
                             {% if player.2 %}
                                 <p class="text-left">{{ player.1.position}}</p>
                             {% else %}
-                                <p class="text-left">{{ player.1.playerSub.position}}</p>
+                                <p class="text-left">{{ player.1.originalPlayer.position}}</p>
                             {% endif %}
                         </div>
                         <div class="col" >
                             {% if player.2 %}
                                 <p class="text-right">{{player.1.user.firstName}} {{player.1.user.lastName}}</p>
-                            {% elif player.1.playerSub != None %}
-                                <p class="text-right">{{player.1.playerSub.user.firstName}} {{player.1.playerSub.user.lastName}}</p>
-                            {% elif player.1.reserveSub != None %}
-                                <p class="text-right">{{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}}</p>
+                            {% else %}
+                                <p class="text-right">(sub) {{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}}</p>
                             {% endif %}
                         </div>
                     </div>

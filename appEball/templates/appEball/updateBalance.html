@@ -1,0 +1,41 @@
+{% extends 'appEball/base_with_grey_background.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/updateBalance.css' %}">
+{% endblock %}
+
+
+
+{% block content2 %}
+
+    {% block title %}
+    Update {{player.user.firstName}} {{player.user.lastName}}'s balance
+    {% endblock %}
+    <form method="post">
+            {% csrf_token %}
+            <div class="content">
+                <p id="p1">Increase {{player.user.firstName}} {{player.user.lastName}}'s balance by:</p>
+                
+                <div class="row" align= "center" >
+                    <input type="text" class="form-control rounded-pill" name="increase" maxlength="100" id="inc" >
+                    
+                </div>
+                <div class="row" align= "center" >
+                <p  id="p2">Current balance is {{player.balance}}€</p>
+                </div>
+        
+                <div class="row">
+                    <div class="col text-center">
+                        <button class="btn rounded-pill" type="submit" id="pageBtn" name="submit" style="width: 10%;">Increase</button>
+                    </div>
+                </div>
+                <div class="row" >
+                <a class="btn rounded-pill" href="{{request.META.HTTP_REFERER}}" id='pageBtn2'>Back</a>
+            </div>
+            </div>
+        </form>
+
+
+
+{% endblock %}
