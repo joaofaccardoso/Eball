@@ -65,6 +65,7 @@ class Tournament(models.Model):
 
 class Field(models.Model):
     name = models.CharField(max_length=100, blank=False, unique=True)
+    price=models.IntegerField(default=3)
 
     class Meta:
         db_table = 'Field'

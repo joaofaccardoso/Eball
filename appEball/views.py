@@ -94,11 +94,15 @@ class teams_list(View):
         allTeams=list()
         myTeams=list()
         tournaments = list()
+        myTeamsList=list()
+        myTeamsFilter=list()
+        myTournaments=list()
 
         if(request.user.is_authenticated):
             myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
             myTeamsFilter=Team.objects.filter(pk__in=myTeamsList)
             myTournaments = myTeamsFilter.values_list('tournament',flat=True)
+            tournaments = Tournament.objects.all().exclude(pk__in=myTournaments)
             myTeamsFilter=list(myTeamsFilter)
         else:
             tournaments=list(Tournament.objects.all())
@@ -108,46 +112,47 @@ class teams_list(View):
             if(i%2==0):
                 if(request.user.is_authenticated):
                     player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                    checkPlayer = (len(player) == 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    checkPlayer = (len(player) == 0) and (16-len(Player.objects.filter(team=allTeamsFilter[i])))>0
                 else:
                     checkPlayer = None
-                allTeams.append(["row2",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
+                allTeams.append(["row2",allTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
                 
                 if(len(myTeamsFilter)>i and myTeamsFilter[i].isDayOff==False):
                     t_games=(Game.objects.filter(team1=myTeamsFilter[i]) | Game.objects.filter(team2=myTeamsFilter[i])).order_by('slot__date')
 
                     for j in range (len(t_games)):
                         if t_games[j].slot.date>=timezone.now():
-                            myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
+                            myTeams.append(["row2",myTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
                             break
                         if (j==len(t_games)-1):
-                            myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
+                            myTeams.append(["row2",myTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
                 
                     if (len(t_games)==0):
-                        myTeams.append(["row2",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
+                        myTeams.append(["row2",myTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),1])
             else:
                 if(request.user.is_authenticated):
                     player = list(Player.objects.filter(team=allTeamsFilter[i],user=request.user))
-                    checkPlayer = (len(player) == 0) and (15-len(Player.objects.filter(team=allTeamsFilter[i])))>0
+                    checkPlayer = (len(player) == 0) and (16-len(Player.objects.filter(team=allTeamsFilter[i])))>0
                 else:
                     checkPlayer = None
-                allTeams.append(["row1",allTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
+                allTeams.append(["row1",allTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),checkPlayer])
                 if(len(myTeamsFilter)>i and myTeamsFilter[i].isDayOff==False):
                     t_games=list((Game.objects.filter(team1=myTeamsFilter[i]) | Game.objects.filter(team2=myTeamsFilter[i])).order_by('slot__date'))
                     for j in range (len(t_games)):
                         if t_games[j].slot.date>=timezone.now():
-                            myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
+                            myTeams.append(["row1",myTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),t_games[j]])
                             break
                         if (j==len(t_games)-1):
-                            myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
+                            myTeams.append(["row1",myTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),0])   
                     if (len(t_games)==0):
-                        myTeams.append(["row1",myTeamsFilter[i],15-len(Player.objects.filter(team=allTeamsFilter[i])),1])
+                        myTeams.append(["row1",myTeamsFilter[i],16-len(Player.objects.filter(team=allTeamsFilter[i])),1])
     
         return render(request, 'appEball/teams_list.html', {'allTeams':allTeams,
                                                             'myTeams':myTeams,
                                                             'tactics':tactics,
-                                                            'tournaments':myTournaments,
+                                                            'myTournaments':myTournaments,
                                                             'myTeamsList':myTeamsList,
+                                                            'tournaments':tournaments
                                                             })
 
     def post(self, request):
@@ -508,7 +513,7 @@ class tournaments(View):
                 allTournaments.append(["row1",allTournamentsFilter[i]])
                 if(len(myTournamentsFilter)>i):
                     myTournaments.append(["row1",myTournamentsFilter[i]])
-
+       
         return render(request, 'appEball/tournaments.html', {'allTournaments':allTournaments,'myTournaments':myTournaments,'week':TournamentDaysForm.week,'fields':fields})
     
     def _create_slots(self,fields):
@@ -741,9 +746,12 @@ class tournament_info(View):
     def get(self,request,pk,gRound):
         tournament=Tournament.objects.get(pk=pk)
         if(tournament.gRound==0):
-            allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('name'))
+            allTeams=Team.objects.filter(tournament=tournament).order_by('name')
+            allTeams=list(allTeams)
+            nCompleteTeams = Team.objects.filter(tournament=tournament).filter(availDF=0,availFW=0,availGK=0,availMF=0,availST=0).count()
         else:
             allTeams=list(Team.objects.filter(tournament=tournament).exclude(isDayOff=True).order_by('-points','-goalsDif'))
+
         
         allDays=list(Slot.objects.filter(tournament=tournament))
         games=list()
@@ -793,6 +801,7 @@ class tournament_info(View):
 
 
 
+
     def post(self,request,pk,gRound):
         tournament = Tournament.objects.get(pk=pk)
         if request.method=="POST":
@@ -802,6 +811,7 @@ class tournament_info(View):
                     reserve=Reserve(user=request.user,tournament=tournament)
                     reserve.save()
             return HttpResponseRedirect(reverse('appEball:askSub',kwargs={'pk': pk}))
+
 
 
 def generate_games(request, pk):
@@ -877,10 +887,15 @@ def get_slots(startDate,endDate,nGames,tournamentSlots):
         hEnd=tournamentSlots[i].end.hour
         mEnd=tournamentSlots[i].end.minute
 
+        newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
         while(hStart+1+(mStart+30)//60<hEnd or (hStart+1+(mStart+30)//60==hEnd and (mStart+30)%60<=mEnd)):
-            newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
             daySlots=list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=newDate))
             if(len(daySlots)==0):
+                s1=newDate+datetime.timedelta(minutes=30)
+                while(list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=s1))!=0):
+                    s1=s1+datetime.timedelta(minutes=30)
+
+                s2=s1+datetime.timedelta(minutes=30)
                 newSlot=Slot(weekDay=newDate.weekday(),date=newDate,field=tournamentSlots[i].field)
                 newSlot.save()
                 slotsDays.append(newSlot)
@@ -914,13 +929,16 @@ def change_round(request,pk,gRound,change):
     return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk,'gRound':gRound}))
 
 
-
 class subPage(View):
     def get(self,request,pk,pksub,subFlag):  
         tournament=Tournament.objects.get(pk=pk)
         players=list(Player.objects.filter(user=request.user))
         teams=list(Team.objects.filter(tournament=tournament))
-        sub=Reserve.objects.get(pk=pksub)
+
+        if subFlag==0:
+            sub=Reserve.objects.get(pk=pksub)
+        else:
+            sub=Player.objects.get(pk=pksub)
 
         for player in players:
             for team in teams:
@@ -985,22 +1003,6 @@ def my_calendar(request):
             games.append([allGames[i],'row2'])
     return render(request,'appEball/my_calendar.html',{'games':games})
 
-
-def next_matches(players):
-    games=[]
-    contador=0
-    for player in players:
-        games_t=list(Game.objects.filter(tournament=player.team.tournament))
-        for game in games_t:
-            if game.slot.date.date()>datetime.date.today():
-                if game.team1==player.team or game.team2==player.team:
-                    if contador%2==0:
-                        games.append([game,'row1'])
-                    else:
-                        games.append([game,'row2'])
-                    contador=contador+1
-    sorted(games, key=lambda game: game[0].slot.date)
-    return games
 class presencas(View):
     template_name= 'appEball/presencas.html'
    
@@ -1026,9 +1028,13 @@ class presencas(View):
             print(nomesMarked)
             team = Team.objects.get(pk=pk)
             jogadores=list(Player.objects.filter(team = pk))
+            
+            
             for jogador in jogadores:
                 if jogador.user.firstName not in nomesMarked:
                     jogador.faltas+=1
+                    jogador.isSub=True
+                    jogador.isStarter=False
                     jogador.save()
             for player in jogadores:
                 if player.isSubbed:
@@ -1055,7 +1061,7 @@ class game(View):
         players2=list()
         isSt1=False
         isSt2=False
-        
+
         for i in range(len(jogadores1)):
             if(i%2==0):
                 players1.append(["row2",jogadores1[i]])
@@ -1073,6 +1079,22 @@ class game(View):
         return render(request, self.template_name,{'isOver':isOver,'game':game,'players1':players1,'players2':players2})
 
     
+
+def next_matches(players):
+    games=[]
+    contador=0
+    for player in players:
+        games_t=list(Game.objects.filter(tournament=player.team.tournament))
+        for game in games_t:
+            if game.slot.date.date()>datetime.date.today():
+                if game.team1==player.team or game.team2==player.team:
+                    if contador%2==0:
+                        games.append([game,'row1'])
+                    else:
+                        games.append([game,'row2'])
+                    contador=contador+1
+    sorted(games, key=lambda game: game[0].date)
+    return games
 
 
 def checkTeamName(request):
@@ -1164,14 +1186,15 @@ class manage_team(View):
     def post(self,request,pk):
         team=Team.objects.get(pk=pk)
         if request.method=="POST":
-            button_clicked1 =  request.POST.get("submit_1")
-            button_clicked2 =  request.POST.get("submit_2")
-            button_clicked3 =  request.POST.get("submit_3")
-            button_clicked4 =  request.POST.get("submit_4")
+            button_clicked1 = request.POST.get("submit_1")
+            button_clicked2 = request.POST.get("submit_2")
+            button_clicked3 = request.POST.get("submit_3")
+            button_clicked4 = request.POST.get("submit_4")
             if(button_clicked1!=None):
                 user=CustomUser.objects.get(pk=button_clicked1)
                 team.captain=user
                 team.save()
+                print(team.captain)
                 return HttpResponseRedirect(reverse('appEball:teams_list'))
             elif(button_clicked2!=None):
                 player=Player.objects.get(pk=button_clicked2)
@@ -1186,3 +1209,35 @@ class manage_team(View):
             elif(button_clicked4!=None):
                 Player.objects.get(pk=button_clicked4).delete()
             return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk':pk}))
+
+def registar_saldo(request,pk):
+    game=Game.objects.get(pk=pk)
+    jogadores1=list(Player.objects.filter(team=game.team1))
+    jogadores2=list(Player.objects.filter(team=game.team2))
+
+    for jogador1 in jogadores1:
+        if jogador1.balance < game.slot.field.price or jogador1.balance<3:
+            jogador1.isSub=True
+            jogador1.isStarter=False
+            jogador1.save()
+            for player in jogadores1:
+                if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
+                    player.isSub=False
+                    player.isStarter=True
+                    player.save()
+
+    for jogador2 in jogadores2:
+        if jogador2.balance < game.slot.field.price or jogador.balance<3:
+            jogador2.isSub=True
+            jogador2.isStarter=False
+            jogador2.save()
+            for player in jogadores2:
+                if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
+                    player.isSub=False
+                    player.isStarter=True
+                    player.save()
+
+
+    return HttpResponseRedirect(reverse('appEball:tournaments'))
+
+

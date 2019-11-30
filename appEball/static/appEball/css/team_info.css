@@ -1,3 +1,25 @@
+@font-face {
+    font-family: "lucidaSansRegular";
+    src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
+}
+
+@font-face {
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
+}
+
+* {
+    font-family: "lucidaSansRegular";
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background: inherit;
+    background-blend-mode: inherit;
+}
 #playersCol {
     margin-left: 30px;
     color: white;
