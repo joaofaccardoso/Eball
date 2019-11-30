@@ -5,12 +5,12 @@ Eball é um sistema online que permite a pessoas interessadas em jogar futebol a
 
 ## Requirements
 
-python==3.0.0
-pip
-Django==2.0.7
-django-multiselectfield==0.1.10
-Pillow==6.2.1
-psycopg2==2.8.4
+python==3.0.0<br/>
+pip<br/>
+Django==2.0.7<br/>
+django-multiselectfield==0.1.10<br/>
+Pillow==6.2.1<br/>
+psycopg2==2.8.4<br/>
 
 
 ## Instalation
@@ -44,7 +44,7 @@ python manage.py runserver
 
 
 ## Authors 
-Bárbara Vieira,
-João Cardoso,
-Maria Carolina Gonçalves,
+Bárbara Vieira<br/>
+João Cardoso<br/>
+Maria Carolina Gonçalves<br/>
 Maria Leonor Coelho
