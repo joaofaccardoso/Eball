@@ -85,3 +85,8 @@ class SubForm(forms.ModelForm):
         fields = (
             'subGames',
         )
+
+
+class GameForm(forms.Form):
+    team1Result = forms.IntegerField(min_value=0)
+    team2Result = forms.IntegerField(min_value=0)

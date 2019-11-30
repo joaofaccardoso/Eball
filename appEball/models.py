@@ -170,9 +170,18 @@ class Slot(models.Model):
     def __str__(self):
         return str(self.weekDay) + ", " + str(self.start) + " - " + str(self.end)
 
+class Result(models.Model):
+    goalsT1byC1 = models.IntegerField(default=-1)
+    goalsT2byC1 = models.IntegerField(default=-1)
+    goalsT1byC2 = models.IntegerField(default=-1)
+    goalsT2byC2 = models.IntegerField(default=-1)
+    goalsT1Final = models.IntegerField(default=-1)
+    goalsT2Final = models.IntegerField(default=-1)
+
 class Game(models.Model):
-    team1 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team1') 
-    team2 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team2') 
+    result = models.ForeignKey(Result, on_delete=models.CASCADE, default=None)
+    team1 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team1')
+    team2 = models.ForeignKey(Team,on_delete=models.CASCADE,default = None,related_name='team2')
     tournament = models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
     gRound = models.IntegerField(default = 0)
     goalsT1_byT1 = models.IntegerField(default=0)

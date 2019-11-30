@@ -88,8 +88,9 @@
                         <button class="btn rounded-pill" style="margin-left: 40%; margin-top: 30px;" id="joinBtn" type="submit">Change position</button>
                         {% elif not isFull and user.isAccepted %}
                         <button class="btn rounded-pill" style="margin-left: 40%; margin-top: 30px;" id="joinBtn" type="submit">Join Team</button>
-                        {% else %}
-                        <a class="btn rounded-pill" style="width: 120px; margin-left:10px;" href="#">Leave Team</a>
+                        {% endif %}
+                        {% if inTeam %}
+                            <a class="btn rounded-pill" style="width: 120px; margin-left:10px;" href="#">Leave Team</a>
                         {% endif %}
                         {% if user.pk is team.captain.pk %}
                         <a class="btn rounded-pill" style="width: 200px; margin-left:10px;" href="#" >Manage Team</a>

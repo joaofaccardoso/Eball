@@ -7,8 +7,8 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.views import View
-from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm, TeamCreationForm, TournamentDaysForm,ReserveForm, SubForm
-from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, Game, Reserve, Substitute, Slot
+from .forms import CustomUserForm, CustomUserLoginForm, EditProfileForm, TeamCreationForm, TournamentDaysForm,ReserveForm, SubForm, GameForm
+from .models import CustomUser, Tournament, Team, Tactic, Notification, Player, Field, Game, Reserve, Substitute, Slot, Result
 from django.http import JsonResponse
 from django.db import transaction
 from django.db import IntegrityError
@@ -854,7 +854,9 @@ def generate_games(request, pk):
     day=0
     for i in range(1,nRounds+1):
         for j in range(nTeams//2+nTeams%2):
-            newGame = Game(team1=teams1[j],team2=teams2[j],tournament=tournament,gRound=i,slot=slots[day])
+            newResult = Result()
+            newResult.save()
+            newGame = Game(result=newResult,team1=teams1[j],team2=teams2[j],tournament=tournament,gRound=i,slot=slots[day])
             newGame.save()
             games.append(newGame)
             day+=1
@@ -1105,6 +1107,134 @@ class game(View):
 
         return render(request, self.template_name,{'isOver':isOver,'game':game,'starterPlayers1':starterPlayers1,'starterPlayers2':starterPlayers2})
 
+    def post(self, request, pk):
+        form = GameForm(request.POST)
+        if form.is_valid():
+            game = Game.objects.get(pk=pk)
+            if request.user == game.team1.captain:
+                resultTeam1 = form.cleaned_data.get('team1Result')
+                resultTeam2 = form.cleaned_data.get('team2Result')
+                result = game.result
+                result.goalsT1byC1 = resultTeam1
+                result.goalsT2byC1 = resultTeam2
+                result.save()
+                if result.goalsT1byC2 != -1 and result.goalsT2byC2 != -1:
+                    if result.goalsT1byC1 == result.goalsT1byC2 and result.goalsT2byC1 == result.goalsT2byC2:
+                        result.goalsT1Final = result.goalsT1byC1
+                        result.goalsT2Final = result.goalsT2byC1
+                        self._registar_saldo(pk)
+                    else:
+                        n = Notification(text='The game between '+game.team1.name+' and '+game.team2.name+' does not have matching results! Better check that out!', title = 'Wrong results on '+game.tournament.name+'!', user=game.tournament.user)
+                        n.save()
+            elif request.user == game.team2.captain:
+                resultTeam1 = form.cleaned_data.get('team1Result')
+                resultTeam2 = form.cleaned_data.get('team2Result')
+                result = game.result
+                result.goalsT1byC2 = resultTeam1
+                result.goalsT2byC2 = resultTeam2
+                result.save()
+                if result.goalsT1byC1 != -1 and result.goalsT2byC1 != -1:
+                    if result.goalsT1byC1 == result.goalsT1byC2 and result.goalsT2byC1 == result.goalsT2byC2:
+                        result.goalsT1Final = result.goalsT1byC2
+                        result.goalsT2Final = result.goalsT2byC2
+                        self._registar_saldo(pk)
+                    else:
+                        n = Notification(text='The game between '+game.team1.name+' and '+game.team2.name+' does not have matching results! Better check that out!', title = 'Wrong results on '+game.tournament.name+'!', user=game.tournament.user)
+                        n.save()
+            if request.user == game.tournament.user:
+                resultTeam1 = form.cleaned_data.get('team1Result')
+                resultTeam2 = form.cleaned_data.get('team2Result')
+                result = game.result
+                result.goalsT1Final = resultTeam1
+                result.goalsT2Final = resultTeam2
+                result.save()
+                self._registar_saldo(pk)
+            if result.goalsT1Final != -1 and result.goalsT2Final != -1:
+                team1 = game.team1
+                team2 = game.team2
+                self._teamPoints(result, team1, team2)
+            return HttpResponseRedirect(reverse('appEball:game', kwargs={'pk':pk}))
+
+    def _registar_saldo(self, pk):
+        game=Game.objects.get(pk=pk)
+        jogadores1=list(Player.objects.filter(team=game.team1))
+        jogadores2=list(Player.objects.filter(team=game.team2))
+
+        for jogador1 in jogadores1:
+
+            if jogador1.balance < game.slot.field.price:
+                jogador1.isSub=True
+                jogador1.faltas+=1
+                jogador1.isStarter=False
+                jogador1.save()
+                for player in jogadores1:
+                    if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
+                        player.isSub=False
+                        player.isStarter=True
+                        player.save()
+
+            elif jogador1.balance>game.slot.field.price:
+                jogador1.balance-=game.slot.field.price
+                if jogador1.balance<3:
+                    jogador1.isSub=True
+                    jogador1.isStarter=False
+                    jogador1.save()
+                    for player in jogadores1:
+                        if(player!=jogador1 and player.isSub==True and player.position==jogador1.position):
+                            player.isSub=False
+                            player.isStarter=True
+                            player.save()
+
+
+        for jogador2 in jogadores2:
+
+            if jogador2.balance < game.slot.field.price :
+                jogador2.isSub=True
+                jogador2.faltas+=1
+                jogador2.isStarter=False
+                jogador2.save()
+                for player in jogadores2:
+                    if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
+                        player.isSub=False
+                        player.isStarter=True
+                        player.save()
+            
+            elif jogador2.balance>game.slot.field.price:
+                jogador2.balance-=game.slot.field.price
+                if jogador2.balance<3:
+                    jogador2.isSub=True
+                    jogador2.isStarter=False
+                    jogador2.save()
+                    for player in jogadores2:
+                        if(player!=jogador2 and player.isSub==True and player.position==jogador2.position):
+                            player.isSub=False
+                            player.isStarter=True
+                            player.save()
+
+    def _teamPoints(self, result , team1, team2):
+        if result.goalsT1Final > result.goalsT2Final:
+            team1.points += 3
+            team1.won += 1
+            team2.lost += 1
+        elif result.goalsT1Final == result.goalsT2Final:
+            team1.points += 1
+            team2.points += 1
+            team1.drawn += 1
+            team2.drawn += 1
+        else:
+            team2.points += 3
+            team2.won += 1
+            team1.lost += 1
+        team1.goalsDif = (team1.goalsFor + result.goalsT1Final) - (team1.goalsAgainst + result.goalsT2Final) 
+        team1.goalsFor += result.goalsT1Final
+        team1.goalsAgainst += result.goalsT2Final
+        team2.goalsDif = (team2.goalsFor + result.goalsT2Final) - (team2.goalsAgainst + result.goalsT1Final)
+        team2.goalsFor += result.goalsT2Final
+        team2.goalsAgainst += result.goalsT1Final
+        team1.played += 1
+        team2.played += 1
+        team1.save()
+        team2.save()
 
 def next_matches(players):
     games=[]

@@ -3,13 +3,16 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/game.css' %}">
+    <script type="text/javascript" src="{% static 'appEball/js/game.js' %}"></script>
 {% endblock %}
 
 {% block title %}
     Game
-{% endblock %}
-
-{% block content2 %}    
+    {% endblock %}
+    
+    {% block content2 %}    
+    <form method="post">
+        {% csrf_token %}
     <h2>{{game.tournament.name}}</h2>
     <div class="content">
         <div class="row" >
@@ -27,7 +30,7 @@
         <div class="row disp" id="row1" align='center'>
             <div class="col">
                 {% if user == game.team1.captain and isOver == True %}
-                    <a class="btn rounded-pill float-right"  id = "pageBtn" href="{% url 'appEball:presencas' game.team2.pk %}" id='pageBtn'style="height: 80%;">Attendance</a>
+                <a class="btn rounded-pill float-right"  id = "pageBtn" href="{% url 'appEball:presencas' game.team2.pk %}" id='pageBtn'style="height: 80%;">Attendance</a>
                 {% endif %}
             </div>
             <div class="col" align="right">
@@ -41,7 +44,7 @@
             </div>
             <div class="col">
                 {% if user == game.team2.captain and isOver == True %}
-                    <a class="btn rounded-pill float-left"  id = "pageBtn" href="{% url 'appEball:presencas' game.team2.pk %}" id='pageBtn'style="height: 80%; ">Attendance</a>
+                <a class="btn rounded-pill float-left"  id = "pageBtn" href="{% url 'appEball:presencas' game.team2.pk %}" id='pageBtn'style="height: 80%; ">Attendance</a>
                 {% endif %}
             </div>
         </div>
@@ -49,24 +52,25 @@
             <div class="col" align="right" >                
                 <div class="row">                
                     <div class="col" align="right" >
-                        {% if user == game.tournament.user or user == game.team2.captain %}
-                        <div class="row">
-                            <div class="col-1" style="padding-top: 10px">
-                                <a href="">
-                                    <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                </a>
-                                
-                            </div>
-                            <div class="col-1">
-                                <a href="">
-                                    <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;" alt="" >
-                                </a>
-                            </div>
-                        </div>
+                        {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 and isOver == True %}
+                            {% if user == game.tournament.user or user == game.team2.captain or user == game.team1.captain %}
+                            <a id="minus1" style="margin-right: 10px;background: inherit; border: none;">
+                                <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
+                            </a>
+                            <a id="plus1" style="background: inherit; border: none;">
+                                <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;" alt="" >
+                            </a>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="col-3" align="right" >
-                        <p class="center goals" > {{game.goalsT1_byT1}} </p>
+                        {% if user == game.team1.captain %}
+                            <input class="center goals" readonly {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 %} {% if game.result.goalsT1byC1 < 0 %} value=0 {% else %} value={{game.result.goalsT1byC1}} {% endif %} {% else %} value={{game.result.goalsT1Final}} {% endif %} id="team1Input" name="team1Result" style="width: 30px; background: inherit; border: none;">
+                        {% elif user == game.team2.captain %}
+                            <input class="center goals" readonly {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 %} {% if game.result.goalsT1byC2 < 0 %} value=0 {% else %} value={{game.result.goalsT1byC2}} {% endif %} {% else %} value={{game.result.goalsT1Final}} {% endif %} id="team1Input" name="team1Result" style="width: 30px; background: inherit; border: none;">
+                        {% else %}
+                            <input class="center goals" readonly {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 %} value=0 {% else %} value={{game.result.goalsT1Final}} {% endif %} id="team1Input" name="team1Result" style="width: 30px; background: inherit; border: none;">
+                        {% endif %}
                     </div>
                 </div>
 
@@ -77,28 +81,29 @@
             <div class="col" align="left" >        
                 <div class="row">
                     <div class="col-3" align="left" >
-                        <p class="center goals" > {{game.goalsT1_byT2}} </p>
+                        {% if user == game.team1.captain %}
+                            <input class="center goals" readonly {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 %} {% if game.result.goalsT2byC1 < 0 %} value=0 {% else %} value={{game.result.goalsT2byC1}} {% endif %} {% else %} value={{game.result.goalsT2Final}} {% endif %} id="team2Input" name="team2Result" style="width: 30px; background: inherit; border: none;">
+                        {% elif user == game.team2.captain %}
+                            <input class="center goals" readonly {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 %} {% if game.result.goalsT2byC2 < 0 %} value=0 {% else %} value={{game.result.goalsT2byC2}} {% endif %} {% else %} value={{game.result.goalsT2Final}} {% endif %} id="team2Input" name="team2Result" style="width: 30px; background: inherit; border: none;">
+                        {% else %}
+                            <input class="center goals" readonly {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 %} value=0 {% else %} value={{game.result.goalsT2Final}} {% endif %} id="team2Input" name="team2Result" style="width: 30px; background: inherit; border: none;">
+                        {% endif %}
                     </div>
-                    <div class="col" align="center" >
-                        {% if user == game.tournament.user or user == game.team1.captain %}
-                        <div class="row">
-                            <div class="col-1" style="padding-top: 10px">
-                                <a href="">
+                    <div class="col" align="left" >
+                        {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 and isOver == True %}
+                            {% if user == game.tournament.user or user == game.team1.captain or user == game.team2.captain %}
+                            <a id="minus2" style="background: inherit; border: none;">
                                 <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                </a>
-                            </div>
-                            <div class="col-1" >
-                                    <a href="">
+                            </a>
+                            <a id="plus2" style="margin-left: 10px; background: inherit; border: none;">
                                 <img src="{% static 'appEball/assets/plus_preto.png' %}"  style="width:25px;height:25px;"  alt="" >
-                                </a>
-                            </div>
-                        </div>
+                            </a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
             </div>           
         </div>
-        <form method="post">
             <div class="row disp" align='center' style="margin-top: 20px;">
                 <div class="col" align="right">
                     {% if game.team1.tactic.nST > 0 %}
@@ -129,46 +134,7 @@
                                 <p class="text-left">{{player.1.reserveSub.user.firstName}} {{player.1.reserveSub.user.lastName}}</p>
                             {% endif %}
                         </div>
-                        <div class="col-3">
-                            {% if user == game.team1.captain %}
-                            <div class="card" style="height:30px;background-color: #727070;border-radius: 20px; ">
-
-                                <div class="row">
-                                    <div class="col-1" style="padding-right:6%;padding-top: 10px">
-                                        <a href="">
-                                        <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                        </a>
-                                    </div>
-                                    <div class="col-5" align="right">
-                                        <img src="{% static 'appEball/assets/football_preto.png' %}"  alt="" height="22" width="22">
-                                    </div>
-                                   <div class="col-1">
-                                        <a href="">
-                                        <img src="{% static 'appEball/assets/plus_preto.png' %}"   style="width:25px;height:25px;" alt="" >
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}              
-                        </div>
-                        <div class="col-2" >
-                            <div class="row">
-                                <div class="col">
-                                {% if player.2 and player.1.nrGoals > 0 %}
-                                    <p class="text-right">{{player.1.nrGoals}}</p>
-                                {% elif player.1.playerSub != None and player.1.playerSub.nrGoals > 0 %}
-                                    <p class="text-right">{{player.1.playerSub.nrGoals}}</p>
-                                {% elif player.1.reserveSub != None and player.1.playerSub.nrGoals > 0 %}
-                                    <p class="text-right">{{player.1.playerSub.nrGoals}}</p>
-                                {% endif %}
-                                </div>
-                                <div class="col" >
-                                    <img src="{% static 'appEball/assets/football_branco.png' %}" alt="">
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="col-2" >
+                        <div class="col" align='right'>
                             {% if player.2 %}
                                 <p class="text-right">{{ player.1.position}}</p>
                             {% else %}
@@ -190,45 +156,7 @@
                                 <p class="text-left">{{ player.1.playerSub.position}}</p>
                             {% endif %}
                         </div>
-                        <div class="col-2" >
-                            <div class="row">
-                                <div class="col">
-                                {% if player.2 and player.1.nrGoals > 0 %}
-                                    <p class="text-left">{{player.1.nrGoals}}</p>
-                                {% elif player.1.playerSub != None and player.1.playerSub.nrGoals > 0 %}
-                                    <p class="text-left">{{player.1.playerSub.nrGoals}}</p>
-                                {% elif player.1.reserveSub != None and player.1.playerSub.nrGoals > 0 %}
-                                    <p class="text-left">{{player.1.playerSub.nrGoals}}</p>
-                                {% endif %}
-                                </div>
-                                <div class="col">
-                                    <img src="{% static 'appEball/assets/football_branco.png' %}" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            {% if user == game.team2.captain %}
-                            <div class="card" style="height:30px;background-color: #727070;border-radius: 20px; ">
-
-                                <div class="row">
-                                    <div class="col-1" style="padding-left:6%;padding-top: 10px">
-                                        <a href="">
-                                        <img src="{% static 'appEball/assets/minus_preto.png' %}"  alt="" >
-                                        </a>
-                                    </div>
-                                    <div class="col-5" align="left">
-                                        <img src="{% static 'appEball/assets/football_preto.png' %}"  alt="" height="22" width="22">
-                                    </div>
-                                   <div class="col-1">
-                                        <a href="">
-                                        <img src="{% static 'appEball/assets/plus_preto.png' %}"   style="width:25px;height:25px;" alt="" >
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}              
-                        </div>
-                        <div class="col-5" >
+                        <div class="col" >
                             {% if player.2 %}
                                 <p class="text-right">{{player.1.user.firstName}} {{player.1.user.lastName}}</p>
                             {% elif player.1.playerSub != None %}
@@ -242,10 +170,12 @@
                 </div>
             </div>
             <div class="row disp" align='center' style="margin-top: 20px;">
-                {% if user == game.tournament.user or user == game.team1.captain or user == game.team2.captain %}
-                <div class="col" align="right" >
-                    <a class="btn rounded-pill center"  href="" id='pageBtn' style="width: 160px;">Confirm</a>
-                </div>
+                {% if game.result.goalsT1Final < 0 and game.result.goalsT2Final < 0 and isOver == True %}
+                    {% if user == game.tournament.user or user == game.team1.captain or user == game.team2.captain %}
+                        <div class="col" align="right" >
+                            <button class="btn rounded-pill center" id='pageBtn' style="width: 160px;" type="submit">Confirm</button>
+                        </div>
+                    {% endif %}
                 <div class="col" align="left">
                 {% else %}
                     <div class="col" align="center">

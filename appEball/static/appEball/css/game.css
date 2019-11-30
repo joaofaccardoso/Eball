@@ -86,3 +86,23 @@ h2 {
 .team, .goals{
     font-size: 20px;
 }
+
+#plus1:hover {
+    cursor: pointer;
+}
+
+#plus2:hover {
+    cursor: pointer;
+}
+
+#minus1:hover {
+    cursor: pointer;
+}
+
+#minus2:hover {
+    cursor: pointer;
+}
+
+input {
+    color: white;
+}

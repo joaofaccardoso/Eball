@@ -62,15 +62,20 @@
                             <p class="team">{{ game.1.team1.name }} </p>
                         </a>
                     </div>
+                    <div class="col-1" align='right' style="margin: none;">
+                        <p>{% if game.1.result.goalsT1Final < 0 and game.1.result.goalsT2Final < 0 %} NF {% else %} {{ game.1.result.goalsT1Final }} {% endif %}</p>
+                    </div>
                     <div class="col-sm-4" align='center'>
                         <a class="team" href="{% url 'appEball:game' game.1.pk %}">
                             <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:i' }}, {{ game.1.slot.field.name }} </p>
                         </a>
                     </div>
-                        </a>
+                    <div class="col-1" align='left' style="margin: none;">
+                        <p>{% if game.1.result.goalsT1Final < 0 and game.1.result.goalsT2Final < 0 %} NF {% else %} {{ game.1.result.goalsT2Final }} {% endif %}</p>
+                    </div>
                     <div class="col" align='left'>
                         <a class="team" href="{% url 'appEball:team_info' game.1.team2.pk %}">
-                            <p class="team">{{ game.1.team2.name }} </p>
+                            <p class="team"> {{ game.1.team2.name }} </p>
                         </a>
                     </div>
                 </div>
