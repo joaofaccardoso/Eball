@@ -76,10 +76,10 @@ class UserLogin(View):
                 return HttpResponseRedirect(reverse('appEball:home_page'))
             else:
                 messages.warning(request, 'Invalid username or password.')
-                return HttpResponseRedirect('')
+                return HttpResponseRedirect(reverse('appEball:login'))
         else:
             messages.warning(request, 'Invalid username or password.')
-            return HttpResponseRedirect('')
+            return HttpResponseRedirect(reverse('appEball:login'))
 
 def userLogout(request):
     logout(request)
@@ -337,7 +337,7 @@ class TeamInfo(View):
             chosenPosition = request.POST['position']
         else:
             messages.warning(request, 'You need to choose a position!')
-            return HttpResponseRedirect('')
+            return HttpResponseRedirect(reverse('appEball:team_info'))
         isStarter = True
         isSub=False
         if chosenPosition == 'subST':
