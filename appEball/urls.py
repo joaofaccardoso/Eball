@@ -47,4 +47,6 @@ urlpatterns = [
     path('presencas/<int:pk>/',views.presencas.as_view(),name='presencas'),
     path('game/<int:pk>',views.game.as_view(),name='game'),
     path('manage_team/<int:pk>',views.manage_team.as_view(),name='manage_team'),
+
+    path('updateBalance/<int:pk>/', views.updateBalance.as_view(), name='updateBalance'),
 ]

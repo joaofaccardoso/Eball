@@ -93,3 +93,13 @@ class SubForm(forms.ModelForm):
         fields = (
             'subGames',
         )
+
+
+
+class BalanceForm(forms.ModelForm):
+
+    class Meta:
+        model = Player
+        fields = (
+            
+        )

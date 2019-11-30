@@ -83,7 +83,7 @@
                     
                 </div>
                  <div class="col-2" >
-                    <a class="btn rounded-pill pull-right"  id="pageBtn" href="{% url 'appEball:userProfile' player.1.user.username %}" style="width: 160px">Update Balance</a>
+                    <a class="btn rounded-pill pull-right"  id="pageBtn" href="{% url 'appEball:updateBalance' player.1.pk %}" style="width: 160px">Update Balance</a>
                 </div>
                  <div class="col-2" >
                     {% if player.1.user.firstName != team.captain.firstName %}

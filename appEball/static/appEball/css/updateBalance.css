@@ -1,0 +1,107 @@
+@font-face {
+    font-family: "lucidaSansRegular";
+    src: url("../fonts/lucida-sans/LucidaSansRegular.ttf");
+}
+
+@font-face {
+    font-family: "lucidaSansDemibold";
+    src: url("../fonts/lucida-sans/lucidasansdemibold.ttf");
+}
+
+* {
+    font-family: "lucidaSansRegular";
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background: inherit;
+    background-blend-mode: inherit;
+}
+
+
+#pageBtn {
+    background-color: #727070;
+    color: white;
+    height: 80%;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 20px;
+}
+
+
+
+#pageBtn2 {
+    background-color: #727070;
+    color: white;
+    height: 80%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 10px auto;
+    text-align: right;
+}
+
+#pageBtn:hover {
+    background-color: #FFE603;
+    color: #262626;
+    transition:0.5s;
+}
+
+#pageBtn2:hover {
+    background-color: #FFE603;
+    color: #262626;
+    transition:0.5s;
+}
+
+#all #pageBtn{
+    float: right;
+}
+
+#my #pageBtn{
+    float: right;
+}
+
+
+
+
+.row{
+
+    padding-right: 60px;
+    padding-left: 60px;
+}
+
+#coluna{
+    text-align: center;
+    
+}
+#others{
+    font-size: 14px;
+    color: #E5E5E5;
+}
+#p1{
+    text-align: center;
+    font-size: 30px;
+    padding-left: 30px;
+    padding-top: 30px;
+    color: white;
+}
+
+
+#p2{
+    margin: 10px auto;
+    text-align: center;
+    font-size: 14px;
+    color: yellow;
+}
+
+#inc{
+    width: 300px;
+    margin: 10px auto;
+    text-align: center;
+    
+}
