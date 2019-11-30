@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-sm-4" align='center'>
                         <a class="team" href="{% url 'appEball:game' game.1.pk %}">
-                            <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:m' }}, {{ game.1.slot.field.name }} </p>
+                            <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:i' }}, {{ game.1.slot.field.name }} </p>
                         </a>
                     </div>
                         </a>
@@ -131,7 +131,9 @@
                     <div class="col-sm-2">
                         <div class="row">
                             <div class="col"  align='center'>
-                                <p class="topRow" id="Midfielder">{{ team.1.name }}</p>
+                                <a href="">
+                                    <p class="topRow" id="Midfielder">{{ team.1.name }}</p>
+                                </a>
                             </div>
                         </div>
                     </div>

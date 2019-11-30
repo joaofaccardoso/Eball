@@ -111,7 +111,7 @@
                             {% elif t.3 == 1 %}
                                 <p class="d-inline-block text-truncat" id="p2">Waiting for tournament to start...</p>
                             {% else %}
-                                <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date|date:'d-m-Y, H:m'}}</p>
+                                <p class="d-inline-block text-truncat" id="p2"><b>Next match:</b> {{t.3.slot.date|date:'d-m-Y, H:i'}}</p>
                                 <p class="d-inline-block text-truncat" id="p1">Round {{t.3.gRound}}</p>
                             {% endif %}
                         </div>

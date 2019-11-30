@@ -1,7 +1,6 @@
 from django.db import models
 import datetime
 from django.contrib.auth.models import AbstractUser
-from multiselectfield import MultiSelectField
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
 class CustomUser(AbstractUser):
@@ -205,6 +204,7 @@ class Substitute(models.Model):
     originalPlayer=models.ForeignKey(Player,null=True, on_delete=models.CASCADE,related_name='originalPlayer')
     hasAccepted= models.BooleanField(default=True) #tem de estar a false mas é so para teste
     isActive=models.BooleanField(default=True)
+    nrGoals = models.IntegerField(default=0)
 
 
     class Meta:

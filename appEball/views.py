@@ -893,15 +893,10 @@ def get_slots(startDate,nGames,tournamentSlots):
         hEnd=tournamentSlots[i].end.hour
         mEnd=tournamentSlots[i].end.minute
 
-        newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
         while(hStart+1+(mStart+30)//60<hEnd or (hStart+1+(mStart+30)//60==hEnd and (mStart+30)%60<=mEnd)):
+            newDate=datetime.datetime(day=date.day,month=date.month,year=date.year,hour=hStart,minute=mStart)
             daySlots=list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=newDate))
             if(len(daySlots)==0):
-                s1=newDate+datetime.timedelta(minutes=30)
-                while(list(Slot.objects.filter(weekDay=newDate.weekday(),field=tournamentSlots[i].field,date=s1))!=0):
-                    s1=s1+datetime.timedelta(minutes=30)
-
-                s2=s1+datetime.timedelta(minutes=30)
                 newSlot=Slot(weekDay=newDate.weekday(),date=newDate,field=tournamentSlots[i].field)
                 newSlot.save()
                 slotsDays.append(newSlot)
@@ -1067,23 +1062,48 @@ class game(View):
         isSt1=False
         isSt2=False
 
-        for i in range(len(jogadores1)):
-            if(i%2==0):
-                players1.append(["row2",jogadores1[i]])
-            else:
-                players1.append(["row1",jogadores1[i]])
-
-        for i in range(len(jogadores2)):
-            if(i%2==0):
-                players2.append(["row2",jogadores2[i]])
-            else:
-                players2.append(["row1",jogadores2[i]])
-
         isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
 
-        
+        allPlayers1 = Player.objects.filter(team=game.team1).values_list('user',flat = True)
+        allPlayers2 = Player.objects.filter(team=game.team2).values_list('user',flat = True)
 
-        return render(request, self.template_name,{'isOver':isOver,'game':game,'players1':players1,'players2':players2})
+        subs1 = Substitute.objects.filter(originalPlayer__in=allPlayers1)
+        subs2 = Substitute.objects.filter(originalPlayer__in=allPlayers2)
+
+        starterPlayers1Filter = list(Player.objects.filter(team=game.team1,isSubbed=False))
+        starterPlayers2Filter = list(Player.objects.filter(team=game.team2,isSubbed=False))
+        if(subs1.count()!=0):
+            starterPlayers1Filter.append(subs1)
+        if(subs2.count()!=0):
+            starterPlayers2Filter.append(subs2)
+        starterPlayers2Filter.append(subs2)
+        print(starterPlayers2Filter)
+
+        starterPlayers1 = list()
+        starterPlayers2 = list()
+        for i in range(len(starterPlayers1Filter)):
+            if(i%2==0):
+                if(isinstance(starterPlayers1Filter[i], Player)):
+                    starterPlayers1.append(['row2',starterPlayers1Filter[i],True])
+                else:
+                    starterPlayers1.append(['row2',starterPlayers1Filter[i],False])
+
+                if(isinstance(starterPlayers2Filter[i], Player)):
+                    starterPlayers2.append(['row2',starterPlayers2Filter[i],True])
+                else:
+                    starterPlayers2.append(['row2',starterPlayers2Filter[i],False])
+            else:
+                if(isinstance(starterPlayers1Filter[i], Player)):
+                    starterPlayers1.append(['row1',starterPlayers1Filter[i],True])
+                else:
+                    starterPlayers1.append(['row1',starterPlayers1Filter[i],False])
+
+                if(isinstance(starterPlayers2Filter[i], Player)):
+                    starterPlayers2.append(['row1',starterPlayers2Filter[i],True])
+                else:
+                    starterPlayers2.append(['row1',starterPlayers2Filter[i],False])
+
+        return render(request, self.template_name,{'isOver':isOver,'game':game,'starterPlayers1':starterPlayers1,'starterPlayers2':starterPlayers2})
 
 
 def next_matches(players):
