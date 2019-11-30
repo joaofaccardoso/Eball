@@ -34,7 +34,7 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="content1">
-                        <div class="row" >
+                        <div class="row" style="margin-top: 20px;">
                             <div class="col-sm-2">
                                 <label for="id_name">Team's name:</label>
                             </div>
@@ -42,7 +42,7 @@
                                 <input type="text" class="form-control rounded-pill" placeholder="Enter the Team's name" name="name" maxlength="100" required="" id="id_name" style="width: 400px; ">   
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin-top: 20px;">
                             <div class="col-sm-2">
                                 <label for="tactic">Select tactic:</label>
                             </div>
@@ -54,7 +54,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin-top: 20px;">
                             <div class="col-sm-2">
                                 <label for="sel1">Select tournament:</label>
                             </div>
@@ -66,12 +66,12 @@
                                 </select>
                             </div>
                         </div>  
-                    </div> 
-                    <div class="row">
-                        <div class="col text-center">
-                            <button class="btn rounded-pill" type="submit" id="pageBtn" style="width: 10%;">Create</button>
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col" align="center">
+                                <button class="btn rounded-pill" type="submit" id="create" style="width: 160px;">Create</button>
+                            </div>
                         </div>
-                    </div>
+                    </div> 
                 </form>
             </div>
             <div class="tab-pane fade border border-1 active show" id="all" role="tabpanel" aria-labelledby="all-tab">

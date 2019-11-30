@@ -51,7 +51,7 @@ class Tournament(models.Model):
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
     gRound=models.IntegerField(unique=False,default=0)
 
-    REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
+    REQUIRED_FIELDS = ['name','maxTeams','beginDate','user']
 
     class Meta:
         db_table = 'Tournament'
@@ -132,14 +132,13 @@ class Player(models.Model):
         ordering = ['team', '-isStarter', '-position']
     
     def __str__(self):
-        return self.user.username+" || "+self.team.name+' || '+self.position
+        return self.user.username+" || "+self.team.name+' || '+self.position + ' || '+str(self.isSub)
 
     
 class Reserve(models.Model):
     tournament=models.ForeignKey(Tournament,on_delete=models.CASCADE,default=None)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
-    
     class Meta:
         db_table = 'Reserve'
         verbose_name = 'Reserve'
@@ -209,12 +208,9 @@ class TournamentDays(models.Model):
 
 class Substitute(models.Model):
     reserveSub=models.ForeignKey(Reserve,null=True, on_delete=models.CASCADE,related_name='reserveSub')
-    playerSub=models.ForeignKey(Player,null=True, on_delete=models.CASCADE)
     originalPlayer=models.ForeignKey(Player,null=True, on_delete=models.CASCADE,related_name='originalPlayer')
     hasAccepted= models.BooleanField(default=True) #tem de estar a false mas é so para teste
-    isActive=models.BooleanField(default=True)
     nrGoals = models.IntegerField(default=0)
-
 
     class Meta:
         db_table = 'Substitute'

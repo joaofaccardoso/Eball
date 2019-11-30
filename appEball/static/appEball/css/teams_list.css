@@ -91,7 +91,7 @@ body {
     color: white;   
 }
 
-#pageBtn, #pageBtnInactive{
+#pageBtn, #pageBtnInactive, #create{
     background-color: #727070;
     color: white;
     height: 80%;
@@ -125,11 +125,9 @@ body {
 .content1{
     height: 55%;
     margin-top: 20px;
-
 }
 
 .content1 .row{
-    height: 20%;
     display: flex;
     align-items: center;
 }
