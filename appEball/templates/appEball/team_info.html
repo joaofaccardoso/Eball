@@ -52,7 +52,7 @@
                     <div class="row" id="{% cycle 'row2' 'row1' %}">
                         <div class="col-7">
                             {% if sub.0 %}
-                                <input type="radio" name="position" disabled style="opacity: 0%;" value="sub{{ sub.1 }}"> {{ sub.0.user.firstName }} {{ sub.0.user.lastName }}
+                                <input type="radio" name="position" disabled style="opacity: 0%;" value="sub{{ sub.1 }}"> {{ sub.0.user.firstName }} {{ sub.0.user.lastName }} {% if sub.0.user.pk is team.captain.pk %} (captain) {%endif%}
                             {% else %}
                                 {% if user.isAccepted %}
                                     <input type="radio" name="position" value="sub{{ sub.1 }}"> Choose this position
@@ -90,7 +90,7 @@
                                 <button class="btn rounded-pill" id="joinBtn" type="submit" style="width: 160px;">Change position</button>
                             {% endif %}
                             {% if user.pk is team.captain.pk %}
-                                <a class="btn rounded-pill" style="width: 160px; margin-left:10px;" href="{% url 'appEball:manage_team0' team.pk %}" >Manage Team</a>
+                                <a class="btn rounded-pill" style="width: 160px; margin-left:10px;" href="{% url 'appEball:manage_team' team.pk %}" >Manage Team</a>
                             {% elif team.tournament.gRound == 0 %}
                                 <a class="btn rounded-pill" style="width: 160px; margin-left:10px;" href="{% url 'appEball:leave_team' team.pk %}" >Leave Team</a>
                             {% endif %}

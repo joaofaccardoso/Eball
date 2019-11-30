@@ -103,7 +103,7 @@ class teams_list(View):
             myTeamsList=Player.objects.filter(user=request.user).values_list('team',flat=True)
             myTeamsFilter=Team.objects.filter(pk__in=myTeamsList)
             myTournaments = myTeamsFilter.values_list('tournament',flat=True)
-            tournaments = Tournament.objects.all().exclude(pk__in=myTournaments)
+            tournaments = Tournament.objects.all().exclude(pk__in=myTournaments,isFull=True)
             myTeamsFilter=list(myTeamsFilter)
         else:
             tournaments=list(Tournament.objects.all())
@@ -171,6 +171,11 @@ class teams_list(View):
                 newPlayer.save()
                 newTeam.availMF -= 1
                 newTeam.save()
+
+                nTeams = Team.objects.filter(tournament = tournament).count()
+                if(nTeams==tournament.maxTeams):
+                    tournament.isFull==True
+                    tournament.save()
                 return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
@@ -913,56 +918,44 @@ class game(View):
     template_name='appEball/game.html'
 
     def get(self,request,pk):
-        game=Game.objects.get(pk=pk)
-        jogadores1=list(Player.objects.filter(team=game.team1))
-        jogadores2=list(Player.objects.filter(team=game.team2))
-        players1=list()
-        players2=list()
-        isSt1=False
-        isSt2=False
+        game=Game.objects.get(pk=pk)   
 
-        isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
+        allPlayers1 = Player.objects.filter(team=game.team1)
+        allPlayers2 = Player.objects.filter(team=game.team2)
+        
+        starters1 = list(Player.objects.filter(team=game.team1,isSubbed = False))
+        starters2 = list(Player.objects.filter(team=game.team2,isSubbed = False))
 
-        allPlayers1 = Player.objects.filter(team=game.team1).values_list('user',flat = True)
-        allPlayers2 = Player.objects.filter(team=game.team2).values_list('user',flat = True)
+        subs1 = list(Substitute.objects.filter(originalPlayer__in=allPlayers1))
+        subs2 = list(Substitute.objects.filter(originalPlayer__in=allPlayers2))
 
-        subs1 = Substitute.objects.filter(originalPlayer__in=allPlayers1)
-        subs2 = Substitute.objects.filter(originalPlayer__in=allPlayers2)
-
-        starterPlayers1Filter = list(Player.objects.filter(team=game.team1,isSubbed=False))
-        starterPlayers2Filter = list(Player.objects.filter(team=game.team2,isSubbed=False))
-        if(subs1.count()!=0):
-            starterPlayers1Filter.append(subs1)
-        if(subs2.count()!=0):
-            starterPlayers2Filter.append(subs2)
-        starterPlayers2Filter.append(subs2)
-        print(starterPlayers2Filter)
-
-        starterPlayers1 = list()
-        starterPlayers2 = list()
-        for i in range(len(starterPlayers1Filter)):
+        allStarters1=list()
+        allStarters2=list()
+        for i in range(16):
             if(i%2==0):
-                if(isinstance(starterPlayers1Filter[i], Player)):
-                    starterPlayers1.append(['row2',starterPlayers1Filter[i],True])
+                if(len(starters1)>i):
+                    allStarters1.append(["row2",starters1[i],True])
                 else:
-                    starterPlayers1.append(['row2',starterPlayers1Filter[i],False])
+                    allStarters1.append(["row2",subs1[i-len(starters1)],False])
 
-                if(isinstance(starterPlayers2Filter[i], Player)):
-                    starterPlayers2.append(['row2',starterPlayers2Filter[i],True])
+                if(len(starters2)>i):
+                    allStarters2.append(["row2",starters2[i],True])
                 else:
-                    starterPlayers2.append(['row2',starterPlayers2Filter[i],False])
+                    allStarters2.append(["row2",subs2[i-len(starters2)],False])
             else:
-                if(isinstance(starterPlayers1Filter[i], Player)):
-                    starterPlayers1.append(['row1',starterPlayers1Filter[i],True])
+                if(len(starters1)>i):
+                    allStarters1.append(["row1",starters1[i],True])
                 else:
-                    starterPlayers1.append(['row1',starterPlayers1Filter[i],False])
+                    allStarters1.append(["row1",subs1[i-len(starters1)],False])
 
-                if(isinstance(starterPlayers2Filter[i], Player)):
-                    starterPlayers2.append(['row1',starterPlayers2Filter[i],True])
+                if(len(starters2)>i):
+                    allStarters2.append(["row1",starters2[i],True])
                 else:
-                    starterPlayers2.append(['row1',starterPlayers2Filter[i],False])
-
-        return render(request, self.template_name,{'isOver':isOver,'game':game,'starterPlayers1':starterPlayers1,'starterPlayers2':starterPlayers2})
+                    allStarters2.append(["row1",subs2[i-len(starters2)],False])
+            
+        isOver = game.slot.date +datetime.timedelta(hours=1,minutes=30) <= timezone.now()
+        print(allStarters1)
+        return render(request, self.template_name,{'allStarters1':allStarters1,'allStarters2':allStarters2,'isOver':isOver,'game':game})
 
     def post(self, request, pk):
         form = GameForm(request.POST)
@@ -1258,6 +1251,9 @@ def sub_perm(request,teamId,subId):
     user.isSub = True
     user.isStarter = False
     user.save()
+
+    notification = Notification(title='Requested for you to be starter!', text=user.user.username+' asked you to be starter!' , user=sub.user)
+    notification.save()
     return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':teamId}))
 
 def leave_team(request,teamId):
