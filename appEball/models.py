@@ -49,7 +49,6 @@ class Tournament(models.Model):
     name=models.CharField(max_length=100, blank=False, unique=True)
     maxTeams = models.IntegerField(unique=False, blank=False)
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
-    endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
     user = models.ForeignKey(CustomUser,default=None,on_delete=models.SET_DEFAULT)
     gRound=models.IntegerField(unique=False,default=0)
 
@@ -65,7 +64,7 @@ class Tournament(models.Model):
 
 class Field(models.Model):
     name = models.CharField(max_length=100, blank=False, unique=True)
-    price=models.IntegerField(default=3)
+    price=models.FloatField(default=3)
 
     class Meta:
         db_table = 'Field'
@@ -195,9 +194,8 @@ class TournamentDays(models.Model):
     name=models.CharField(max_length=100, blank=False, unique=True)
     maxTeams = models.IntegerField(unique=False, blank=False)
     beginDate=models.DateField(('Tournament Start Date'),default=datetime.date.today)
-    endDate=models.DateField(('Tournament End Date'),default=datetime.date.today)
 
-    REQUIRED_FIELDS = ['name','maxTeams','beginDate','endDate','user']
+    REQUIRED_FIELDS = ['name','maxTeams','beginDate','user']
 
 
 

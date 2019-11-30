@@ -54,8 +54,9 @@ class UserRegister(View):
             return HttpResponseRedirect(reverse('appEball:home_page'))
         else:
             print(form.errors)
-            messages.warning(request, f'Form is not valid.')
-            return HttpResponseRedirect(reverse('appEball:register'))
+            messages.warning(request, 'Password needs to be at least 8 chars long or passwords do not match!')
+            context = {'title': 'Register', 'firstName': form.cleaned_data.get('firstName'), 'lastName':form.cleaned_data.get('lastName'), 'username':form.cleaned_data.get('username'), 'email':form.cleaned_data.get('email'), 'ccNumber':form.cleaned_data.get('ccNumber'),'phoneNumber':form.cleaned_data.get('phoneNumber')}
+            return render(request, self.template_name, context)
 
 class UserLogin(View):
     form_class = CustomUserLoginForm
@@ -167,6 +168,8 @@ class teams_list(View):
                 messages.success(request, 'Team created successfuly!')
                 newPlayer = Player(position='MF', balance=20,nrGoals=0,isStarter=True,isSub=False,team=newTeam,user=request.user)
                 newPlayer.save()
+                newTeam.availMF -= 1
+                newTeam.save()
                 return HttpResponseRedirect(reverse('appEball:team_info', kwargs={'teamId':newTeam.pk}))
             else:
                 print(form.errors)
@@ -483,7 +486,7 @@ class tournaments(View):
         allTournaments=[]
         myTournaments=[]
         fieldsFilter = list(Field.objects.all())
-        # self._create_slots(fieldsFilter)
+        #self._create_slots(fieldsFilter)
         fields=list()
 
         week={0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'}
@@ -530,10 +533,9 @@ class tournaments(View):
                 name = form.cleaned_data.get('name')
                 maxTeams = form.cleaned_data.get('maxTeams')
                 beginDate = form.cleaned_data.get('beginDate')
-                endDate = form.cleaned_data.get('endDate')
 
                 user = CustomUser.objects.get(username=request.user.username)
-                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,endDate=endDate,user=user)
+                newTournament = Tournament(name=name,maxTeams=maxTeams,beginDate=beginDate,user=user)
                 newTournament.save()
 
                 tournamentSlots = list()
@@ -818,7 +820,7 @@ def generate_games(request, pk):
     nRounds = nTeams-1+nTeams%2
     nGames = nRounds*(nTeams//2+nTeams%2)
 
-    slots=get_slots(tournament.beginDate,tournament.endDate,nGames,tournamentSlots)
+    slots=get_slots(tournament.beginDate,nGames,tournamentSlots)
 
     teams2 = teams1.copy()
     teams2.reverse()
@@ -856,7 +858,7 @@ def generate_games(request, pk):
     return HttpResponseRedirect(reverse('appEball:tournament_info', kwargs={'pk':pk,'gRound':tournament.gRound}))
 
 
-def get_slots(startDate,endDate,nGames,tournamentSlots):
+def get_slots(startDate,nGames,tournamentSlots):
     
     slotsDays = list()
     game=0
@@ -1118,13 +1120,12 @@ def checkDates(request):
     if request.user.is_authenticated:
         data = json.loads(request.body)
         startDate = data['startDate']
-        endDate = data['endDate']
-        if endDate!='' and startDate!='':
-            if (endDate < startDate):
-                return JsonResponse({'is_complete':True, 'is_valid':False})
-            return JsonResponse({'is_complete':True, 'is_valid':True})
+        if startDate!='':
+            if (str(timezone.now()) > startDate):
+                return JsonResponse({'is_valid':False})
+            return JsonResponse({'is_valid':True})
         else:
-            return JsonResponse({'is_complete':False,'is_valid':True})
+            return JsonResponse({'is_valid':False})
     else:
         raise Http404
 

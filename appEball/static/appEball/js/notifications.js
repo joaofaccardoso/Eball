@@ -24,8 +24,7 @@ function sendAjax(e, pk){
         type: "PATCH",
         contentType:"application/json",
         success: (response_data)=>{
-            $('#notificationsNav').load(' #notificationsNav');
-            $('#myTabContent').load(' #myTabContent');
+            window.location = '';
         },
         failure:(response_data)=>{
             console.log("FAILURE===", response_data);

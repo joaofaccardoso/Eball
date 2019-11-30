@@ -19,29 +19,29 @@
                 <div class="col" id="middleColLeft">
                     <div class="row">
                         <label for="id_firstName">First name:</label>
-                        <input type="text" class="form-control rounded-pill" placeholder="Enter your first name" name="firstName" maxlength="100" required="" id="id_firstName">
+                        <input type="text" class="form-control rounded-pill" placeholder="Enter your first name" name="firstName" maxlength="100" required="" id="id_firstName" {% if firstName %} value={{ firstName }} {% endif %} >
                     </div>
                     <div class="row">
                         <label for="id_lastName">Last name:</label>
-                        <input type="text" class="form-control rounded-pill" placeholder="Enter your last name" name="lastName" maxlength="100" required="" id="id_lastName">
+                        <input type="text" class="form-control rounded-pill" placeholder="Enter your last name" name="lastName" maxlength="100" required="" id="id_lastName" {% if lastName %} value={{ lastName }} {% endif %}>
                     </div>
                     <div class="row">
                         <label for="id_username">Username:</label>
-                        <input type="text" class="form-control rounded-pill" placeholder="Enter a username" name="username" maxlength="150" required="" id="id_username">
+                        <input type="text" class="form-control rounded-pill" placeholder="Enter a username" name="username" maxlength="150" required="" id="id_username" {% if username %} value={{ username }} {% endif %}>
                     </div>
                     <div class="row">
                         <label for="id_email">E-mail:</label>
-                        <input type="email" class="form-control rounded-pill" placeholder="Enter e-mail" name="email" maxlength="255" autofocus="" required="" id="id_email">
+                        <input type="email" class="form-control rounded-pill" placeholder="Enter e-mail" name="email" maxlength="255" autofocus="" required="" id="id_email" {% if email %} value={{ email }} {% endif %}>
                     </div>
                 </div>
                 <div class="col" id="middleColRight">
                     <div class="row">
                         <label for="id_ccNumber">CcNumber:</label>
-                        <input type="number" class="form-control rounded-pill" placeholder="Enter your CC number" name="ccNumber" required="" id="id_ccNumber">
+                        <input type="number" class="form-control rounded-pill" placeholder="Enter your CC number" name="ccNumber" required="" id="id_ccNumber" {% if ccNumber %} value={{ ccNumber }} {% endif %}>
                     </div>    
                     <div class="row">
                         <label for="id_phoneNumber">PhoneNumber:</label>
-                        <input type="number" class="form-control rounded-pill" placeholder="Enter your phone number" name="phoneNumber" required="" id="id_phoneNumber">
+                        <input type="number" class="form-control rounded-pill" placeholder="Enter your phone number" name="phoneNumber" required="" id="id_phoneNumber" {% if phoneNumber %} value={{ phoneNumber }} {% endif %}>
                     </div>
                     <div class="row">
                         <label for="id_password1">Password:</label>
