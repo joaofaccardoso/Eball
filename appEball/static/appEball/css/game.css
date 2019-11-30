@@ -77,6 +77,7 @@ h2 {
 
 .disp{
     padding-top: 5px !important;
+    padding-right: 5px ;
     text-align: justify;
     color: white;
     font-family: "lucidaSansRegular";

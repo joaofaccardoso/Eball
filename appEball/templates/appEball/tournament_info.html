@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-sm-4" align='center'>
                         <a class="team" href="{% url 'appEball:game' game.1.pk %}">
-                            <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:m' }}, {{ game.1.slot.field.name }} </p>
+                            <p class="center game">{{ game.1.slot.date|date:'d-m-Y, H:i' }}, {{ game.1.slot.field.name }} </p>
                         </a>
                     </div>
                         </a>
@@ -131,7 +131,9 @@
                     <div class="col-sm-2">
                         <div class="row">
                             <div class="col"  align='center'>
-                                <p class="topRow" id="Midfielder">{{ team.1.name }}</p>
+                                <a href="">
+                                    <p class="topRow" id="Midfielder">{{ team.1.name }}</p>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -159,7 +161,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="row">
+                        <div class="row" style="padding-right: 20px">
                             {% if tournament.user == user %}
                                 <div class="col" align='center'>
                                     <a class="btn rounded-pill" href="{% url 'appEball:delete_team' team.1.pk %}" id='pageBtn' >Kick Team</a>
@@ -169,6 +171,8 @@
                                 <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
                             {% elif user.is_authenticated and team.1.pk not in myTeamsList and team.1.tournament.pk not in myTournamentsList %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team </a>
+                            {% else %}
+                                <a class="btn rounded-pill disabled"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team </a>
                             {% endif %} 
                         </div>
                     </div>
@@ -265,6 +269,8 @@
                                 <a class="btn rounded-pill"  href="{% url 'appEball:register' %}" id='pageBtn'>Join Team</a>
                             {% elif user.is_authenticated and team.1.pk not in myTeamsList and team.1.tournament.pk not in myTournamentsList %}
                                 <a class="btn rounded-pill"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team </a>
+                            {% else %}
+                                <a class="btn rounded-pill disabled"  href="{% url 'appEball:team_info' team.1.pk %}" id='pageBtn'>Join Team </a>
                             {% endif %} 
                         </div>
                     </div>
