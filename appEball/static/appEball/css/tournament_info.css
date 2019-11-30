@@ -98,3 +98,8 @@ h2 {
     text-decoration: underline;
     text-decoration-color: white;
 }
+
+.topRow:hover{
+    text-decoration: underline;
+    text-decoration-color: #FFE603;
+}

@@ -15,10 +15,8 @@
             <h2>{{tournament.name}}</h2>
         </div>
         <div class="col">
-            {% if tournament.user == user and tournament.gRound == 0 and teams|length >= 2 %}
-                <div class="col">
-                    <a class="btn rounded-pill float-right"  href="{% url 'appEball:generate_games' tournament.pk %}" id='pageBtn'>Generate Games</a>
-                </div>
+            {% if tournament.user == user and tournament.gRound == 0 and generate %}
+                <a class="btn rounded-pill float-right"  href="{% url 'appEball:generate_games' tournament.pk %}" id='pageBtn'>Generate Games</a>
             {% endif %}
 
 
@@ -137,7 +135,7 @@
                         <div class="row">
                             <div class="col"  align='center'>
                                 <a href="">
-                                    <p class="topRow" id="Midfielder">{{ team.1.name }}</p>
+                                    <p class="topRow" id="Midfielder" style="color: #FFE603">{{ team.1.name }}</p>
                                 </a>
                             </div>
                         </div>

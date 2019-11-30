@@ -27,6 +27,7 @@ urlpatterns = [
     path('team_info/<int:teamId>',views.TeamInfo.as_view(), name='team_info'),
     path('delete_team/<int:pk>', views.delete_team, name='delete_team'),
     path('teams_list/checkTeamName/', views.checkTeamName, name='check_team_name'),
+    path('updateBalance/<int:pk>/', views.updateBalance.as_view(), name='updateBalance'),
 
     path('tournaments/', views.tournaments.as_view(), name='tournaments'),
     path('is_tournament_manager/<str:username>', views.is_tournament_manager, name='is_tournament_manager'),
