@@ -1196,16 +1196,14 @@ class manage_team(View):
             elif(button_clicked4!=None):
                 Player.objects.get(pk=button_clicked4).delete()
             return HttpResponseRedirect(reverse('appEball:manage_team', kwargs={'pk':pk}))
-
-
-
+            
 def registar_saldo(request,pk):
     game=Game.objects.get(pk=pk)
     jogadores1=list(Player.objects.filter(team=game.team1))
     jogadores2=list(Player.objects.filter(team=game.team2))
 
     for jogador1 in jogadores1:
-        if jogador1.balance < game.slot.field.preco or jogador1.balance<3:
+        if jogador1.balance < game.slot.field.price or jogador1.balance<3:
             jogador1.isSub=True
             jogador1.isStarter=False
             jogador1.save()
@@ -1216,7 +1214,7 @@ def registar_saldo(request,pk):
                     player.save()
 
     for jogador2 in jogadores2:
-        if jogador2.balance < game.slot.field.preco or jogador.balance<3:
+        if jogador2.balance < game.slot.field.price or jogador.balance<3:
             jogador2.isSub=True
             jogador2.isStarter=False
             jogador2.save()
