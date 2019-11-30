@@ -44,7 +44,7 @@ python manage.py runserver
 
 
 ## Authors 
-Bárbara Vieira
-João Cardoso
-Maria Carolina Gonçalves
+Bárbara Vieira,
+João Cardoso,
+Maria Carolina Gonçalves,
 Maria Leonor Coelho
