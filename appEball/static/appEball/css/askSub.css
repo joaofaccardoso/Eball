@@ -15,9 +15,6 @@ body {
     background-color: transparent;
 }
 
-#profileNav{
-    color: #FFE603;
-}
 
 #SubCard {
     margin: 5%;
@@ -60,10 +57,14 @@ body {
     transition:0.5s;
 }
 
-h4,h2 {
+h2 {
     margin-left: 40px;
+    font-size: 20px;
     color: white;
+    margin-top: -10px;
+    color: #FFE603;
 }
+
 #reserves{
     color:yellow;
 }

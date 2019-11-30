@@ -5,26 +5,38 @@
     <link rel="stylesheet" type="text/css" href="{% static 'appEball/css/askSub.css' %}">
 {% endblock %}
 
-
+{% block title %}
+    <strong>Reserves</strong>
+{% endblock %}
 
 {% block content2 %}
-    <h4>Tournament</h4>
-    <h2><strong>{{tournament.name}}</strong></h2>
-    <h4 id="reserves"><strong>Reserves</h4>
-    <div class="content">
-      {% for reserve in reserves %}
-        <div class="row" id ="{{reserve.1}}">
-            <div class="col-6">
-              <p class="name line">{{reserve.0.user.firstName}} {{reserve.0.user.lastName}}</p>
-            </div>
-            <div class="col-6">
-                {% if reserve.2 == 1 %}
-                <a class="btn rounded-pill" href="{% url 'appEball:subPage' tournament.pk reserve.0.pk 0  %}">Ask to Sub</a>
-                {% endif %}
-            </div>
-          </div>
-        
-      {% endfor %}
+    <div class="row">
+      <div class="col">
+        <h2>{{tournament.name}}</h2>
+      </div>
+      <div class="col" align="right">
+        <a class="btn rounded-pill" role="button" style="width: 160px; margin-right: 20px; margin-top: -5px;" href={{ request.META.HTTP_REFERER }}>Back</a>
+      </div>
+    </div>
+    <div class="content" style="margin-top: 20px;">
+      <div class="row">
+        <div class="col">
+
+          {% for reserve in reserves %}
+            <div class="row" id ="{{reserve.1}}">
+                <div class="col-sm-6">
+                  <p class="name line">{{reserve.0.user.firstName}} {{reserve.0.user.lastName}}</p>
+                </div>
+                <div class="col-sm-6">
+                    {% if reserve.2 == 0 and check == 1   %}
+                    <a class="btn rounded-pill" href="{% url 'appEball:subPage' tournament.pk reserve.0.pk 0  %}">Ask to Sub</a>
+                    {% endif %}
+                </div>
+              </div>
+            
+          {% endfor %}
+        </div>
+      </div>
     </div>
 
 {% endblock %}
