@@ -1,6 +1,7 @@
 import json
 import random
 import datetime
+import calendar
 from django.shortcuts import render, reverse
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
@@ -70,9 +71,25 @@ class UserLogin(View):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+
+                myTeams = Player.objects.filter(user=user).values_list('team',flat=True)
+
+                myGames = (Game.objects.filter(team1__pk__in=myTeams) | Game.objects.filter(team2__pk__in=myTeams)).order_by('slot__date')
+
+                myNotifications = Notification.objects.filter(user=user).values_list('title',flat=True)
+                list(calendar.day_name)
+                for game in myGames:
+                    slot=game.slot
+                    slot.date=timezone.now()+datetime.timedelta(days=4)
+                    slot.save()
+                    text = game.tournament.name+": " + game.team1.name + " vs " + game.team2.name
+                    if(text not in myNotifications and timezone.now() + datetime.timedelta(days=7) >= game.slot.date):
+                        notification = Notification(user=user,title=text,text="Next "+calendar.day_name[game.slot.date.weekday()] + " you have a game. Wish you the best luck!")
+                        notification.save()
                 return HttpResponseRedirect(reverse('appEball:home_page'))
             else:
                 messages.warning(request, 'Invalid username or password.')
